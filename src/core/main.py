@@ -1,0 +1,141 @@
+import yaml
+import sys
+from pathlib import Path
+
+# Add the project root to the python path
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.append(str(ROOT_DIR))
+
+from src.perception.screen_capture import ScreenCapture
+from src.perception.ocr_engine import OCREngine
+from src.perception.game_state_detector import GameStateDetector
+from src.action.input_simulator import InputSimulator
+from src.knowledge.pokemon_database import PokemonDatabase
+from src.knowledge.team_manager import TeamManager
+from src.decision.battle_strategy import BattleStrategy
+from src.core.bot_controller import BotController
+from src.core.hotkey_listener import HotkeyManager
+from src.core.udp_receiver import create_udp_receiver
+
+def load_config():
+    config_path = ROOT_DIR / 'config' / 'settings.yaml'
+    with open(config_path, "r", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+
+    rois_path = ROOT_DIR / 'config' / 'rois.yaml'
+    if rois_path.exists():
+        try:
+            with open(rois_path, "r", encoding="utf-8") as f:
+                rois_cfg = yaml.safe_load(f) or {}
+
+            battle_ui = rois_cfg.get('battle_ui', {})
+            config.setdefault('rois', {})
+
+            if 'enemy_name_roi' in battle_ui:
+                config['rois']['enemy_name'] = battle_ui['enemy_name_roi']
+
+            if 'my_hp_roi' in battle_ui:
+                config['rois']['hp_player'] = battle_ui['my_hp_roi']
+                config['rois']['player_hp_bar'] = battle_ui['my_hp_roi']
+
+            if 'fight_button' in battle_ui:
+                config['rois']['fight_button_rel'] = battle_ui['fight_button']
+
+            if 'pokemon_button' in battle_ui:
+                config['rois']['pokemon_button_rel'] = battle_ui['pokemon_button']
+
+            if 'run_button' in battle_ui:
+                config['rois']['run_button_rel'] = battle_ui['run_button']
+        except Exception as e:
+            logger.error(f"Falha ao carregar rois.yaml: {e}")
+
+    return config
+
+try:
+    from loguru import logger
+except ImportError:
+    class logger:
+        @staticmethod
+        def error(msg): print(f"ERROR: {msg}")
+        @staticmethod
+        def exception(msg): print(f"EXCEPTION: {msg}")
+
+def setup_logging():
+    """Configura loguru para salvar logs em arquivo com rotação."""
+    try:
+        from loguru import logger
+        log_dir = ROOT_DIR / 'logs'
+        log_dir.mkdir(exist_ok=True)
+        logger.add(
+            str(log_dir / "pokebot_{time}.log"), 
+            rotation="5 MB", 
+            retention="1 week",
+            level="DEBUG"
+        )
+    except Exception:
+        pass
+
+def main():
+    try:
+        setup_logging()
+        config = load_config()
+        
+        # Initialize components
+        screen = ScreenCapture(config)
+        ocr = OCREngine(config['ocr']['tesseract_path'])
+        detector = GameStateDetector(screen, ocr, config)
+        input_sim = InputSimulator(config)
+        db = PokemonDatabase()
+        team_mgr = TeamManager()
+        strategy = BattleStrategy(db, team_mgr, config)
+        
+        components = {
+            'screen': screen,
+            'detector': detector,
+            'input': input_sim,
+            'ocr': ocr,
+            'strategy': strategy,
+            'team_mgr': team_mgr
+        }
+        
+        bot = BotController(config, components)
+        
+        # Inicializa hotkey listener se habilitado
+        hotkey_listener = None
+        if config.get('controls', {}).get('enabled', True):
+            try:
+                hotkey_listener = HotkeyManager.create_and_start(bot, config)
+                logger.success("✅ Hotkey listener ativo! Pressione as teclas para controlar o bot.")
+            except Exception as e:
+                logger.error(f"Erro ao iniciar hotkey listener: {e}")
+                logger.warning("Bot continuará sem controles por hotkey")
+        
+        # Inicializa receptor UDP para controle remoto (se habilitado)
+        udp_receiver = None
+        if config.get('remote_control', {}).get('enabled', False):
+            try:
+                udp_receiver = create_udp_receiver(bot, config)
+                if udp_receiver:
+                    udp_receiver.start()
+                    logger.success("✅ Controle remoto UDP ativo! Use remote_controller.py na máquina host.")
+            except Exception as e:
+                logger.error(f"Erro ao iniciar controle remoto UDP: {e}")
+                logger.warning("Bot continuará sem controle remoto")
+        
+        # Executa o bot
+        bot.run()
+        
+        # Cleanup
+        if hotkey_listener:
+            hotkey_listener.stop()
+        
+        if udp_receiver:
+            udp_receiver.stop()
+            
+    except Exception as e:
+        logger.exception(f"Fatal error in main loop: {e}")
+        input("Press Enter to exit...")
+
+if __name__ == "__main__":
+    main()
