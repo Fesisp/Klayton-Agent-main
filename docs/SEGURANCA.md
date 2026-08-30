@@ -25,8 +25,8 @@ Edite `config/settings.yaml` e adicione:
 
 ```yaml
 notifications:
-  telegram_bot_token: "8572655546:AAEnpu9oX65UfW7FEV9zzHgmymZdC4_NSsw"  # Seu token
-  telegram_chat_id: "2142471792"                                        # Seu chat ID
+  telegram_bot_token: "YOUR_TELEGRAM_TOKEN_HERE"                        # Token do bot
+  telegram_chat_id: "YOUR_CHAT_ID_HERE"                                 # Seu chat ID
   discord_webhook_url: "https://discord.com/api/webhooks/..."          # Sua URL
 ```
 
