@@ -1,0 +1,26 @@
+{
+  "map_name": "Frosty Mountain",
+  "region": "Event_Winter",
+  "exits": [
+    {
+      "target_map": "Winter Event Village",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Abomasnow",
+      "rate": 0.3,
+      "min_lvl": 30,
+      "max_lvl": 40
+    },
+    {
+      "species": "Cubchoo",
+      "rate": 0.4,
+      "min_lvl": 20,
+      "max_lvl": 30
+    }
+  ]
+}

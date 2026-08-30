@@ -1,0 +1,16 @@
+{
+  "map_name": "New Bark Town",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 29",
+      "direction": "West"
+    },
+    {
+      "target_map": "Route 27",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

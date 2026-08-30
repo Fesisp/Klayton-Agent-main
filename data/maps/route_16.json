@@ -1,0 +1,16 @@
+{
+  "map_name": "Route 16",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Celadon City",
+      "direction": "East"
+    },
+    {
+      "target_map": "Cycling Road",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

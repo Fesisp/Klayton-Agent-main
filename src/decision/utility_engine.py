@@ -58,3 +58,33 @@ class UtilityEngine:
             cost=cost,
             time=estimated_time
         )
+
+    def evaluate_goals(self, goals: list, world: WorldState) -> Dict[str, float]:
+        """
+        Pontua cada meta candidata usando a fórmula utility = reward - risk - cost - time.
+        Retorna dicionário mapeando nome da meta para sua pontuação de utilidade final.
+        """
+        scores: Dict[str, float] = {}
+
+        for g in goals:
+            reward, risk, cost, time_penalty = 50.0, 10.0, 5.0, 5.0
+
+            if g == "HEAL_TEAM":
+                if world.team.needs_healing:
+                    reward, risk = 120.0, 0.0
+                else:
+                    reward, risk = 0.0, 80.0
+            elif g == "FOLLOW_PLAYER":
+                reward = 80.0 if world.companion.is_following_leader else 70.0
+                risk = 5.0
+            elif g in ["FARM_XP", "HUNT"]:
+                reward = 60.0
+                if world.team.needs_healing:
+                    risk = 90.0
+            elif g == "EXPLORE":
+                reward = 30.0
+
+            utility = reward - risk - cost - time_penalty
+            scores[g] = utility
+
+        return scores

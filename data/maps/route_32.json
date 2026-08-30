@@ -1,0 +1,21 @@
+{
+  "map_name": "Route 32",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Violet City",
+      "direction": "North"
+    },
+    {
+      "target_map": "Union Cave",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      12,
+      35
+    ]
+  },
+  "pokemart": null
+}

@@ -1,0 +1,20 @@
+{
+  "map_name": "Route 2",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Viridian City",
+      "direction": "South"
+    },
+    {
+      "target_map": "Viridian Forest",
+      "direction": "North"
+    },
+    {
+      "target_map": "Pewter City",
+      "direction": "NorthExit"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

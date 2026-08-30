@@ -1,0 +1,25 @@
+{
+  "map_name": "Route 10",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Rock Tunnel Exit",
+      "direction": "North"
+    },
+    {
+      "target_map": "Lavender Town",
+      "direction": "South"
+    },
+    {
+      "target_map": "Power Plant",
+      "direction": "Water"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      10,
+      5
+    ]
+  },
+  "pokemart": null
+}

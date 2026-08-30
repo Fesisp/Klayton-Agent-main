@@ -1,0 +1,16 @@
+{
+  "map_name": "Route 5",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Cerulean City",
+      "direction": "North"
+    },
+    {
+      "target_map": "Saffron City",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

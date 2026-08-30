@@ -1,0 +1,26 @@
+{
+  "map_name": "Accumula Town",
+  "region": "Unova",
+  "exits": [
+    {
+      "target_map": "Unova Route 1",
+      "direction": "South"
+    },
+    {
+      "target_map": "Unova Route 2",
+      "direction": "North"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      15,
+      10
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      25,
+      10
+    ]
+  }
+}

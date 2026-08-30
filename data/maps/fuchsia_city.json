@@ -1,0 +1,34 @@
+{
+  "map_name": "Fuchsia City",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 18",
+      "direction": "West"
+    },
+    {
+      "target_map": "Route 15",
+      "direction": "East"
+    },
+    {
+      "target_map": "Route 19",
+      "direction": "South"
+    },
+    {
+      "target_map": "Safari Zone",
+      "direction": "North"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      18,
+      20
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      28,
+      20
+    ]
+  }
+}

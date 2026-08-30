@@ -1,0 +1,16 @@
+{
+  "map_name": "Route 12",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Lavender Town",
+      "direction": "North"
+    },
+    {
+      "target_map": "Route 13",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

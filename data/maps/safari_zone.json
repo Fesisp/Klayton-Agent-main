@@ -1,0 +1,12 @@
+{
+  "map_name": "Safari Zone",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Fuchsia City",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

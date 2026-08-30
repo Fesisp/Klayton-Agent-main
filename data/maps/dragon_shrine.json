@@ -1,0 +1,26 @@
+{
+  "map_name": "Dragon Shrine",
+  "region": "Event_NewYear",
+  "exits": [
+    {
+      "target_map": "Lunar Festival Grounds",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Dratini",
+      "rate": 0.15,
+      "min_lvl": 20,
+      "max_lvl": 30
+    },
+    {
+      "species": "Bagon",
+      "rate": 0.15,
+      "min_lvl": 20,
+      "max_lvl": 30
+    }
+  ]
+}

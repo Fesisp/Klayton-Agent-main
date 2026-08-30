@@ -1,0 +1,22 @@
+{
+  "map_name": "Cianwood City",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 41",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      15,
+      20
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      25,
+      20
+    ]
+  }
+}

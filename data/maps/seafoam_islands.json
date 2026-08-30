@@ -1,0 +1,16 @@
+{
+  "map_name": "Seafoam Islands",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 20 East",
+      "direction": "East"
+    },
+    {
+      "target_map": "Route 20 West",
+      "direction": "West"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

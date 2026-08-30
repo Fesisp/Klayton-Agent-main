@@ -1,0 +1,12 @@
+{
+  "map_name": "Pokemon Mansion",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Cinnabar Island",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

@@ -1,0 +1,26 @@
+{
+  "map_name": "Rabbit Forest",
+  "region": "Event_Easter",
+  "exits": [
+    {
+      "target_map": "Easter Egg Island",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Bunnelby",
+      "rate": 0.45,
+      "min_lvl": 10,
+      "max_lvl": 20
+    },
+    {
+      "species": "Azumarill",
+      "rate": 0.25,
+      "min_lvl": 20,
+      "max_lvl": 30
+    }
+  ]
+}

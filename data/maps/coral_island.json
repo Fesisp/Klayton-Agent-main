@@ -1,0 +1,26 @@
+{
+  "map_name": "Coral Island",
+  "region": "Event_Summer",
+  "exits": [
+    {
+      "target_map": "Summer Beach Resort",
+      "direction": "Water"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Corsola",
+      "rate": 0.35,
+      "min_lvl": 20,
+      "max_lvl": 30
+    },
+    {
+      "species": "Mantyke",
+      "rate": 0.3,
+      "min_lvl": 20,
+      "max_lvl": 30
+    }
+  ]
+}

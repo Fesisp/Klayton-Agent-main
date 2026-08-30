@@ -1,0 +1,16 @@
+{
+  "map_name": "Mt. Moon B1F",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Mt. Moon 1F",
+      "direction": "Ladders"
+    },
+    {
+      "target_map": "Mt. Moon B2F",
+      "direction": "Ladders"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

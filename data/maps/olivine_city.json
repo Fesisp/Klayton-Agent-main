@@ -1,0 +1,26 @@
+{
+  "map_name": "Olivine City",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 39",
+      "direction": "North"
+    },
+    {
+      "target_map": "Route 40",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      18,
+      12
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      28,
+      12
+    ]
+  }
+}

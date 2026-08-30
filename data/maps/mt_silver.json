@@ -1,0 +1,17 @@
+{
+  "map_name": "Mt. Silver",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 28",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      10,
+      10
+    ]
+  },
+  "pokemart": null
+}

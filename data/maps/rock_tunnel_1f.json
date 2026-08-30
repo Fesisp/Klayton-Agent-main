@@ -1,0 +1,16 @@
+{
+  "map_name": "Rock Tunnel 1F",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 9",
+      "direction": "North"
+    },
+    {
+      "target_map": "Rock Tunnel B1F",
+      "direction": "Ladders"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

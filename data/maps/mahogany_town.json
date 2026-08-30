@@ -1,0 +1,30 @@
+{
+  "map_name": "Mahogany Town",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 42",
+      "direction": "West"
+    },
+    {
+      "target_map": "Route 43",
+      "direction": "North"
+    },
+    {
+      "target_map": "Route 44",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      14,
+      10
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      24,
+      10
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "map_name": "Lunar Festival Grounds",
+  "region": "Event_NewYear",
+  "exits": [
+    {
+      "target_map": "Dragon Shrine",
+      "direction": "North"
+    },
+    {
+      "target_map": "Celadon City",
+      "direction": "PortExit"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      15,
+      12
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      25,
+      12
+    ]
+  },
+  "encounter_areas": [
+    {
+      "species": "Drampa",
+      "rate": 0.2,
+      "min_lvl": 25,
+      "max_lvl": 35
+    },
+    {
+      "species": "Magikarp",
+      "rate": 0.5,
+      "min_lvl": 10,
+      "max_lvl": 20
+    }
+  ]
+}

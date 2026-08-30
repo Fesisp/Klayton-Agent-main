@@ -1,0 +1,30 @@
+{
+  "map_name": "Azalea Town",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 33",
+      "direction": "East"
+    },
+    {
+      "target_map": "Ilex Forest",
+      "direction": "West"
+    },
+    {
+      "target_map": "Slowpoke Well",
+      "direction": "EastPond"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      15,
+      10
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      25,
+      10
+    ]
+  }
+}

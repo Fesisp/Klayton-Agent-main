@@ -1,0 +1,16 @@
+{
+  "map_name": "Union Cave",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 32",
+      "direction": "North"
+    },
+    {
+      "target_map": "Route 33",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

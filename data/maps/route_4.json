@@ -1,0 +1,21 @@
+{
+  "map_name": "Route 4",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Mt. Moon B2F",
+      "direction": "West"
+    },
+    {
+      "target_map": "Cerulean City",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      5,
+      10
+    ]
+  },
+  "pokemart": null
+}

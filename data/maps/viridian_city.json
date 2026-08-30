@@ -1,0 +1,30 @@
+{
+  "map_name": "Viridian City",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 1",
+      "direction": "South"
+    },
+    {
+      "target_map": "Route 2",
+      "direction": "North"
+    },
+    {
+      "target_map": "Route 22",
+      "direction": "West"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      12,
+      18
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      22,
+      18
+    ]
+  }
+}

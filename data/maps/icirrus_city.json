@@ -1,0 +1,26 @@
+{
+  "map_name": "Icirrus City",
+  "region": "Unova",
+  "exits": [
+    {
+      "target_map": "Twist Mountain",
+      "direction": "West"
+    },
+    {
+      "target_map": "Unova Route 8",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      16,
+      12
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      26,
+      12
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "map_name": "Route 1",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Pallet Town",
+      "direction": "South"
+    },
+    {
+      "target_map": "Viridian City",
+      "direction": "North"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

@@ -1,0 +1,40 @@
+{
+  "map_name": "Spring Blossom Park",
+  "region": "Event_Spring",
+  "exits": [
+    {
+      "target_map": "Sakura Gardens",
+      "direction": "East"
+    },
+    {
+      "target_map": "Goldenrod City",
+      "direction": "PortExit"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      10,
+      10
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      20,
+      10
+    ]
+  },
+  "encounter_areas": [
+    {
+      "species": "Cherubi",
+      "rate": 0.4,
+      "min_lvl": 10,
+      "max_lvl": 20
+    },
+    {
+      "species": "Flabebe",
+      "rate": 0.35,
+      "min_lvl": 10,
+      "max_lvl": 20
+    }
+  ]
+}

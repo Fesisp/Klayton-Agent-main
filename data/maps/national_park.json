@@ -1,0 +1,16 @@
+{
+  "map_name": "National Park",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 35",
+      "direction": "South"
+    },
+    {
+      "target_map": "Route 36",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

@@ -1,0 +1,12 @@
+{
+  "map_name": "Sprout Tower",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Violet City",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

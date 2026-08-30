@@ -1,0 +1,12 @@
+{
+  "map_name": "Power Plant",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 10",
+      "direction": "WaterExit"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

@@ -1,0 +1,34 @@
+{
+  "map_name": "Saffron City",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 5",
+      "direction": "North"
+    },
+    {
+      "target_map": "Route 6",
+      "direction": "South"
+    },
+    {
+      "target_map": "Route 7",
+      "direction": "West"
+    },
+    {
+      "target_map": "Route 8",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      20,
+      15
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      30,
+      15
+    ]
+  }
+}

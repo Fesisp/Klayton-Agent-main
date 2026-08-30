@@ -1,0 +1,16 @@
+{
+  "map_name": "Route 14",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 13",
+      "direction": "East"
+    },
+    {
+      "target_map": "Route 15",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

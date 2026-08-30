@@ -1,0 +1,16 @@
+{
+  "map_name": "Ilex Forest",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Azalea Town",
+      "direction": "South"
+    },
+    {
+      "target_map": "Route 34",
+      "direction": "North"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

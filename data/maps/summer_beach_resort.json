@@ -1,0 +1,40 @@
+{
+  "map_name": "Summer Beach Resort",
+  "region": "Event_Summer",
+  "exits": [
+    {
+      "target_map": "Coral Island",
+      "direction": "Water"
+    },
+    {
+      "target_map": "Vermilion City",
+      "direction": "FerryExit"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      18,
+      15
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      28,
+      15
+    ]
+  },
+  "encounter_areas": [
+    {
+      "species": "Wingull",
+      "rate": 0.45,
+      "min_lvl": 15,
+      "max_lvl": 25
+    },
+    {
+      "species": "Pyukumuku",
+      "rate": 0.25,
+      "min_lvl": 15,
+      "max_lvl": 25
+    }
+  ]
+}

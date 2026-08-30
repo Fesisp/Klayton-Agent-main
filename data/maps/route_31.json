@@ -1,0 +1,20 @@
+{
+  "map_name": "Route 31",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 30",
+      "direction": "South"
+    },
+    {
+      "target_map": "Violet City",
+      "direction": "West"
+    },
+    {
+      "target_map": "Dark Cave",
+      "direction": "North"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

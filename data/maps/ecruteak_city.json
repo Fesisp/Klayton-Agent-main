@@ -1,0 +1,34 @@
+{
+  "map_name": "Ecruteak City",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 36",
+      "direction": "South"
+    },
+    {
+      "target_map": "Route 37",
+      "direction": "SouthEast"
+    },
+    {
+      "target_map": "Route 38",
+      "direction": "West"
+    },
+    {
+      "target_map": "Route 42",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      20,
+      15
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      30,
+      15
+    ]
+  }
+}

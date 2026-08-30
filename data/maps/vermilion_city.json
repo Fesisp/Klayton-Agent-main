@@ -1,0 +1,30 @@
+{
+  "map_name": "Vermilion City",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 6",
+      "direction": "North"
+    },
+    {
+      "target_map": "Route 11",
+      "direction": "East"
+    },
+    {
+      "target_map": "SS Anne",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      15,
+      10
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      25,
+      10
+    ]
+  }
+}

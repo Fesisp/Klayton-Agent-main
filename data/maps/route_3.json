@@ -1,0 +1,16 @@
+{
+  "map_name": "Route 3",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Pewter City",
+      "direction": "West"
+    },
+    {
+      "target_map": "Mt. Moon 1F",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

@@ -1,0 +1,16 @@
+{
+  "map_name": "Route 15",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 14",
+      "direction": "North"
+    },
+    {
+      "target_map": "Fuchsia City",
+      "direction": "West"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

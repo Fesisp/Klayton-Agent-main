@@ -1,0 +1,46 @@
+{
+  "map_name": "Winter Event Village",
+  "region": "Event_Winter",
+  "exits": [
+    {
+      "target_map": "Frosty Mountain",
+      "direction": "North"
+    },
+    {
+      "target_map": "Vermilion City",
+      "direction": "PortExit"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      12,
+      10
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      22,
+      10
+    ]
+  },
+  "encounter_areas": [
+    {
+      "species": "Delibird",
+      "rate": 0.4,
+      "min_lvl": 15,
+      "max_lvl": 25
+    },
+    {
+      "species": "Snorunt",
+      "rate": 0.35,
+      "min_lvl": 15,
+      "max_lvl": 25
+    },
+    {
+      "species": "Cryogonal",
+      "rate": 0.15,
+      "min_lvl": 20,
+      "max_lvl": 30
+    }
+  ]
+}

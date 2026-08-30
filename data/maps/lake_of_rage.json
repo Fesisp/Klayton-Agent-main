@@ -1,0 +1,12 @@
+{
+  "map_name": "Lake of Rage",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 43",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

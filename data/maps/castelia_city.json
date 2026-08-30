@@ -1,0 +1,26 @@
+{
+  "map_name": "Castelia City",
+  "region": "Unova",
+  "exits": [
+    {
+      "target_map": "Pinwheel Forest",
+      "direction": "South"
+    },
+    {
+      "target_map": "Unova Route 4",
+      "direction": "North"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      25,
+      20
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      35,
+      20
+    ]
+  }
+}

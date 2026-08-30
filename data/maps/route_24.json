@@ -1,0 +1,16 @@
+{
+  "map_name": "Route 24",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Cerulean City",
+      "direction": "South"
+    },
+    {
+      "target_map": "Route 25",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

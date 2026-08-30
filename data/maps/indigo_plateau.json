@@ -1,0 +1,22 @@
+{
+  "map_name": "Indigo Plateau",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Victory Road",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      10,
+      10
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      20,
+      10
+    ]
+  }
+}

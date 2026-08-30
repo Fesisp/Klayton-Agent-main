@@ -1,0 +1,26 @@
+{
+  "map_name": "Driftveil City",
+  "region": "Unova",
+  "exits": [
+    {
+      "target_map": "Unova Route 5",
+      "direction": "East"
+    },
+    {
+      "target_map": "Unova Route 6",
+      "direction": "West"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      18,
+      12
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      28,
+      12
+    ]
+  }
+}

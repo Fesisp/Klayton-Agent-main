@@ -1,0 +1,40 @@
+{
+  "map_name": "Easter Egg Island",
+  "region": "Event_Easter",
+  "exits": [
+    {
+      "target_map": "Rabbit Forest",
+      "direction": "North"
+    },
+    {
+      "target_map": "Pallet Town",
+      "direction": "FerryExit"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      12,
+      12
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      22,
+      12
+    ]
+  },
+  "encounter_areas": [
+    {
+      "species": "Togepi",
+      "rate": 0.25,
+      "min_lvl": 5,
+      "max_lvl": 15
+    },
+    {
+      "species": "Buneary",
+      "rate": 0.4,
+      "min_lvl": 10,
+      "max_lvl": 20
+    }
+  ]
+}

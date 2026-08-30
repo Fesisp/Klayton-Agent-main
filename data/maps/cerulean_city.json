@@ -1,0 +1,34 @@
+{
+  "map_name": "Cerulean City",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 4",
+      "direction": "West"
+    },
+    {
+      "target_map": "Route 24",
+      "direction": "North"
+    },
+    {
+      "target_map": "Route 9",
+      "direction": "East"
+    },
+    {
+      "target_map": "Route 5",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      18,
+      15
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      28,
+      15
+    ]
+  }
+}

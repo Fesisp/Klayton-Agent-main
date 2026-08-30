@@ -1,0 +1,26 @@
+{
+  "map_name": "Blackthorn City",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 45",
+      "direction": "South"
+    },
+    {
+      "target_map": "Ice Path",
+      "direction": "North"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      18,
+      16
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      28,
+      16
+    ]
+  }
+}

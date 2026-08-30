@@ -1,0 +1,26 @@
+{
+  "map_name": "Opelucid City",
+  "region": "Unova",
+  "exits": [
+    {
+      "target_map": "Unova Route 9",
+      "direction": "West"
+    },
+    {
+      "target_map": "Unova Route 10",
+      "direction": "North"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      22,
+      14
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      32,
+      14
+    ]
+  }
+}

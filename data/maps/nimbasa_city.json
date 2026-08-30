@@ -1,0 +1,30 @@
+{
+  "map_name": "Nimbasa City",
+  "region": "Unova",
+  "exits": [
+    {
+      "target_map": "Unova Route 4",
+      "direction": "South"
+    },
+    {
+      "target_map": "Unova Route 5",
+      "direction": "West"
+    },
+    {
+      "target_map": "Unova Route 16",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      20,
+      15
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      30,
+      15
+    ]
+  }
+}

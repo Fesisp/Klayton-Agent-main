@@ -1,0 +1,30 @@
+{
+  "map_name": "Violet City",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 31",
+      "direction": "East"
+    },
+    {
+      "target_map": "Route 32",
+      "direction": "South"
+    },
+    {
+      "target_map": "Route 36",
+      "direction": "West"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      18,
+      14
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      28,
+      14
+    ]
+  }
+}

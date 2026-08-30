@@ -1,0 +1,16 @@
+{
+  "map_name": "Unova Route 1",
+  "region": "Unova",
+  "exits": [
+    {
+      "target_map": "Nuvema Town",
+      "direction": "South"
+    },
+    {
+      "target_map": "Accumula Town",
+      "direction": "North"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

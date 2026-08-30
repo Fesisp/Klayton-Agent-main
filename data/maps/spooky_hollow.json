@@ -1,0 +1,40 @@
+{
+  "map_name": "Spooky Hollow",
+  "region": "Event_Halloween",
+  "exits": [
+    {
+      "target_map": "Haunted Manor",
+      "direction": "North"
+    },
+    {
+      "target_map": "Lavender Town",
+      "direction": "PortalExit"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      14,
+      14
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      24,
+      14
+    ]
+  },
+  "encounter_areas": [
+    {
+      "species": "Pumpkaboo",
+      "rate": 0.35,
+      "min_lvl": 15,
+      "max_lvl": 25
+    },
+    {
+      "species": "Litwick",
+      "rate": 0.35,
+      "min_lvl": 15,
+      "max_lvl": 25
+    }
+  ]
+}

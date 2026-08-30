@@ -59,3 +59,31 @@ class MapGraph:
                     queue.append(new_path)
 
         return []
+
+    def load_all_maps_from_disk(self, maps_dir: Optional[Path] = None) -> int:
+        """
+        Carrega automaticamente todos os arquivos JSON de mapas do diretório data/maps/
+        e constrói o grafo global de navegação de todas as regiões (Kanto, Johto e Unova).
+        """
+        import json
+        if maps_dir is None:
+            maps_dir = Path(__file__).resolve().parent.parent.parent / "data" / "maps"
+
+        if not maps_dir.exists():
+            return 0
+
+        count = 0
+        for json_file in maps_dir.glob("*.json"):
+            try:
+                with open(json_file, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    map_name = data.get("map_name")
+                    exits = data.get("exits", [])
+                    connections = [e["target_map"] for e in exits if "target_map" in e]
+                    if map_name:
+                        self.add_map(map_name, connections)
+                        count += 1
+            except Exception:
+                pass
+
+        return count

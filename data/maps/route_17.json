@@ -1,0 +1,16 @@
+{
+  "map_name": "Route 17 (Cycling Road)",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 16",
+      "direction": "North"
+    },
+    {
+      "target_map": "Route 18",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

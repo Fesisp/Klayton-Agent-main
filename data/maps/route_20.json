@@ -1,0 +1,20 @@
+{
+  "map_name": "Route 20",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 19",
+      "direction": "East"
+    },
+    {
+      "target_map": "Seafoam Islands",
+      "direction": "Cave"
+    },
+    {
+      "target_map": "Cinnabar Island",
+      "direction": "West"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

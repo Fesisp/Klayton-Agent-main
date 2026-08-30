@@ -1,0 +1,26 @@
+{
+  "map_name": "Sakura Gardens",
+  "region": "Event_Spring",
+  "exits": [
+    {
+      "target_map": "Spring Blossom Park",
+      "direction": "West"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Shaymin",
+      "rate": 0.05,
+      "min_lvl": 30,
+      "max_lvl": 50
+    },
+    {
+      "species": "Roselia",
+      "rate": 0.4,
+      "min_lvl": 15,
+      "max_lvl": 25
+    }
+  ]
+}

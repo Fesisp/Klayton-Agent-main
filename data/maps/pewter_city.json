@@ -1,0 +1,26 @@
+{
+  "map_name": "Pewter City",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 2",
+      "direction": "South"
+    },
+    {
+      "target_map": "Route 3",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      14,
+      12
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      24,
+      12
+    ]
+  }
+}

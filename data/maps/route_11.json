@@ -1,0 +1,16 @@
+{
+  "map_name": "Route 11",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Vermilion City",
+      "direction": "West"
+    },
+    {
+      "target_map": "Digletts Cave",
+      "direction": "East"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}

@@ -1,0 +1,26 @@
+{
+  "map_name": "Nacrene City",
+  "region": "Unova",
+  "exits": [
+    {
+      "target_map": "Unova Route 3",
+      "direction": "East"
+    },
+    {
+      "target_map": "Pinwheel Forest",
+      "direction": "West"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      16,
+      14
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      26,
+      14
+    ]
+  }
+}

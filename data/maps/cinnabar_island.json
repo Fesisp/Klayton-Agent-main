@@ -1,0 +1,26 @@
+{
+  "map_name": "Cinnabar Island",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 20",
+      "direction": "East"
+    },
+    {
+      "target_map": "Route 21",
+      "direction": "North"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      12,
+      15
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      22,
+      15
+    ]
+  }
+}

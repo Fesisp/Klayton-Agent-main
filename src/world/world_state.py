@@ -15,6 +15,17 @@ import time
 
 
 @dataclass
+class Observation:
+    """
+    Observação bruta emitida pela percepção visual/OCR com nível de confiança.
+    """
+    category: str  # battle, team, location, player, quest
+    data: Dict[str, Any]
+    confidence: float = 1.0  # 0.0 a 1.0
+    timestamp: float = field(default_factory=time.time)
+
+
+@dataclass
 class PokemonInfo:
     """Informações de um Pokémon da equipe ou inimigo."""
     name: str = "Unknown"
@@ -142,3 +153,34 @@ class WorldState:
 
     def update_timestamp(self) -> None:
         self.last_update = time.time()
+
+    def apply_observation(self, obs: Observation, min_confidence: float = 0.50) -> bool:
+        """
+        Aplica uma observação bruta ao WorldState apenas se a confiança atingir o limiar mínimo.
+        Garante que o WorldState permaneça a Fonte Única da Verdade sem ruídos visuais.
+        """
+        if obs.confidence < min_confidence:
+            return False
+
+        self.update_timestamp()
+        if obs.category == "battle":
+            if "in_battle" in obs.data:
+                self.battle.in_battle = bool(obs.data["in_battle"])
+            if "is_shiny" in obs.data:
+                self.battle.is_shiny = bool(obs.data["is_shiny"])
+            if "opponent_name" in obs.data:
+                self.battle.opponent_name = str(obs.data["opponent_name"])
+            if "opponent_hp_percentage" in obs.data:
+                self.battle.opponent_hp_percentage = float(obs.data["opponent_hp_percentage"])
+
+        elif obs.category == "location":
+            if "map_name" in obs.data:
+                self.location.current_map = str(obs.data["map_name"])
+            if "position" in obs.data:
+                self.player.position = obs.data["position"]
+
+        elif obs.category == "team":
+            if "hp_percentage" in obs.data and self.team.active_pokemon:
+                self.team.active_pokemon.hp_percentage = float(obs.data["hp_percentage"])
+
+        return True

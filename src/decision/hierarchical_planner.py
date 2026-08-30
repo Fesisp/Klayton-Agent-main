@@ -60,12 +60,26 @@ class HierarchicalPlanner:
     def __init__(self):
         from ..skills.heal_skill import HealSkill
         from ..skills.follow_skill import FollowSkill
+        from ..skills.capture_skill import CaptureSkill
+        from ..skills.fishing_skill import FishingSkill
+        from ..skills.farm_xp_skill import FarmXPSkill
+        from ..skills.shop_skill import ShopSkill
+        from ..skills.explore_skill import ExploreSkill
+        from ..skills.return_to_player_skill import ReturnToPlayerSkill
+        from ..skills.recover_skill import RecoverSkill
 
         self.skills: Dict[str, BaseSkill] = {
             "BattleSkill": BattleSkill(),
             "HuntingSkill": HuntingSkill(),
             "HealSkill": HealSkill(),
             "FollowSkill": FollowSkill(),
+            "CaptureSkill": CaptureSkill(),
+            "FishingSkill": FishingSkill(),
+            "FarmXPSkill": FarmXPSkill(),
+            "ShopSkill": ShopSkill(),
+            "ExploreSkill": ExploreSkill(),
+            "ReturnToPlayerSkill": ReturnToPlayerSkill(),
+            "RecoverSkill": RecoverSkill(),
         }
         self.active_plan: Optional[Plan] = None
 

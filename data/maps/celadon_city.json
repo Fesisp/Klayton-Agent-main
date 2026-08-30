@@ -1,0 +1,26 @@
+{
+  "map_name": "Celadon City",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Route 7",
+      "direction": "East"
+    },
+    {
+      "target_map": "Route 16",
+      "direction": "West"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      30,
+      10
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      20,
+      15
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "map_name": "Goldenrod City",
+  "region": "Johto",
+  "exits": [
+    {
+      "target_map": "Route 34",
+      "direction": "South"
+    },
+    {
+      "target_map": "Route 35",
+      "direction": "North"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      22,
+      18
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      32,
+      18
+    ]
+  }
+}

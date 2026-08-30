@@ -1,0 +1,32 @@
+{
+  "map_name": "Haunted Manor",
+  "region": "Event_Halloween",
+  "exits": [
+    {
+      "target_map": "Spooky Hollow",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Gastly",
+      "rate": 0.4,
+      "min_lvl": 15,
+      "max_lvl": 25
+    },
+    {
+      "species": "Haunter",
+      "rate": 0.25,
+      "min_lvl": 25,
+      "max_lvl": 35
+    },
+    {
+      "species": "Mimikyu",
+      "rate": 0.05,
+      "min_lvl": 25,
+      "max_lvl": 35
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "map_name": "Mistralton City",
+  "region": "Unova",
+  "exits": [
+    {
+      "target_map": "Chargestone Cave",
+      "direction": "South"
+    },
+    {
+      "target_map": "Unova Route 7",
+      "direction": "North"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      15,
+      10
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      25,
+      10
+    ]
+  }
+}

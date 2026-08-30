@@ -1,0 +1,16 @@
+{
+  "map_name": "Route 7",
+  "region": "Kanto",
+  "exits": [
+    {
+      "target_map": "Saffron City Gate",
+      "direction": "East"
+    },
+    {
+      "target_map": "Celadon City",
+      "direction": "West"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null
+}
