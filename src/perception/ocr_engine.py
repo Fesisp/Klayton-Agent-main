@@ -1,7 +1,17 @@
-import cv2
+try:
+    import cv2
+except ImportError:
+    cv2 = None
 import numpy as np
-import pytesseract
-from loguru import logger
+try:
+    import pytesseract
+except ImportError:
+    pytesseract = None
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger("OCREngine")
 import re
 import os
 from difflib import get_close_matches

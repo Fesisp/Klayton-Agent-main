@@ -58,9 +58,14 @@ class HierarchicalPlanner:
     """
 
     def __init__(self):
+        from ..skills.heal_skill import HealSkill
+        from ..skills.follow_skill import FollowSkill
+
         self.skills: Dict[str, BaseSkill] = {
             "BattleSkill": BattleSkill(),
             "HuntingSkill": HuntingSkill(),
+            "HealSkill": HealSkill(),
+            "FollowSkill": FollowSkill(),
         }
         self.active_plan: Optional[Plan] = None
 
@@ -72,23 +77,25 @@ class HierarchicalPlanner:
         tasks: List[Task] = []
 
         if world.team.needs_healing:
-            tasks.append(Task(name="HealTeamTask", target_skill_name="HuntingSkill"))
-
-        if world.battle.in_battle:
+            tasks.append(Task(name="HealTeamTask", target_skill_name="HealSkill"))
+        elif world.battle.in_battle:
             tasks.append(Task(name="FightBattleTask", target_skill_name="BattleSkill"))
         elif goal_name in ["FARM_XP", "HUNT", "TRAIN_POKEMON"]:
             tasks.append(Task(name="ExploreAreaTask", target_skill_name="HuntingSkill"))
             tasks.append(Task(name="FightEncounterTask", target_skill_name="BattleSkill"))
         else:
-            tasks.append(Task(name="FollowTask", target_skill_name="HuntingSkill"))
+            tasks.append(Task(name="FollowTask", target_skill_name="FollowSkill"))
 
         self.active_plan = Plan(goal_name=goal_name, tasks=tasks)
         return self.active_plan
 
-    def resolve_next_skill(self, goal_name: str, world: WorldState) -> Optional[BaseSkill]:
+    def resolve_next_skill(self, goal_name: str, world: WorldState, max_depth: int = 5) -> Optional[BaseSkill]:
         """
         Resolve a próxima Skill a ser executada a partir da Tarefa ativa no Plano.
         """
+        if max_depth <= 0:
+            return None
+
         if not self.active_plan or self.active_plan.goal_name != goal_name or self.active_plan.is_finished:
             self.create_plan_for_goal(goal_name, world)
 
@@ -99,7 +106,7 @@ class HierarchicalPlanner:
                 if skill.is_complete(world):
                     task.completed = True
                     self.active_plan.current_task_index += 1
-                    return self.resolve_next_skill(goal_name, world)
+                    return self.resolve_next_skill(goal_name, world, max_depth=max_depth - 1)
                 return skill
 
         return None

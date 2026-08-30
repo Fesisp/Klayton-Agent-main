@@ -1,6 +1,12 @@
-import mss
+try:
+    import mss
+except ImportError:
+    mss = None
 import numpy as np
-import cv2
+try:
+    import cv2
+except ImportError:
+    cv2 = None
 from src.utils.window_handler import WindowHandler
 
 class ScreenCapture:

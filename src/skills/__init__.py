@@ -2,7 +2,7 @@
 from .base_skill import BaseSkill, SkillResult, SkillStatus
 from .battle_skill import BattleSkill
 from .hunting_skill import HuntingSkill
-from .follow_skill import FollowSkill
+from .follow_skill import FollowPlayerSkill, FollowSkill
 from .wait_skill import WaitSkill
 from .heal_skill import HealSkill
 from .navigate_skill import NavigateSkill
@@ -16,6 +16,7 @@ __all__ = [
     'SkillStatus',
     'BattleSkill',
     'HuntingSkill',
+    'FollowPlayerSkill',
     'FollowSkill',
     'WaitSkill',
     'HealSkill',

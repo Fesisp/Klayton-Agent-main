@@ -115,6 +115,15 @@ class ResourcesState:
 
 
 @dataclass
+class CompanionState:
+    """Estado do companheiro em relação ao líder."""
+    target_player_position: Optional[Tuple[int, int]] = None
+    is_following_leader: bool = False
+    leader_last_seen_timestamp: float = field(default_factory=time.time)
+    leader_distance: float = 0.0
+
+
+@dataclass
 class WorldState:
     """
     WorldState - Modelo Global do Mundo (Fonte Única da Verdade).
@@ -126,6 +135,7 @@ class WorldState:
     quest: QuestState = field(default_factory=QuestState)
     location: LocationState = field(default_factory=LocationState)
     resources: ResourcesState = field(default_factory=ResourcesState)
+    companion: CompanionState = field(default_factory=CompanionState)
     agent: AgentState = field(default_factory=AgentState)
     last_update: float = field(default_factory=time.time)
     raw_data: Dict[str, Any] = field(default_factory=dict)

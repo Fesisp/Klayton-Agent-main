@@ -1,6 +1,12 @@
-import pyautogui
+try:
+    import pyautogui
+except ImportError:
+    pyautogui = None
 import time
-import cv2
+try:
+    import cv2
+except ImportError:
+    cv2 = None
 import numpy as np
 import os
 import random
@@ -8,7 +14,10 @@ try:
     import pydirectinput
 except Exception:
     pydirectinput = None
-from scipy import interpolate
+try:
+    from scipy import interpolate
+except ImportError:
+    interpolate = None
 from ..utils.geometry import normalize_roi, get_safe_random_point
 from ..utils.window_handler import WindowHandler
 try:

@@ -1,11 +1,18 @@
 import time
-import cv2
+try:
+    import cv2
+except ImportError:
+    cv2 = None
 import winsound
 import random
 from pathlib import Path
 from enum import Enum
 import ctypes
-from loguru import logger
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger("BotController")
 from ..perception.game_state_detector import GameState
 from ..perception.chat_handler import ChatHandler
 from ..utils.geometry import normalize_roi, crop_roi_safe, get_safe_random_point
@@ -47,6 +54,11 @@ class BotController:
         goal_cfg = self.cfg.get('bot', {}).get('primary_goal', self.cfg.get('bot', {}).get('behavior', 'mission'))
         initial_goal = Goal.from_string(str(goal_cfg))
         self.goal_engine = GoalEngine(primary_goal=initial_goal, config=config)
+
+        # Agente Autônomo Companheiro (Klayton Companion Agent 2.0)
+        from ..agent.companion_agent import KlaytonCompanionAgent
+        self.companion_agent = KlaytonCompanionAgent()
+        self.companion_agent.components = components
         
     @property
     def behavior(self):
@@ -86,48 +98,21 @@ class BotController:
                 
                 game_state = self.detector.detect_state(img)
 
-                # Avalia o sub-objetivo ativo através do GoalEngine
-                context = {
-                    'game_state': game_state,
-                    'in_battle': (game_state == GameState.IN_BATTLE),
-                }
-                active_goal = self.goal_engine.evaluate_subgoal(context)
+                # 1. Atualiza WorldState com observações reais de percepção (Single Source of Truth)
+                self.companion_agent.world.battle.in_battle = (game_state == GameState.IN_BATTLE)
+                self.companion_agent.world.battle.is_shiny = (game_state == GameState.SHINY_FOUND)
 
-                if self.debug:
-                    logger.debug(f"GameState: {game_state.name} | Primary Goal: {self.goal_engine.primary_goal.name} | Active Goal: {active_goal.name}")
-
-                # PRIORIDADE MÁXIMA: Shiny (sobrepõe qualquer estado)
+                # Prioridade máxima: Notificação e Pausa para Shiny
                 if game_state == GameState.SHINY_FOUND:
                     self.handle_shiny()
-                
-                # Objetivo FOLLOW_PLAYER: Rastreio contínuo do jogador
-                if active_goal == Goal.FOLLOW_PLAYER:
-                    self.handle_follow(img)
                     continue
 
-                # PRIORIDADE 2: Batalha (sobrepõe exploração, mas mantém o objetivo ativo)
-                if game_state == GameState.IN_BATTLE:
-                    self.handle_battle(img)
-                    continue
+                # 2. O cérebro novo (KlaytonCompanionAgent) avalia intenções, metas e comanda o corpo através das Skills
+                self.companion_agent.step()
 
-                # PRIORIDADE 3: Execução do Objetivo Ativo (quando explorando)
-                if game_state == GameState.EXPLORING:
-                    if active_goal == Goal.PROGRESS_STORY:
-                        self.handle_mission(img)
-                    elif active_goal in [Goal.HUNT, Goal.FARM_XP, Goal.TRAIN_POKEMON]:
-                        self.handle_hunting(img)
-                    elif active_goal == Goal.FISH:
-                        self.handle_fishing(img)
-                    elif active_goal in [Goal.HEAL_TEAM, Goal.RETURN_TO_CENTER]:
-                        self.handle_heal_team(img)
-                    elif active_goal == Goal.BUY_ITEMS:
-                        self.handle_buy_items(img)
-                    elif active_goal == Goal.FOLLOW_PLAYER:
-                        self.handle_follow(img)
-                    elif active_goal == Goal.IDLE:
-                        if self.debug:
-                            logger.debug("Bot em Objetivo OCIOSO (IDLE). Aguardando...")
-                        pass
+                if self.debug:
+                    active_subgoal = self.companion_agent.world.agent.current_subgoal
+                    logger.debug(f"GameState: {game_state.name} | Companion Active Subgoal: {active_subgoal}")
                 
                 # Intervalo do loop principal (configurável, padrão 1.0s)
                 sleep_time = float(self.cfg.get('bot', {}).get('loop_interval', 1.0))

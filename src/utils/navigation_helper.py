@@ -7,7 +7,11 @@ que podem ser utilizadas em múltiplos modos (MISSION, FOLLOW, HUNTING).
 
 import time
 import random
-from loguru import logger
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger("NavigationHelper")
 
 
 class NavigationHelper:

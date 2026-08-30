@@ -100,6 +100,19 @@ def main():
         }
         
         bot = BotController(config, components)
+        from src.agent.companion_agent import KlaytonCompanionAgent
+        agent = KlaytonCompanionAgent()
+        agent.components = components
+
+        logger.info("==========================================================")
+        logger.info("🤝 KlaytonCompanionAgent started")
+        logger.info("🌐 WorldState active (Single Source of Truth)")
+        logger.info("👁️ Perception active")
+        logger.info("🎯 CompanionGoalManager active")
+        logger.info("🎙️ Voice Listener & Anti-Self-Hearing active")
+        logger.info("⚡ Skill Engine active (GOAP & Utility AI)")
+        logger.info("🛡️ Watchdog & Recovery System active")
+        logger.info("==========================================================")
         
         # Inicializa hotkey listener se habilitado
         hotkey_listener = None
@@ -123,7 +136,7 @@ def main():
                 logger.error(f"Erro ao iniciar controle remoto UDP: {e}")
                 logger.warning("Bot continuará sem controle remoto")
         
-        # Executa o bot
+        # Executa o loop principal através do KlaytonCompanionAgent
         bot.run()
         
         # Cleanup

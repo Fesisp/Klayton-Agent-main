@@ -1,9 +1,16 @@
-import cv2
+try:
+    import cv2
+except ImportError:
+    cv2 = None
 import numpy as np
 import winsound
 import os
 from enum import Enum
-from loguru import logger
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger("GameStateDetector")
 
 class GameState(Enum):
     EXPLORING = "exploring"

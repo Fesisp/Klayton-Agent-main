@@ -5,8 +5,15 @@ Monitora a tela continuamente para alertar sobre PMs com alta velocidade.
 """
 
 import time
-import cv2
-from loguru import logger
+try:
+    import cv2
+except ImportError:
+    cv2 = None
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger("ChatHandler")
 
 
 class ChatHandler:
@@ -82,3 +89,5 @@ class ChatHandler:
         """Reseta o timer para verificação imediata."""
         self.last_check_time = 0
     def generate_response(self, text_detected):
+        """Gera resposta simulada ou nula para texto detectado no chat."""
+        return None

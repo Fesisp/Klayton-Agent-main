@@ -2,8 +2,15 @@
 Módulo de Notificações - Dispara alertas para canais gratuitos (Telegram + Discord)
 """
 
-import requests
-from loguru import logger
+try:
+    import requests
+except ImportError:
+    requests = None
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger("Notifier")
 
 
 class NotificationManager:
