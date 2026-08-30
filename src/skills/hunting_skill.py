@@ -11,7 +11,7 @@ Data: 2026-08-30
 import random
 import time
 from typing import Any, Dict
-from .base_skill import BaseSkill, SkillResult
+from .base_skill import BaseSkill, SkillResult, SkillStatus
 from ..world.world_state import WorldState
 
 
@@ -25,15 +25,16 @@ class HuntingSkill(BaseSkill):
     def execute(self, world: WorldState, components: Dict[str, Any]) -> SkillResult:
         input_sim = components.get('input')
         if not input_sim:
-            return SkillResult(success=False, failed=True, message="InputSimulator ausente")
+            return SkillResult(status=SkillStatus.FAILED, message="InputSimulator ausente")
 
         # Escolhe direção aleatória humanizada
         directions = ['w', 'a', 's', 'd']
         direction = random.choice(directions)
-        input_sim.press(direction)
-        time.sleep(0.1)
+        if hasattr(input_sim, 'press'):
+            input_sim.press(direction)
+        time.sleep(0.01)
 
-        return SkillResult(success=True, completed=False, message=f"Passo dado na direção {direction}")
+        return SkillResult(status=SkillStatus.RUNNING, message=f"Passo dado na direção {direction}")
 
     def is_complete(self, world: WorldState) -> bool:
         return world.battle.in_battle or world.team.needs_healing

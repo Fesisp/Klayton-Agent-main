@@ -15,6 +15,22 @@ bot:
   primary_goal: "PROGRESS_STORY"
   behavior: "mission"
 
+voice:
+  enabled: true
+  tts_enabled: true                # Resposta por voz (Edge-TTS Neural)
+  neural_voice: "pt-BR-AntonioNeural"  # Opções: pt-BR-AntonioNeural (masculina), pt-BR-FranciscaNeural (feminina)
+  voice_rate: "+0%"                # Velocidade da fala (-10% a +20%)
+  voice_pitch: "+0Hz"              # Tom da voz
+  language: "pt-BR"                # Idioma de reconhecimento e fala
+  debounce_seconds: 1.2            # Tempo de espera adaptativo para falas longas
+  wake_word: "klayton"             # Nome do companheiro
+  sound_feedback: true             # Feedback sonoro imediato ao receber comandos
+
+security:
+  stealth_enabled: true            # Ativa proteção de processo Win32
+  anti_debug: true                 # Oculta threads de depuradores em modo usuário
+  dacl_hardening: true             # Restringe acessos não autorizados à memória do processo
+
 screen:
   capture_method: "mss"
   fps: 10

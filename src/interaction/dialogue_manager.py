@@ -14,8 +14,10 @@ Autor: Klayton Companion Agent
 Data: 2026-08-30
 """
 
-from dataclasses import dataclass
-from typing import Optional
+import difflib
+from dataclasses import dataclass, field
+from typing import Optional, List
+from .neural_tts import NeuralTTSEngine
 try:
     from loguru import logger
 except ImportError:
@@ -35,9 +37,42 @@ class DialogueManager:
     Gerenciador de diálogo e expressão verbal do Companheiro.
     """
 
-    def __init__(self, use_tts: bool = False):
+    def __init__(self, use_tts: bool = True):
         self.use_tts = use_tts
         self._last_speech: Optional[SpeechUtterance] = None
+        self.recent_speech_history: List[str] = []
+        
+        # Motor Neural TTS com callbacks de estado
+        self.tts_engine = NeuralTTSEngine(
+            voice_name="pt-BR-AntonioNeural",
+            on_speech_start=self._on_speech_start,
+            on_speech_end=self._on_speech_end
+        )
+
+    @property
+    def is_speaking(self) -> bool:
+        return self.tts_engine.is_speaking
+
+    def _on_speech_start(self) -> None:
+        logger.debug("🔊 Klayton começou a falar (Supressão de eco ativada)")
+
+    def _on_speech_end(self) -> None:
+        logger.debug("🔇 Klayton terminou de falar")
+
+    def is_echo_of_own_speech(self, text: str, similarity_threshold: float = 0.65) -> bool:
+        """
+        Verifica se o texto recebido é um eco ou repetição da própria fala recente do Klayton.
+        """
+        text_clean = text.strip().lower()
+        if not text_clean:
+            return False
+
+        for past_speech in self.recent_speech_history:
+            ratio = difflib.SequenceMatcher(None, text_clean, past_speech.lower()).ratio()
+            if ratio >= similarity_threshold:
+                logger.warning(f"🛡️ Eco de auto-fala detectado e suprimido: '{text}' (Similaridade {ratio*100:.0f}% com '{past_speech}')")
+                return True
+        return False
 
     def express_decision(self, decision_type: str, context: Optional[dict] = None) -> SpeechUtterance:
         """
@@ -64,18 +99,13 @@ class DialogueManager:
         utterance = SpeechUtterance(text=speech_text)
         self._last_speech = utterance
         
+        # Guarda histórico para proteção de eco
+        self.recent_speech_history.append(speech_text)
+        if len(self.recent_speech_history) > 8:
+            self.recent_speech_history.pop(0)
+
         logger.info(f"🗣️ Klayton diz: '{speech_text}'")
         if self.use_tts:
-            self._speak_tts(speech_text)
+            self.tts_engine.speak(speech_text)
 
         return utterance
-
-    def _speak_tts(self, text: str) -> None:
-        """Interface de síntese de voz local (pyttsx3/SAPI5)."""
-        try:
-            import pyttsx3
-            engine = pyttsx3.init()
-            engine.say(text)
-            engine.runAndWait()
-        except Exception as e:
-            logger.debug(f"TTS offline/não disponível: {e}")

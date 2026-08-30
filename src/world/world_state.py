@@ -96,15 +96,36 @@ class AgentState:
 
 
 @dataclass
+class LocationState:
+    """Estado de localização e navegação global."""
+    current_map: str = "Unknown"
+    region: str = "Kanto"
+    coordinates: Tuple[int, int] = (0, 0)
+    nearby_exits: List[str] = field(default_factory=list)
+    important_landmarks: List[str] = field(default_factory=list)
+
+
+@dataclass
+class ResourcesState:
+    """Estado de recursos e inventário."""
+    pokeballs_count: int = 10
+    potions_count: int = 5
+    money: int = 1000
+    items: Dict[str, int] = field(default_factory=dict)
+
+
+@dataclass
 class WorldState:
     """
-    WorldState - Modelo Global do Mundo.
+    WorldState - Modelo Global do Mundo (Fonte Única da Verdade).
     Todas as observações atualizam este objeto central.
     """
     player: PlayerState = field(default_factory=PlayerState)
     team: TeamState = field(default_factory=TeamState)
     battle: BattleState = field(default_factory=BattleState)
     quest: QuestState = field(default_factory=QuestState)
+    location: LocationState = field(default_factory=LocationState)
+    resources: ResourcesState = field(default_factory=ResourcesState)
     agent: AgentState = field(default_factory=AgentState)
     last_update: float = field(default_factory=time.time)
     raw_data: Dict[str, Any] = field(default_factory=dict)

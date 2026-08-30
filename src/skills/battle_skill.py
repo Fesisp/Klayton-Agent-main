@@ -9,7 +9,7 @@ Data: 2026-08-30
 """
 
 from typing import Any, Dict
-from .base_skill import BaseSkill, SkillResult
+from .base_skill import BaseSkill, SkillResult, SkillStatus
 from ..world.world_state import WorldState
 
 
@@ -25,7 +25,7 @@ class BattleSkill(BaseSkill):
         input_sim = components.get('input')
         
         if not strategy or not input_sim:
-            return SkillResult(success=False, failed=True, message="Componentes ausentes")
+            return SkillResult(status=SkillStatus.FAILED, message="Componentes ausentes")
 
         # Exemplo de execução delegada à inteligência de batalha v2.5
         active_pkmn = world.team.active_pokemon.name if world.team.active_pokemon else "Unknown"
@@ -34,9 +34,9 @@ class BattleSkill(BaseSkill):
         best_slot = strategy.get_best_move(active_pkmn, enemy_pkmn)
         if best_slot != -1 and hasattr(input_sim, 'click_in_slot'):
             input_sim.click_in_slot(best_slot)
-            return SkillResult(success=True, completed=False, message=f"Golpe executado slot {best_slot}")
+            return SkillResult(status=SkillStatus.RUNNING, message=f"Golpe executado slot {best_slot}")
         
-        return SkillResult(success=True, completed=False, message="Aguardando turno de batalha")
+        return SkillResult(status=SkillStatus.RUNNING, message="Aguardando turno de batalha")
 
     def is_complete(self, world: WorldState) -> bool:
         return not world.battle.in_battle

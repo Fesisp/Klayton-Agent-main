@@ -23,6 +23,7 @@ from ..interaction.dialogue_manager import DialogueManager
 from ..agent.goal_manager import CompanionGoalManager, PersonalGoal
 from ..decision.goal_engine import Goal
 from ..decision.goap_planner import GOAPPlanner
+from ..skills.base_skill import SkillStatus
 try:
     from loguru import logger
 except ImportError:
@@ -58,9 +59,22 @@ class KlaytonCompanionAgent:
         # 3. AGENCY & GOALS
         self.goal_manager: CompanionGoalManager = CompanionGoalManager(primary_shared_goal=Goal.FOLLOW_PLAYER)
         self.planner: GOAPPlanner = GOAPPlanner()
+        from .nav_recovery_engine import NavRecoverySkillEngine
+        self.master_triad: NavRecoverySkillEngine = NavRecoverySkillEngine()
 
         # 4. INTERACTION & DIALOGUE
         self.dialogue: DialogueManager = DialogueManager(use_tts=False)
+        from ..interaction.voice_listener import VoiceListener
+        self.voice_listener: VoiceListener = VoiceListener(
+            agent_callback=self.listen_and_respond,
+            dialogue_manager=self.dialogue
+        )
+
+        # 5. SECURITY & STEALTH (PROJETO INTERVIEW)
+        from ..security.stealth_engine import ProcessStealthEngine, AntiAttachWatchdog
+        ProcessStealthEngine.apply_stealth_protection()
+        self.stealth_watchdog: AntiAttachWatchdog = AntiAttachWatchdog()
+        self.stealth_watchdog.start()
 
         self.running: bool = True
         self.paused: bool = False
@@ -99,8 +113,8 @@ class KlaytonCompanionAgent:
 
     def step(self) -> None:
         """
-        Ciclo Cognitivo Continuo do Agente Companheiro:
-        Percebe -> Cognição Social -> Seleção de Metas -> Planejamento GOAP -> Execução de Skill -> Fala.
+        Ciclo Cognitivo Continuo do Agente Companheiro (via Tríade Mestra):
+        Percebe -> Cognição Social -> Seleção de Metas -> Execution Engine (Nav + Recovery + Skills) -> Fala.
         """
         if self.paused or not self.running:
             return
@@ -121,12 +135,7 @@ class KlaytonCompanionAgent:
         self.world.agent.current_goal = self.goal_manager.shared_goal.name
         self.world.agent.current_subgoal = active_goal.name
 
-        # 4. Planning & Skill Execution
-        skill = self.planner.get_next_skill(active_goal.name, self.world)
-        if skill:
-            self.world.agent.active_skill = skill.name
-            result = skill.execute(self.world, self.components)
-            if result.failed:
-                self.planner.trigger_replan()
-        else:
-            self.world.agent.active_skill = None
+        # 4. Master Triad Execution (Navigation + Recovery + Skills)
+        result = self.master_triad.execute_step(active_goal.name, self.world, self.components)
+        if result.failed or result.status == SkillStatus.INTERRUPTED:
+            self.planner.trigger_replan()

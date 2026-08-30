@@ -14,17 +14,31 @@ Data: 2026-08-30
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
-from ..world.world_state import WorldState
+from enum import Enum
+
+
+class SkillStatus(Enum):
+    """Status explícito de retorno de uma Skill."""
+    SUCCESS = "SUCCESS"
+    FAILED = "FAILED"
+    RUNNING = "RUNNING"
+    INTERRUPTED = "INTERRUPTED"
 
 
 @dataclass
 class SkillResult:
     """Resultado da execução de um ciclo da Skill."""
-    success: bool = True
-    completed: bool = False
-    failed: bool = False
+    status: SkillStatus = SkillStatus.RUNNING
     message: str = ""
     data: Dict[str, Any] = None
+
+    @property
+    def success(self) -> bool:
+        return self.status == SkillStatus.SUCCESS
+
+    @property
+    def failed(self) -> bool:
+        return self.status == SkillStatus.FAILED
 
 
 class BaseSkill(ABC):
