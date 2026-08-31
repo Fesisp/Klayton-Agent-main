@@ -3,7 +3,6 @@ try:
 except ImportError:
     cv2 = None
 import numpy as np
-import winsound
 import os
 from enum import Enum
 try:

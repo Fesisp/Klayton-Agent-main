@@ -49,6 +49,9 @@ class LearnedFact:
     risk_level: ExplorationRisk = ExplorationRisk.SAFE
     created_at: float = field(default_factory=time.time)
     updated_at: float = field(default_factory=time.time)
+    first_seen: float = field(default_factory=time.time)
+    last_seen: float = field(default_factory=time.time)
+    visual_reference: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         """Converte a instância para um dicionário serializável."""

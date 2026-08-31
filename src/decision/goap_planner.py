@@ -312,3 +312,58 @@ class GOAPPlanner:
             return resumed
         return None
 
+    def peek_next_action(
+        self,
+        goal_input: Any,
+        world: WorldState
+    ) -> Optional[Tuple[GOAPAction, BaseSkill]]:
+        """
+        Inspeciona a próxima ação e Skill do plano GOAP sem consumi-la da fila.
+        A ação permanece no topo até ser confirmada via commit_current_action().
+        """
+        if isinstance(goal_input, GoalInstance):
+            goal_name = goal_input.name
+            goal_instance = goal_input
+        else:
+            goal_name = str(goal_input)
+            goal_instance = GoalInstance(type=Goal.from_string(goal_name))
+
+        if self.needs_replan or not self.current_plan:
+            start_symbols = self.extract_world_state_symbols(world, goal_instance)
+            goal_symbols = self._map_goal_to_goap_state(goal_name)
+            self.current_plan = self.plan(start_symbols, goal_symbols)
+            self.needs_replan = False
+
+        if not self.current_plan:
+            return None
+
+        action = self.current_plan[0]
+        skill = self.skills.get(action.target_skill_name)
+        if skill is None:
+            return None
+
+        return action, skill
+
+    def commit_current_action(self, completed_action: GOAPAction) -> None:
+        """
+        Consome a ação do plano GOAP somente após a conclusão com SUCESSO (SkillStatus.SUCCESS).
+        """
+        if not self.current_plan:
+            return
+
+        current = self.current_plan[0]
+        if current != completed_action and current.name != completed_action.name:
+            raise RuntimeError(f"Tentativa de confirmar a ação '{completed_action.name}', mas a ação ativa no topo do plano é '{current.name}'")
+
+        self.current_plan.pop(0)
+
+    def get_next_skill(self, goal_input: Any, world: WorldState) -> Optional[BaseSkill]:
+        """
+        Compatibilidade legada: inspeciona a próxima Skill sem consumi-la.
+        """
+        planned = self.peek_next_action(goal_input, world)
+        if planned is None:
+            return None
+        _, skill = planned
+        return skill
+

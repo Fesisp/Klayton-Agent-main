@@ -16,9 +16,10 @@ Data: 2026-08-30
 """
 
 import time
-import winsound
 from typing import Dict, Any, Optional
 from pathlib import Path
+
+from ..platform.audio_alerts import AudioAlertService
 
 from ..world.world_state import WorldState, Observation
 from ..decision.goal_engine import Goal, GoalInstance
@@ -91,6 +92,8 @@ class KlaytonCompanionAgent:
         ProcessStealthEngine.apply_stealth_protection()
         self.stealth_watchdog: AntiAttachWatchdog = AntiAttachWatchdog()
         self.stealth_watchdog.start()
+
+        self.audio_alerts: AudioAlertService = AudioAlertService()
 
         # Controle de Execução
         self.running: bool = True
@@ -237,7 +240,7 @@ class KlaytonCompanionAgent:
                     self.paused = True
                     self.notifier.notify_all("⚠️ MENSAGEM PRIVADA RECEBIDA! O agente foi pausado imediatamente para evitar ban.", is_critical=True)
                     for _ in range(3):
-                        winsound.MessageBeep(winsound.MB_ICONHAND)
+                        self.audio_alerts.warning()
                         time.sleep(0.3)
                     continue
 

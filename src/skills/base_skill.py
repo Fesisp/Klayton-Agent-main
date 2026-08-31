@@ -58,7 +58,15 @@ class BaseSkill(ABC):
         self.config = config or {}
         self.target_pokemon: Optional[str] = None
         self.target_level: Optional[int] = None
+        self.target_map: Optional[str] = None
         self._current_status: SkillStatus = SkillStatus.READY
+
+    def reset_runtime_state(self) -> None:
+        """Reseta variáveis transitórias de estado antes da reativação da Skill."""
+        self._current_status = SkillStatus.READY
+        self.target_pokemon = None
+        self.target_level = None
+        self.target_map = None
 
     def can_start(self, world: WorldState) -> bool:
         """Verifica se a Skill pode ser iniciada no estado atual do mundo."""

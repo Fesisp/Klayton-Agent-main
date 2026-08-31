@@ -57,8 +57,9 @@ def test_e2e_goal_instance_parameter_transmission():
     test_skill = HuntingSkill()
     test_skill.target_level = 35  # Valor padrão antigo
 
-    # Mocka o retorno do planner para retornar a skill de teste
-    engine.goap_planner.get_next_skill = lambda goal, w: test_skill
+    from src.decision.goap_planner import GOAPAction
+    engine.goap_planner.peek_next_action = lambda goal, w: (GOAPAction("HuntEncounter", "HuntingSkill", {}, {}, 1.0), test_skill)
+    engine.goap_planner.skills["HuntingSkill"] = test_skill
 
     # Executa o step com a GoalInstance parametrizada
     engine.execute_step(selected_instance, world, components={})

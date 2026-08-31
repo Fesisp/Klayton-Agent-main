@@ -124,6 +124,20 @@ class KnowledgeBase:
                 return self._row_to_fact(row)
         return None
 
+    def get_fact(self, concept: str) -> Optional[LearnedFact]:
+        """Alias para busca de fato por conceito."""
+        return self.find_similar(concept)
+
+    def list_facts(self) -> List[LearnedFact]:
+        """Retorna a lista completa de fatos armazenados no SQLite."""
+        results = []
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM learned_facts")
+            for r in cursor.fetchall():
+                results.append(self._row_to_fact(r))
+        return results
+
     def get_confirmed(self, concept: str) -> List[LearnedFact]:
         results = []
         with self._get_connection() as conn:
@@ -181,10 +195,16 @@ class KnowledgeBase:
             conn.commit()
 
     def _row_to_fact(self, row: sqlite3.Row) -> LearnedFact:
-        st_val = row["status"]
-        try:
-            st_enum = KnowledgeStatus(st_val)
-        except ValueError:
+        st_val = str(row["status"]).lower()
+        if "confirmed" in st_val:
+            st_enum = KnowledgeStatus.CONFIRMED
+        elif "likely" in st_val:
+            st_enum = KnowledgeStatus.LIKELY
+        elif "trusted" in st_val:
+            st_enum = KnowledgeStatus.TRUSTED
+        elif "refuted" in st_val:
+            st_enum = KnowledgeStatus.REFUTED
+        else:
             st_enum = KnowledgeStatus.HYPOTHESIS
 
         return LearnedFact(

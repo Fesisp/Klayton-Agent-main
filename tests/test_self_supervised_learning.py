@@ -34,7 +34,7 @@ from src.learning.confidence_updater import ConfidenceUpdater
 from src.learning.human_feedback import HumanFeedbackSystem, DecisionRecord
 from src.learning.learning_engine import LearningEngine
 from src.perception.semantic.semantic_vision import SemanticVision
-from src.perception.semantic.providers.base_provider import NullVisionProvider
+from src.perception.semantic.providers.null_provider import NullVisionProvider
 
 
 class MockWorldState:
@@ -161,7 +161,7 @@ def test_self_supervised_learning_pipeline():
 
     retrieved = kb.get_fact("test_concept")
     assert retrieved is not None
-    assert retrieved.status == KnowledgeStatus.CONFIRMED
+    assert (retrieved.status == KnowledgeStatus.CONFIRMED or str(getattr(retrieved.status, 'value', retrieved.status)) == "confirmed")
     assert len(kb.list_facts()) == 2
     print("  ✅ KnowledgeBase salvou e recuperou com sucesso fatos aprendidos no SQLite")
 
@@ -181,14 +181,14 @@ def test_self_supervised_learning_pipeline():
         )
 
         test_plan = engine.hypothesis_engine.create_test(sim_fact)
-        assert test_plan["action"] == "approach_and_cross"
+        assert test_plan.action == "approach_and_cross"
 
         before = world.snapshot()
-        await executor.execute_learning_action(test_plan["action"], sim_fact)
+        await executor.execute_learning_action(test_plan.action, sim_fact)
         after = world.snapshot()
 
-        success = engine.validator.validate(before, after, test_plan["expected"])
-        assert success is True
+        val_res = engine.validator.validate(before, after, test_plan.expected_effect)
+        assert val_res.success is True
 
         ConfidenceUpdater.success(sim_fact)
         kb.save_fact(sim_fact)

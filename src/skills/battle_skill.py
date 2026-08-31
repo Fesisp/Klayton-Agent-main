@@ -44,6 +44,9 @@ class BattleSkill(BaseSkill):
         if world.battle.is_shiny:
             return SkillResult(status=SkillStatus.INTERRUPTED, message="Shiny encontrado! Ação pausada por segurança.")
 
+        if not world.battle.in_battle and not world.battle.is_shiny:
+            return SkillResult(status=SkillStatus.SUCCESS, message="Batalha concluída com sucesso")
+
         active_pkmn = world.team.active_pokemon.name if world.team.active_pokemon else "PlayerPkmn"
         enemy_pkmn = world.battle.opponent_name or "EnemyPkmn"
 

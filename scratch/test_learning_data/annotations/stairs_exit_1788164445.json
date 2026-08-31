@@ -1,0 +1,9 @@
+{
+  "hypothesis_id": "hyp_door_1",
+  "concept": "stairs_exit",
+  "expected_outcome": "change_map",
+  "observed_outcome": "map_changed",
+  "confidence": 0.88,
+  "confirmed_by_environment": true,
+  "timestamp": 1788164445.1449325
+}

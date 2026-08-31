@@ -17,6 +17,8 @@ from ..core.recovery_manager import RecoveryManager
 from ..decision.goap_planner import GOAPPlanner
 from ..decision.hierarchical_planner import HierarchicalPlanner
 from ..decision.goal_engine import GoalInstance, Goal
+from .execution_coordinator import ExecutionCoordinator
+
 try:
     from loguru import logger
 except ImportError:
@@ -26,7 +28,7 @@ except ImportError:
 
 class NavRecoverySkillEngine:
     """
-    Orquestrador Unificado da Tríade Mestra com Injeção Dinâmica de Parâmetros.
+    Orquestrador Unificado da Tríade Mestra com Injeção Dinâmica de Parâmetros e Coordenador de Execução.
     """
 
     def __init__(self):
@@ -34,57 +36,40 @@ class NavRecoverySkillEngine:
         self.recovery: RecoveryManager = RecoveryManager()
         self.goap_planner: GOAPPlanner = GOAPPlanner()
         self.hierarchical_planner: HierarchicalPlanner = HierarchicalPlanner()
+        self.execution: ExecutionCoordinator = ExecutionCoordinator(self.goap_planner)
 
     def execute_step(self, active_goal_input: Union[str, GoalInstance], world: WorldState, components: Dict[str, Any]) -> SkillResult:
         """
-        Executa a Skill ativa e injeta target e target_level da GoalInstance na instância da Skill.
+        Executa o tick da Skill ativa via ExecutionCoordinator, mantendo ações RUNNING ativas.
         """
         if isinstance(active_goal_input, GoalInstance):
             goal_instance = active_goal_input
-            goal_name = goal_instance.name
         else:
             goal_name = str(active_goal_input)
             goal_instance = GoalInstance(type=Goal.from_string(goal_name))
 
-        # 1. Obter a próxima Skill do GOAP / HierarchicalPlanner
-        skill: Optional[BaseSkill] = self.goap_planner.get_next_skill(goal_instance, world)
-        if not skill:
-            skill = self.hierarchical_planner.resolve_next_skill(goal_name, world)
+        # Execução pelo ExecutionCoordinator (Garante que RUNNING não remove a ação do plano)
+        result: SkillResult = self.execution.tick(goal_instance, world, components)
 
-        if not skill:
-            return SkillResult(status=SkillStatus.SUCCESS, message="Nenhuma Skill ativa necessária")
-
-        # 2. Injeção dos parâmetros dinâmicos (target_level, target_pokemon, target_map) na Skill!
-        if goal_instance.target_level and hasattr(skill, 'target_level'):
-            setattr(skill, 'target_level', goal_instance.target_level)
-            logger.info(f"🎯 Parâmetro Injetado na Skill {skill.name}: target_level={goal_instance.target_level}")
-
-        if goal_instance.target and hasattr(skill, 'target_pokemon'):
-            setattr(skill, 'target_pokemon', goal_instance.target)
-
-        if goal_instance.location_hint and hasattr(skill, 'target_map'):
-            setattr(skill, 'target_map', goal_instance.location_hint)
-            logger.info(f"🗺️ Parâmetro Injetado na Skill {skill.name}: target_map='{goal_instance.location_hint}'")
-
-        world.agent.active_skill = skill.name
-
-        # 3. Execução da Skill
-        result: SkillResult = skill.execute(world, components)
+        if self.execution.active and self.execution.active.skill:
+            world.agent.active_skill = self.execution.active.skill.name
 
         # 4. Monitoramento de Colisão & Recuperação
-        if world.player.position:
+        if world.player.position and result.status == SkillStatus.RUNNING:
             moved_successfully = self.navigation.verify_local_step(world.player.position)
             if not moved_successfully or self.navigation.is_stuck:
                 logger.warning(f"🚧 Estagnação detectada em {world.player.position}! Disparando RecoveryManager...")
                 self.recovery.recover(world, components, reason="Position stuck in collision")
                 self.navigation.reset_local()
+                self.execution.interrupt(world)
                 self.goap_planner.trigger_replan()
                 return SkillResult(status=SkillStatus.INTERRUPTED, message="Interrompido para recuperação de obstáculo")
 
         if result.failed:
-            logger.warning(f"🚨 Skill '{skill.name}' reportou falha! Disparando procedimento de recuperação...")
-            self.recovery.recover(world, components, reason=f"Skill {skill.name} failed: {result.message}")
+            logger.warning(f"🚨 Skill reportou falha! Disparando procedimento de recuperação...")
+            self.recovery.recover(world, components, reason=f"Skill failed: {result.message}")
+            self.execution.interrupt(world)
             self.goap_planner.trigger_replan()
-            return SkillResult(status=SkillStatus.FAILED, message=f"Recuperado após falha da Skill {skill.name}")
+            return SkillResult(status=SkillStatus.FAILED, message=f"Recuperado após falha da Skill: {result.message}")
 
         return result

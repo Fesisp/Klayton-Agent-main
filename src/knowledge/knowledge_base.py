@@ -30,6 +30,11 @@ class DataSourceTier(IntEnum):
     POKEAPI = 3             # Tier 3: PokéAPI (Referência canônica Nintendo/GameFreak)
 
 
+class KnowledgeDatabaseError(RuntimeError):
+    """Exceção para falhas estruturais ou ausência de arquivos de banco de dados SQLite."""
+    pass
+
+
 class KnowledgeBase:
     """
     Knowledge Base com resolução de conflitos e hierarquia de 3 níveis:
@@ -46,7 +51,19 @@ class KnowledgeBase:
 
     def _get_conn(self, db_name: str) -> sqlite3.Connection:
         db_path = self.knowledge_dir / f"{db_name}.sqlite"
-        conn = sqlite3.connect(db_path)
+
+        if not db_path.exists():
+            raise KnowledgeDatabaseError(f"Knowledge database ausente: {db_path}")
+
+        if db_path.stat().st_size == 0:
+            raise KnowledgeDatabaseError(f"Knowledge database vazio: {db_path}")
+
+        try:
+            uri = f"{db_path.resolve().as_uri()}?mode=ro"
+            conn = sqlite3.connect(uri, uri=True)
+        except Exception:
+            conn = sqlite3.connect(str(db_path))
+
         conn.row_factory = sqlite3.Row
         return conn
 

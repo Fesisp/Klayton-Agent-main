@@ -113,3 +113,24 @@ class LearningEngine:
             results.append(fact)
 
         return results
+
+    def get_metrics(self) -> dict:
+        """Calcula métricas estatísticas do aprendizado autônomo."""
+        facts = self.knowledge.list_facts() if hasattr(self.knowledge, "list_facts") else []
+        confirmed = [f for f in facts if str(getattr(f.status, 'value', f.status)).lower() in ["confirmed", "trusted"]]
+        refuted = [f for f in facts if str(getattr(f.status, 'value', f.status)).lower() == "refuted"]
+
+        total = len(facts)
+        conf_count = len(confirmed)
+        ref_count = len(refuted)
+
+        reuse_rate = (conf_count / total) if total > 0 else 0.0
+        false_rate = (ref_count / total) if total > 0 else 0.0
+
+        return {
+            "total_facts_in_kb": total,
+            "confirmed_facts": conf_count,
+            "refuted_facts": ref_count,
+            "knowledge_reuse_rate": reuse_rate,
+            "false_learning_rate": false_rate
+        }
