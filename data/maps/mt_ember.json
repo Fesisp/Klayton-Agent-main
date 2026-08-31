@@ -1,0 +1,50 @@
+{
+  "map_name": "Mt. Ember",
+  "region": "Sevii",
+  "exits": [
+    {
+      "target_map": "Kindle Road",
+      "direction": "South"
+    }
+  ],
+  "landmarks": {
+    "moltres_peak": "Moltres Static Peak",
+    "hot_springs": "Ember Spa"
+  },
+  "pokemon_center": null,
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Ponyta",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 32,
+      "max_lvl": 38,
+      "rate": 0.35
+    },
+    {
+      "species": "Rapidash",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 38,
+      "max_lvl": 42,
+      "rate": 0.15
+    },
+    {
+      "species": "Magmar",
+      "method": "cave",
+      "time": "all",
+      "min_lvl": 35,
+      "max_lvl": 40,
+      "rate": 0.1
+    },
+    {
+      "species": "Moltres",
+      "method": "static_boss",
+      "time": "all",
+      "min_lvl": 50,
+      "max_lvl": 50,
+      "rate": 1.0
+    }
+  ]
+}

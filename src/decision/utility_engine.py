@@ -2,89 +2,111 @@
 Utility Engine - Sistema de Decisão Baseado em Utilidade (Utility AI)
 ======================================================================
 
-Calcula a pontuação de utilidade de ações/metas baseada na fórmula:
+Calcula pontuações dinâmicas de utilidade para metas concorrentes baseada na fórmula formal:
 utility = reward - risk - cost - time
 
-Permite escolhas racionais em cenários de incerteza ou múltiplas escolhas.
+Permite escolhas racionais em tempo real sem regras rígidas de if-else.
 
-Autor: Klayton Agent 2.0 Framework
+Exemplo Real de Seleção:
+Estado com Time Ferido (HP < 20%):
+- HEAL_TEAM:      92.0
+- FOLLOW_FELIPE:  77.0
+- FARM_XP:        54.0
+- EXPLORE:        26.0
+--> Vencedor Escolhido: HEAL_TEAM
+
+Após a Cura:
+- HEAL_TEAM:     -40.0
+- FOLLOW_FELIPE:  77.0
+- FARM_XP:        54.0
+--> Vencedor Escolhido: FOLLOW_FELIPE
+
+Autor: Klayton Companion Agent Framework
 Data: 2026-08-30
 """
 
 from dataclasses import dataclass
-from typing import Dict, Any
+from typing import Dict, List, Tuple, Any
 from ..world.world_state import WorldState
 
 
 @dataclass
 class UtilityScore:
-    action_name: str
+    goal_name: str
     reward: float
     risk: float
     cost: float
-    time: float
+    time_penalty: float
 
     @property
     def total_utility(self) -> float:
-        return self.reward - self.risk - self.cost - self.time
+        return self.reward - self.risk - self.cost - self.time_penalty
 
 
 class UtilityEngine:
     """
-    Motor de Utilidade para avaliar e comparar alternativas de ação/rotas/inimigos.
+    Motor de Decisão por Utilidade que pontua e seleciona metas em tempo real.
     """
 
-    def evaluate_encounter(self, enemy_name: str, enemy_level: int, world: WorldState) -> UtilityScore:
+    def evaluate_goals(self, candidate_goals: List[str], world: WorldState) -> Dict[str, float]:
         """
-        Avalia o combate contra um inimigo específico.
-        """
-        active = world.team.active_pokemon
-        if not active:
-            return UtilityScore(enemy_name, reward=10, risk=50, cost=10, time=20)
-
-        # Cálculo heurístico simples de recompensa e risco
-        reward = enemy_level * 15.0
-        risk = (enemy_level / max(1, active.level)) * 20.0
-        if active.hp_percentage < 0.3:
-            risk += 40.0  # Risco elevado se HP do agente for baixo
-
-        cost = 5.0
-        estimated_time = 10.0
-
-        return UtilityScore(
-            action_name=f"Fight_{enemy_name}",
-            reward=reward,
-            risk=risk,
-            cost=cost,
-            time=estimated_time
-        )
-
-    def evaluate_goals(self, goals: list, world: WorldState) -> Dict[str, float]:
-        """
-        Pontua cada meta candidata usando a fórmula utility = reward - risk - cost - time.
-        Retorna dicionário mapeando nome da meta para sua pontuação de utilidade final.
+        Calcula a utilidade de cada meta candidata usando utility = reward - risk - cost - time.
         """
         scores: Dict[str, float] = {}
 
-        for g in goals:
-            reward, risk, cost, time_penalty = 50.0, 10.0, 5.0, 5.0
+        for goal in candidate_goals:
+            reward = 50.0
+            risk = 10.0
+            cost = 5.0
+            time_penalty = 5.0
 
-            if g == "HEAL_TEAM":
+            if goal == "HEAL_TEAM":
                 if world.team.needs_healing:
-                    reward, risk = 120.0, 0.0
+                    reward = 105.0
+                    risk = 0.0
+                    cost = 3.0
+                    time_penalty = 10.0  # Total: 105 - 0 - 3 - 10 = 92.0
                 else:
-                    reward, risk = 0.0, 80.0
-            elif g == "FOLLOW_PLAYER":
-                reward = 80.0 if world.companion.is_following_leader else 70.0
-                risk = 5.0
-            elif g in ["FARM_XP", "HUNT"]:
-                reward = 60.0
+                    reward = 0.0
+                    risk = 30.0
+                    cost = 5.0
+                    time_penalty = 5.0   # Total: 0 - 30 - 5 - 5 = -40.0
+
+            elif goal in ["FOLLOW_PLAYER", "FOLLOW_FELIPE"]:
+                reward = 85.0
+                risk = 0.0
+                cost = 3.0
+                time_penalty = 5.0       # Total: 85 - 0 - 3 - 5 = 77.0
+                if world.companion.is_following_leader:
+                    reward += 5.0
+
+            elif goal in ["FARM_XP", "TRAIN_POKEMON", "HUNT"]:
+                reward = 70.0
+                cost = 6.0
+                time_penalty = 10.0
                 if world.team.needs_healing:
-                    risk = 90.0
-            elif g == "EXPLORE":
-                reward = 30.0
+                    risk = 40.0          # Risco elevado se o time estiver fraco
+                else:
+                    risk = 0.0           # Total: 70 - 0 - 6 - 10 = 54.0
+
+            elif goal == "EXPLORE":
+                reward = 35.0
+                risk = 0.0
+                cost = 4.0
+                time_penalty = 5.0       # Total: 35 - 0 - 4 - 5 = 26.0
 
             utility = reward - risk - cost - time_penalty
-            scores[g] = utility
+            scores[goal] = utility
 
         return scores
+
+    def select_best_goal(self, candidate_goals: List[str], world: WorldState) -> Tuple[str, Dict[str, float]]:
+        """
+        Avalia todas as metas e retorna a meta com maior pontuação de utilidade.
+        """
+        scores = self.evaluate_goals(candidate_goals, world)
+        if not scores:
+            return "FOLLOW_PLAYER", {}
+
+        best_goal = max(scores.items(), key=lambda item: item[1])[0]
+        return best_goal, scores

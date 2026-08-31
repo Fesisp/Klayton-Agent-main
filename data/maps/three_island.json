@@ -1,0 +1,30 @@
+{
+  "map_name": "Three Island",
+  "region": "Sevii",
+  "exits": [
+    {
+      "target_map": "Bond Bridge",
+      "direction": "West"
+    },
+    {
+      "target_map": "Three Isle Port",
+      "direction": "South"
+    }
+  ],
+  "landmarks": {
+    "biker_turf": "Kanto Bikers Showdown"
+  },
+  "pokemon_center": {
+    "coordinates": [
+      18,
+      14
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      28,
+      14
+    ]
+  },
+  "encounter_areas": []
+}

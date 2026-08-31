@@ -1,0 +1,57 @@
+{
+  "map_name": "Berry Forest",
+  "region": "Sevii",
+  "exits": [
+    {
+      "target_map": "Bond Bridge",
+      "direction": "East"
+    }
+  ],
+  "landmarks": {
+    "lostelle_spot": "Hypno Rescue Event"
+  },
+  "pokemon_center": null,
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Drowzee",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 30,
+      "max_lvl": 35,
+      "rate": 0.3
+    },
+    {
+      "species": "Hypno",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 36,
+      "max_lvl": 40,
+      "rate": 0.15
+    },
+    {
+      "species": "Venonat",
+      "method": "grass",
+      "time": "night",
+      "min_lvl": 30,
+      "max_lvl": 34,
+      "rate": 0.35
+    },
+    {
+      "species": "Pinsir",
+      "method": "grass",
+      "time": "morning",
+      "min_lvl": 32,
+      "max_lvl": 38,
+      "rate": 0.1
+    },
+    {
+      "species": "Heracross",
+      "method": "headbutt",
+      "time": "all",
+      "min_lvl": 30,
+      "max_lvl": 35,
+      "rate": 0.1
+    }
+  ]
+}

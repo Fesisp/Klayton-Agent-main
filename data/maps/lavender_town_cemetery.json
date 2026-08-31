@@ -1,0 +1,20 @@
+{
+  "map_name": "Lavender Town Cemetery",
+  "region": "Kanto",
+  "pokeone_slug": "lavender-town-cemetery",
+  "exits": [],
+  "landmarks": {},
+  "pokemon_center": {
+    "coordinates": [
+      15,
+      12
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      25,
+      12
+    ]
+  },
+  "encounter_areas": []
+}

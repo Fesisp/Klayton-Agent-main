@@ -1,0 +1,20 @@
+{
+  "map_name": "Aspertia City",
+  "region": "Unova",
+  "pokeone_slug": "aspertia-city",
+  "exits": [],
+  "landmarks": {},
+  "pokemon_center": {
+    "coordinates": [
+      15,
+      12
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      25,
+      12
+    ]
+  },
+  "encounter_areas": []
+}

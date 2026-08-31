@@ -1,87 +1,74 @@
-import yaml
+"""
+Main Entry Point - Klayton Companion Agent Runtime
+=================================================
+
+Ponto de entrada principal que inicializa os componentes periféricos e executa
+o Klayton Companion Agent como Cérebro Central e Executor Nativo do Runtime.
+
+Autor: Klayton Companion Agent Framework
+Data: 2026-08-30
+"""
+
 import sys
 from pathlib import Path
 
-# Add the project root to the python path
+# Add project root to sys.path
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
-if str(ROOT_DIR) not in sys.path:
-    sys.path.append(str(ROOT_DIR))
+sys.path.insert(0, str(ROOT_DIR))
 
-from src.perception.screen_capture import ScreenCapture
-from src.perception.ocr_engine import OCREngine
+import yaml
+from loguru import logger
+from src.agent.companion_agent import KlaytonCompanionAgent
+from src.perception.screen import ScreenCapture
+from src.perception.ocr import OCREngine
 from src.perception.game_state_detector import GameStateDetector
-from src.action.input_simulator import InputSimulator
-from src.knowledge.pokemon_database import PokemonDatabase
-from src.knowledge.team_manager import TeamManager
-from src.decision.battle_strategy import BattleStrategy
-from src.core.bot_controller import BotController
-from src.core.hotkey_listener import HotkeyManager
-from src.core.udp_receiver import create_udp_receiver
+from src.mechanics.input_simulator import InputSimulator
+from src.mechanics.battle_strategy import BattleStrategy
+from src.mechanics.pokemon_db import PokemonDatabase
+from src.mechanics.team_manager import TeamManager
+from src.core.hotkey_manager import HotkeyManager
+from src.core.remote_controller import create_udp_receiver
 
-def load_config():
-    config_path = ROOT_DIR / 'config' / 'settings.yaml'
-    with open(config_path, "r", encoding="utf-8") as f:
-        config = yaml.safe_load(f)
-
-    rois_path = ROOT_DIR / 'config' / 'rois.yaml'
-    if rois_path.exists():
-        try:
-            with open(rois_path, "r", encoding="utf-8") as f:
-                rois_cfg = yaml.safe_load(f) or {}
-
-            battle_ui = rois_cfg.get('battle_ui', {})
-            config.setdefault('rois', {})
-
-            if 'enemy_name_roi' in battle_ui:
-                config['rois']['enemy_name'] = battle_ui['enemy_name_roi']
-
-            if 'my_hp_roi' in battle_ui:
-                config['rois']['hp_player'] = battle_ui['my_hp_roi']
-                config['rois']['player_hp_bar'] = battle_ui['my_hp_roi']
-
-            if 'fight_button' in battle_ui:
-                config['rois']['fight_button_rel'] = battle_ui['fight_button']
-
-            if 'pokemon_button' in battle_ui:
-                config['rois']['pokemon_button_rel'] = battle_ui['pokemon_button']
-
-            if 'run_button' in battle_ui:
-                config['rois']['run_button_rel'] = battle_ui['run_button']
-        except Exception as e:
-            logger.error(f"Falha ao carregar rois.yaml: {e}")
-
-    return config
-
-try:
-    from loguru import logger
-except ImportError:
-    class logger:
-        @staticmethod
-        def error(msg): print(f"ERROR: {msg}")
-        @staticmethod
-        def exception(msg): print(f"EXCEPTION: {msg}")
 
 def setup_logging():
-    """Configura loguru para salvar logs em arquivo com rotação."""
-    try:
-        from loguru import logger
-        log_dir = ROOT_DIR / 'logs'
-        log_dir.mkdir(exist_ok=True)
-        logger.add(
-            str(log_dir / "pokebot_{time}.log"), 
-            rotation="5 MB", 
-            retention="1 week",
-            level="DEBUG"
-        )
-    except Exception:
-        pass
+    """Configura o sistema de logs do Loguru."""
+    logger.remove()
+    logger.add(
+        sys.stderr,
+        format="<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
+        level="INFO"
+    )
+    logger.add(
+        "logs/klayton_{time:YYYY-MM-DD}.log",
+        rotation="500 MB",
+        retention="10 days",
+        level="DEBUG",
+        encoding="utf-8"
+    )
+
+
+def load_config():
+    """Carrega as configurações do arquivo settings.yaml."""
+    config_path = ROOT_DIR / "config" / "settings.yaml"
+    if not config_path.exists():
+        logger.error(f"Arquivo de configuração não encontrado em: {config_path}")
+        sys.exit(1)
+        
+    with open(config_path, "r", encoding="utf-8") as f:
+        try:
+            return yaml.safe_load(f)
+        except Exception as e:
+            logger.error(f"Erro ao ler settings.yaml: {e}")
+            sys.exit(1)
+
 
 def main():
+    """Função principal que inicializa os componentes e roda o KlaytonCompanionAgent."""
     try:
         setup_logging()
         config = load_config()
         
-        # Initialize components
+        # 1. Inicializa componentes de percepção e mecânicas
         screen = ScreenCapture(config)
         ocr = OCREngine(config['ocr']['tesseract_path'])
         detector = GameStateDetector(screen, ocr, config)
@@ -99,56 +86,38 @@ def main():
             'team_mgr': team_mgr
         }
         
-        bot = BotController(config, components)
-        from src.agent.companion_agent import KlaytonCompanionAgent
-        agent = KlaytonCompanionAgent()
-        agent.components = components
-
-        logger.info("==========================================================")
-        logger.info("🤝 KlaytonCompanionAgent started")
-        logger.info("🌐 WorldState active (Single Source of Truth)")
-        logger.info("👁️ Perception active")
-        logger.info("🎯 CompanionGoalManager active")
-        logger.info("🎙️ Voice Listener & Anti-Self-Hearing active")
-        logger.info("⚡ Skill Engine active (GOAP & Utility AI)")
-        logger.info("🛡️ Watchdog & Recovery System active")
-        logger.info("==========================================================")
+        # 2. Inicializa o Klayton Companion Agent como Cérebro e Executor Único
+        agent = KlaytonCompanionAgent(config=config, components=components)
         
-        # Inicializa hotkey listener se habilitado
+        # 3. Inicializa hotkey listener conectado ao Companion Agent
         hotkey_listener = None
         if config.get('controls', {}).get('enabled', True):
             try:
-                hotkey_listener = HotkeyManager.create_and_start(bot, config)
-                logger.success("✅ Hotkey listener ativo! Pressione as teclas para controlar o bot.")
+                hotkey_listener = HotkeyManager.create_and_start(agent, config)
+                logger.success("✅ Hotkey listener ativo! Pressione as teclas para controlar o Klayton.")
             except Exception as e:
                 logger.error(f"Erro ao iniciar hotkey listener: {e}")
-                logger.warning("Bot continuará sem controles por hotkey")
+                logger.warning("Klayton continuará sem controles por hotkey")
         
-        # Inicializa receptor UDP para controle remoto (se habilitado)
+        # 4. Inicializa receptor UDP para controle remoto (se habilitado)
         udp_receiver = None
         if config.get('remote_control', {}).get('enabled', False):
             try:
-                udp_receiver = create_udp_receiver(bot, config)
+                udp_receiver = create_udp_receiver(agent, config)
                 if udp_receiver:
                     udp_receiver.start()
-                    logger.success("✅ Controle remoto UDP ativo! Use remote_controller.py na máquina host.")
+                    logger.success("✅ Controle remoto UDP ativo!")
             except Exception as e:
                 logger.error(f"Erro ao iniciar controle remoto UDP: {e}")
-                logger.warning("Bot continuará sem controle remoto")
+                logger.warning("Klayton continuará sem controle remoto")
         
-        # Executa o loop principal através do KlaytonCompanionAgent
-        bot.run()
+        # 5. Executa o loop principal diretamente no KlaytonCompanionAgent
+        agent.run()
         
-        # Cleanup
-        if hotkey_listener:
-            hotkey_listener.stop()
-        
-        if udp_receiver:
-            udp_receiver.stop()
-            
     except Exception as e:
-        logger.exception(f"Fatal error in main loop: {e}")
-        input("Press Enter to exit...")
+        logger.critical(f"Erro fatal durante inicialização do Klayton: {e}")
+        sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,20 @@
+{
+  "map_name": "Black City",
+  "region": "Kanto",
+  "pokeone_slug": "black-city",
+  "exits": [],
+  "landmarks": {},
+  "pokemon_center": {
+    "coordinates": [
+      15,
+      12
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      25,
+      12
+    ]
+  },
+  "encounter_areas": []
+}

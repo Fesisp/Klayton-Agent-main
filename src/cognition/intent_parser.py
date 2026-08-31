@@ -55,11 +55,13 @@ class IntentParser:
     def parse(self, text: str) -> AgentIntent:
         text_clean = text.strip().lower()
 
-        # 1. Padrão: "farma xp pro [target] até o [level]"
-        farm_match = re.search(r'(?:farma|farmar|treinar)\s+xp\s+(?:pro|para|o)?\s*(\w+)?\s*(?:até|ate)?\s*(?:o)?\s*(?:lvl|level)?\s*(\d+)?', text_clean)
-        if farm_match:
-            target = farm_match.group(1)
-            lvl = int(farm_match.group(2)) if farm_match.group(2) else None
+        # 1. Padrão: "farma" / "treinar" / "upar" / "farm xp"
+        if any(w in text_clean for w in ["farma", "farmar", "treinar", "treina", "treino", "upar", "xp"]):
+            target = None
+            lvl = None
+            lvl_match = re.search(r'(?:até|ate|ao|lvl|level|nível|nivel)\s*(\d+)', text_clean)
+            if lvl_match:
+                lvl = int(lvl_match.group(1))
             constraints = {}
             if lvl:
                 constraints['target_level'] = lvl

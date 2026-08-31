@@ -9,6 +9,7 @@ Autor: Klayton Companion Agent
 Data: 2026-08-30
 """
 
+from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Set
 

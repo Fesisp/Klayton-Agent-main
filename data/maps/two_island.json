@@ -1,0 +1,31 @@
+{
+  "map_name": "Two Island",
+  "region": "Sevii",
+  "exits": [
+    {
+      "target_map": "Cape Brink",
+      "direction": "North"
+    },
+    {
+      "target_map": "One Island Ferry",
+      "direction": "Ferry"
+    }
+  ],
+  "landmarks": {
+    "game_corner": "Joyful Game Corner",
+    "move_tutor": "Starter Ultimate Move Tutor"
+  },
+  "pokemon_center": {
+    "coordinates": [
+      14,
+      10
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      24,
+      10
+    ]
+  },
+  "encounter_areas": []
+}

@@ -1,0 +1,55 @@
+{
+  "map_name": "Destiny Island Beach",
+  "region": "Destiny_Island",
+  "exits": [
+    {
+      "target_map": "Destiny Shrine",
+      "direction": "North"
+    },
+    {
+      "target_map": "Vermilion City Port",
+      "direction": "Ferry"
+    }
+  ],
+  "landmarks": {
+    "looter_camp": "Looters Expedition Camp"
+  },
+  "pokemon_center": {
+    "coordinates": [
+      12,
+      10
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      22,
+      10
+    ]
+  },
+  "encounter_areas": [
+    {
+      "species": "Corsola",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 35,
+      "max_lvl": 45,
+      "rate": 0.35
+    },
+    {
+      "species": "Kingler",
+      "method": "super_rod",
+      "time": "all",
+      "min_lvl": 38,
+      "max_lvl": 48,
+      "rate": 0.3
+    },
+    {
+      "species": "Mareanie",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 36,
+      "max_lvl": 44,
+      "rate": 0.15
+    }
+  ]
+}

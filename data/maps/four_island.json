@@ -1,0 +1,31 @@
+{
+  "map_name": "Four Island",
+  "region": "Sevii",
+  "exits": [
+    {
+      "target_map": "Icefall Cave",
+      "direction": "East"
+    },
+    {
+      "target_map": "Four Island Port",
+      "direction": "South"
+    }
+  ],
+  "landmarks": {
+    "daycare": "Sevii Pokemon Daycare",
+    "lorelei_home": "Lorelei House"
+  },
+  "pokemon_center": {
+    "coordinates": [
+      16,
+      12
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      26,
+      12
+    ]
+  },
+  "encounter_areas": []
+}

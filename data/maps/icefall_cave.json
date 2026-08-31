@@ -1,0 +1,49 @@
+{
+  "map_name": "Icefall Cave",
+  "region": "Sevii",
+  "exits": [
+    {
+      "target_map": "Four Island",
+      "direction": "West"
+    }
+  ],
+  "landmarks": {
+    "rocket_ambush": "Team Rocket Sevii Base"
+  },
+  "pokemon_center": null,
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Swinub",
+      "method": "cave",
+      "time": "all",
+      "min_lvl": 30,
+      "max_lvl": 36,
+      "rate": 0.4
+    },
+    {
+      "species": "Piloswine",
+      "method": "cave",
+      "time": "all",
+      "min_lvl": 38,
+      "max_lvl": 44,
+      "rate": 0.15
+    },
+    {
+      "species": "Delibird",
+      "method": "cave",
+      "time": "all",
+      "min_lvl": 32,
+      "max_lvl": 36,
+      "rate": 0.2
+    },
+    {
+      "species": "Lapras",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 35,
+      "max_lvl": 42,
+      "rate": 0.1
+    }
+  ]
+}

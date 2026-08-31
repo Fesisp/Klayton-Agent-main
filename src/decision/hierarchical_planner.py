@@ -58,27 +58,26 @@ class HierarchicalPlanner:
     """
 
     def __init__(self):
-        from ..skills.heal_skill import HealSkill
-        from ..skills.follow_skill import FollowSkill
-        from ..skills.capture_skill import CaptureSkill
-        from ..skills.fishing_skill import FishingSkill
-        from ..skills.farm_xp_skill import FarmXPSkill
-        from ..skills.shop_skill import ShopSkill
-        from ..skills.explore_skill import ExploreSkill
-        from ..skills.return_to_player_skill import ReturnToPlayerSkill
-        from ..skills.recover_skill import RecoverSkill
+        from ..skills import (
+            FollowSkill, WaitSkill, NavigateSkill, HealSkill,
+            BattleSkill, HuntingSkill, CaptureSkill, FishingSkill,
+            InteractionSkill, ShoppingSkill, QuestSkill, ExploreSkill,
+            RecoverSkill
+        )
 
         self.skills: Dict[str, BaseSkill] = {
+            "FollowSkill": FollowSkill(),
+            "WaitSkill": WaitSkill(),
+            "NavigateSkill": NavigateSkill(),
+            "HealSkill": HealSkill(),
             "BattleSkill": BattleSkill(),
             "HuntingSkill": HuntingSkill(),
-            "HealSkill": HealSkill(),
-            "FollowSkill": FollowSkill(),
             "CaptureSkill": CaptureSkill(),
             "FishingSkill": FishingSkill(),
-            "FarmXPSkill": FarmXPSkill(),
-            "ShopSkill": ShopSkill(),
+            "InteractionSkill": InteractionSkill(),
+            "ShoppingSkill": ShoppingSkill(),
+            "QuestSkill": QuestSkill(),
             "ExploreSkill": ExploreSkill(),
-            "ReturnToPlayerSkill": ReturnToPlayerSkill(),
             "RecoverSkill": RecoverSkill(),
         }
         self.active_plan: Optional[Plan] = None
@@ -94,9 +93,18 @@ class HierarchicalPlanner:
             tasks.append(Task(name="HealTeamTask", target_skill_name="HealSkill"))
         elif world.battle.in_battle:
             tasks.append(Task(name="FightBattleTask", target_skill_name="BattleSkill"))
-        elif goal_name in ["FARM_XP", "HUNT", "TRAIN_POKEMON"]:
-            tasks.append(Task(name="ExploreAreaTask", target_skill_name="HuntingSkill"))
-            tasks.append(Task(name="FightEncounterTask", target_skill_name="BattleSkill"))
+        elif goal_name in ["FARM_XP", "TRAIN_POKEMON"]:
+            # Meta Composta FARM_XP: Navigate -> Hunt -> Battle -> (Heal if needed) -> Resume
+            tasks.append(Task(name="NavigateToSpot", target_skill_name="NavigateSkill"))
+            tasks.append(Task(name="HuntEncounter", target_skill_name="HuntingSkill"))
+            tasks.append(Task(name="FightBattle", target_skill_name="BattleSkill"))
+        elif goal_name in ["SHOP", "BUY_ITEMS"]:
+            tasks.append(Task(name="NavigateToMart", target_skill_name="NavigateSkill"))
+            tasks.append(Task(name="BuySupplies", target_skill_name="ShoppingSkill"))
+        elif goal_name in ["PROGRESS_STORY", "QUEST"]:
+            tasks.append(Task(name="ExecuteQuest", target_skill_name="QuestSkill"))
+        elif goal_name in ["WAIT", "IDLE"]:
+            tasks.append(Task(name="WaitTask", target_skill_name="WaitSkill"))
         else:
             tasks.append(Task(name="FollowTask", target_skill_name="FollowSkill"))
 

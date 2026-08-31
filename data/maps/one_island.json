@@ -1,0 +1,49 @@
+{
+  "map_name": "One Island",
+  "region": "Sevii",
+  "exits": [
+    {
+      "target_map": "Treasure Beach",
+      "direction": "South"
+    },
+    {
+      "target_map": "Kindle Road",
+      "direction": "North"
+    },
+    {
+      "target_map": "Vermilion City Port",
+      "direction": "Ferry"
+    }
+  ],
+  "pokemon_center": {
+    "coordinates": [
+      15,
+      12
+    ],
+    "network_center": "Celio Network Machine"
+  },
+  "pokemart": {
+    "coordinates": [
+      25,
+      12
+    ]
+  },
+  "encounter_areas": [
+    {
+      "species": "Tangela",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 30,
+      "max_lvl": 35,
+      "rate": 0.4
+    },
+    {
+      "species": "Spearow",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 30,
+      "max_lvl": 35,
+      "rate": 0.35
+    }
+  ]
+}

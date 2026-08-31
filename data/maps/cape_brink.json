@@ -1,0 +1,38 @@
+{
+  "map_name": "Cape Brink",
+  "region": "Sevii",
+  "exits": [
+    {
+      "target_map": "Two Island",
+      "direction": "South"
+    }
+  ],
+  "pokemon_center": null,
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Golduck",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 33,
+      "max_lvl": 38,
+      "rate": 0.4
+    },
+    {
+      "species": "Poliwhirl",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 33,
+      "max_lvl": 38,
+      "rate": 0.4
+    },
+    {
+      "species": "Slowbro",
+      "method": "good_rod",
+      "time": "all",
+      "min_lvl": 30,
+      "max_lvl": 35,
+      "rate": 0.2
+    }
+  ]
+}

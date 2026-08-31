@@ -1,0 +1,41 @@
+{
+  "map_name": "Destiny Shrine",
+  "region": "Destiny_Island",
+  "exits": [
+    {
+      "target_map": "Destiny Island Beach",
+      "direction": "South"
+    }
+  ],
+  "landmarks": {
+    "ancient_altar": "Destiny Altar"
+  },
+  "pokemon_center": null,
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Absol",
+      "method": "grass",
+      "time": "night",
+      "min_lvl": 40,
+      "max_lvl": 48,
+      "rate": 0.15
+    },
+    {
+      "species": "Lucario",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 42,
+      "max_lvl": 50,
+      "rate": 0.08
+    },
+    {
+      "species": "Zorua",
+      "method": "grass",
+      "time": "night",
+      "min_lvl": 35,
+      "max_lvl": 42,
+      "rate": 0.12
+    }
+  ]
+}
