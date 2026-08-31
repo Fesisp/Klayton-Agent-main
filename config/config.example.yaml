@@ -1,0 +1,20 @@
+# Klayton Agent 2.0 - Exemplo de Configuração de Runtime
+system:
+  profile: "balanced"
+  log_level: "INFO"
+
+runtime:
+  arbitration_interval_ms: 500
+  goal_switch_margin: 0.15
+
+perception:
+  fps: 30
+  confidence_threshold: 0.70
+
+memory:
+  decay_rate: 0.001
+  semantic_min_confirmations: 3
+
+input:
+  max_actions_per_second: 15
+  emergency_stop_hotkey: "Ctrl+Shift+F12"

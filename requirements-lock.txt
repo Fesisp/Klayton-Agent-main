@@ -1,0 +1,10 @@
+# Klayton Agent 2.0 - Locked Dependencies
+numpy==1.26.4
+opencv-python==4.9.0.80
+pillow==10.2.0
+pytesseract==0.3.10
+loguru==0.7.2
+pywin32==306
+requests==2.31.0
+pydantic==2.6.4
+pytest==8.0.2

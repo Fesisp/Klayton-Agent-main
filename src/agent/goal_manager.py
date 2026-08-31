@@ -25,6 +25,10 @@ class PersonalGoal:
     priority: float = 0.5
 
 
+from .autonomy.autonomy_controller import AutonomyController
+from .autonomy.goal_candidate import GoalCandidate
+
+
 class CompanionGoalManager:
     """
     Gerenciador de Metas que opera inteiramente sobre instâncias de objetivos (GoalInstance).
@@ -35,6 +39,7 @@ class CompanionGoalManager:
         self.personal_goals: List[PersonalGoal] = []
         self.active_personal_goal: Optional[PersonalGoal] = None
         self.utility_engine: UtilityEngine = UtilityEngine()
+        self.autonomy_controller: AutonomyController = AutonomyController()
 
     @property
     def shared_goal(self) -> Goal:

@@ -335,22 +335,178 @@
       "content": "Felipe disse: vamos treinar agora",
       "timestamp": 1788164658.7624376,
       "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788165296.780148,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788165297.130641,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788165341.8626597,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788165342.1932068,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788165364.1918662,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788165364.533733,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788165747.7041094,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788165747.8138287,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788165772.4615917,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788165772.5586705,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788166086.4267566,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788166086.531491,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788166592.6013792,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788166592.7136254,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788166621.3197207,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788166621.433799,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788166864.1127934,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788166864.209494,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788166890.483081,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788166890.5835629,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788166925.3033516,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788166925.4039416,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788167267.849315,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788167267.9567096,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788167557.315646,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788167557.4152243,
+      "importance": 0.8
     }
   ],
   "semantic": {
     "player_preferences": {},
     "farm_spot_efficiency": {
       "Route 1": {
-        "total_runs": 31,
+        "total_runs": 44,
         "avg_xp_h": 1200.0
       },
       "Viridian Forest": {
-        "total_runs": 31,
+        "total_runs": 44,
         "avg_xp_h": 3500.0
       }
     },
     "known_shiny_encounters": [],
     "completed_milestones": []
   },
-  "saved_at": 1788164658.7625527
+  "saved_at": 1788167557.4153848
 }

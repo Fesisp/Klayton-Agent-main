@@ -1,0 +1,38 @@
+{
+  "session_id": "test_autonomy_train_001",
+  "goal": {
+    "type": "TRAIN_POKEMON",
+    "target": "Pikachu",
+    "target_level": 35,
+    "initial_level": 30
+  },
+  "steps": [
+    {
+      "step_id": 1,
+      "task": "t1_check_team",
+      "world_state": {
+        "level": 30,
+        "team_healed": true
+      },
+      "expected_progress": 0.0
+    },
+    {
+      "step_id": 2,
+      "task": "t3_farm_xp",
+      "world_state": {
+        "level": 33,
+        "team_healed": true
+      },
+      "expected_progress": 0.60
+    },
+    {
+      "step_id": 3,
+      "task": "t4_verify_level",
+      "world_state": {
+        "level": 35,
+        "team_healed": true
+      },
+      "expected_progress": 1.0
+    }
+  ]
+}

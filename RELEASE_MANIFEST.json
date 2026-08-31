@@ -1,0 +1,20 @@
+{
+  "name": "Klayton-Agent",
+  "version": "2.0.0",
+  "build": "2.0.0-rc1",
+  "python": ">=3.11",
+  "platforms": [
+    "windows"
+  ],
+  "knowledge_schema_version": "1.0",
+  "memory_schema_version": "1.0",
+  "required_directories": [
+    "src",
+    "data",
+    "config",
+    "tools",
+    "docs",
+    "tests"
+  ],
+  "master_verification_command": "python tools/verify.py --release"
+}

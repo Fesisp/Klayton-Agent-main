@@ -118,6 +118,43 @@ class BattleStrategy:
         self.blacklist = {x.lower() for x in self.blacklist}
         
         # Tracking de turnos para inferência de itens
+
+    def decide_action(self, active_pkmn: str, enemy_pkmn: str, world: Any = None) -> Any:
+        """
+        Retorna uma decisão estruturada de combate (BattleDecision) contendo a BattleAction.
+        """
+        from ..battle.runtime.battle_action import BattleAction, BattleActionType
+        from ..battle.runtime.battle_decision import BattleDecision
+
+        best_action_str = self.get_best_action(active_pkmn, enemy_pkmn)
+        best_slot = self.get_best_move(active_pkmn, enemy_pkmn)
+        if best_slot == -1:
+            best_slot = 0
+
+        if best_action_str in ["SWITCH_TO_RESISTANT", "SWITCH_MANDATORY"]:
+            action = BattleAction(
+                type=BattleActionType.SWITCH,
+                switch_target="ResistantTarget",
+                reason=f"Troca tática defensiva contra {enemy_pkmn}"
+            )
+            return BattleDecision(
+                action=action,
+                score=0.85,
+                confidence=0.90,
+                reason=f"Troca tática defensiva contra {enemy_pkmn}"
+            )
+
+        action = BattleAction(
+            type=BattleActionType.MOVE,
+            move_slot=best_slot,
+            reason=f"Ataque de melhor TTK no slot {best_slot}"
+        )
+        return BattleDecision(
+            action=action,
+            score=0.90,
+            confidence=0.95,
+            reason=f"Ataque com {active_pkmn} usando slot {best_slot}"
+        )
         self.current_enemy_level = 50  # Default, atualizado via set_enemy_level()
         self.enemy_outspeeded_me_last_turn = False  # Tracking de velocidade
         self.enemy_item_inference = None  # "Choice Scarf", "Choice Band", "Life Orb", etc

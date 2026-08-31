@@ -87,14 +87,29 @@ class TeamState:
 class BattleState:
     """Estado do combate atual sem suposições não observadas."""
     in_battle: bool = False
+    active: bool = False
     turn_count: int = 0
+    turn_id: int = 0
+
+    player_pokemon: Optional[str] = None
+    enemy_pokemon: Optional[str] = None
     opponent_name: Optional[str] = None
     opponent_level: Optional[int] = None
+
+    player_hp_ratio: Optional[float] = None
+    enemy_hp_ratio: Optional[float] = None
     opponent_hp_percentage: Optional[float] = None
+
+    player_status: Optional[str] = None
+    enemy_status: Optional[str] = None
     opponent_status: str = "UNKNOWN"
+
     battle_type: Optional[str] = None  # wild, trainer ou None
     is_shiny: bool = False
     available_actions: List[str] = field(default_factory=lambda: ["fight", "bag", "pokemon", "run"])
+
+    last_action: Optional[Any] = None
+    last_outcome: Optional[Any] = None
 
 
 @dataclass
@@ -147,6 +162,9 @@ class CompanionState:
     leader_distance: float = 0.0
 
 
+from src.navigation.runtime.navigation_state import NavigationState
+
+
 @dataclass
 class WorldState:
     """
@@ -158,14 +176,17 @@ class WorldState:
     battle: BattleState = field(default_factory=BattleState)
     quest: QuestState = field(default_factory=QuestState)
     location: LocationState = field(default_factory=LocationState)
+    navigation: NavigationState = field(default_factory=NavigationState)
     resources: ResourcesState = field(default_factory=ResourcesState)
     companion: CompanionState = field(default_factory=CompanionState)
     agent: AgentState = field(default_factory=AgentState)
     last_update: float = field(default_factory=time.time)
+    version: int = 0
     raw_data: Dict[str, Any] = field(default_factory=dict)
 
     def update_timestamp(self) -> None:
         self.last_update = time.time()
+        self.version += 1
 
     def update_player(self, position: Optional[Tuple[int, int]] = None, map_name: Optional[str] = None, money: Optional[int] = None) -> None:
         self.update_timestamp()

@@ -24,7 +24,7 @@ if str(ROOT_DIR) not in sys.path:
 from src.core.runtime_health import RuntimeHealthChecker
 
 
-def run_quality_gate() -> bool:
+def run_quality_gate(is_release_mode: bool = False) -> bool:
     print("====================================================")
     print("🤖 KLAYTON QUALITY GATE (VERIFY)")
     print("====================================================")
@@ -73,6 +73,60 @@ def run_quality_gate() -> bool:
         "tests/test_execution_coordinator.py",
         "tests/test_knowledge_health.py",
         "tests/test_platform_imports.py",
+        "tests/battle/runtime/test_battle_state_tracker.py",
+        "tests/battle/runtime/test_battle_outcome_verifier.py",
+        "tests/battle/runtime/test_battle_action_executor.py",
+        "tests/battle/runtime/test_battle_session.py",
+        "tests/battle/runtime/test_battle_skill_state_machine.py",
+        "tools/validate_battle_runtime.py",
+        "tools/validate_world_model.py",
+        "tests/navigation/runtime/test_world_graph.py",
+        "tests/navigation/runtime/test_localization.py",
+        "tests/navigation/runtime/test_navigation_progress_verifier.py",
+        "tests/navigation/runtime/test_stuck_detector.py",
+        "tests/navigation/runtime/test_navigation_executor.py",
+        "tests/navigation/runtime/test_route_state.py",
+        "tests/navigation/runtime/test_navigation_skill_state_machine.py",
+        "tools/validate_navigation_runtime.py",
+        "tests/agent/autonomy/test_goal_arbitrator.py",
+        "tests/agent/autonomy/test_goal_stack.py",
+        "tests/agent/autonomy/test_goal_progress.py",
+        "tests/agent/autonomy/test_task_graph.py",
+        "tests/agent/autonomy/test_long_horizon_planner.py",
+        "tests/agent/autonomy/test_loop_detector.py",
+        "tests/agent/autonomy/test_autonomy_controller.py",
+        "tools/validate_autonomy.py",
+        "tests/memory/runtime/test_memory_record.py",
+        "tests/memory/runtime/test_memory_store.py",
+        "tests/memory/runtime/test_memory_admission.py",
+        "tests/memory/runtime/test_memory_consolidator.py",
+        "tests/memory/runtime/test_contradiction_resolver.py",
+        "tests/memory/runtime/test_memory_decay.py",
+        "tests/memory/runtime/test_memory_retriever.py",
+        "tests/memory/runtime/test_procedural_memory.py",
+        "tests/memory/runtime/test_learning_evaluator.py",
+        "tools/audit_memory.py",
+        "tools/replay_learning.py",
+        "tests/interaction/runtime/test_context_resolver.py",
+        "tests/interaction/runtime/test_command_router.py",
+        "tests/interaction/runtime/test_ambiguity_resolver.py",
+        "tests/interaction/runtime/test_explanation_engine.py",
+        "tests/interaction/runtime/test_teaching_interpreter.py",
+        "tests/interaction/runtime/test_correction_handler.py",
+        "tests/interaction/runtime/test_interaction_policy.py",
+        "tests/interaction/runtime/test_npc_interaction.py",
+        "tools/validate_interaction.py",
+        "tests/runtime/test_runtime_supervisor.py",
+        "tests/runtime/test_watchdog.py",
+        "tests/runtime/test_fault_manager.py",
+        "tests/runtime/test_state_guard.py",
+        "tests/runtime/test_resource_monitor.py",
+        "tests/runtime/test_circuit_breaker.py",
+        "tests/runtime/test_shutdown_manager.py",
+        "tests/runtime/test_runtime_scheduler.py",
+        "tests/runtime/test_input_guard.py",
+        "tools/runtime_status.py",
+        "tools/stress_runtime.py",
         "tests/test_autonomous_learning_system.py",
         "tests/test_self_supervised_learning.py",
         "tests/test_semantic_vision.py",
@@ -105,6 +159,21 @@ def run_quality_gate() -> bool:
         print(f"  [FAIL] {failed_tests} testes falharam na suíte")
         all_passed = False
 
+    # 4. Release Audit & Environment Check (se modo --release)
+    if is_release_mode:
+        print("\n🔍 4. Executando Auditoria de Release e Checagem de Ambiente...")
+        check_env_script = ROOT_DIR / "tools" / "check_environment.py"
+        audit_script = ROOT_DIR / "tools" / "release_audit.py"
+
+        r_env = subprocess.run([sys.executable, str(check_env_script)], capture_output=True, text=True, encoding="utf-8", errors="replace")
+        r_aud = subprocess.run([sys.executable, str(audit_script)], capture_output=True, text=True, encoding="utf-8", errors="replace")
+
+        if r_env.returncode == 0 and r_aud.returncode == 0:
+            print("  [PASS] Auditoria de Release e Checagem de Ambiente (100% limpas)")
+        else:
+            print("  [FAIL] Falha na auditoria de release ou checagem de ambiente")
+            all_passed = False
+
     print("\n====================================================")
     if all_passed:
         print("STATUS: READY")
@@ -116,6 +185,17 @@ def run_quality_gate() -> bool:
         return False
 
 
-if __name__ == "__main__":
-    success = run_quality_gate()
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Klayton Master Quality Gate")
+    parser.add_argument("--quick", action="store_true", help="Executa apenas compilação e testes rápidos")
+    parser.add_argument("--full", action="store_true", help="Executa suíte completa")
+    parser.add_argument("--release", action="store_true", help="Executa Quality Gate completo de Release com auditorias")
+    args = parser.parse_args()
+
+    success = run_quality_gate(is_release_mode=args.release)
     sys.exit(0 if success else 1)
+
+
+if __name__ == "__main__":
+    main()

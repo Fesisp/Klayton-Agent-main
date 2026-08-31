@@ -1,0 +1,77 @@
+{
+  "session_id": "test_simple_win_001",
+  "started_at": 1788160000.0,
+  "ended_at": 1788160010.0,
+  "enemy_name": "Squirtle",
+  "result": "won",
+  "turns": [
+    {
+      "turn_id": 1,
+      "observation_before": {
+        "timestamp": 1788160001.0,
+        "in_battle": true,
+        "player_pokemon": "Pikachu",
+        "enemy_pokemon": "Squirtle",
+        "player_hp_ratio": 1.0,
+        "enemy_hp_ratio": 1.0,
+        "move_menu_visible": true,
+        "confidence": 0.95
+      },
+      "decision": {
+        "action": {
+          "type": "move",
+          "move_slot": 0,
+          "reason": "Thunderbolt vs Squirtle (Super Effective)"
+        },
+        "score": 0.95,
+        "confidence": 0.95,
+        "reason": "Super effective move choice"
+      },
+      "observation_after": {
+        "timestamp": 1788160003.0,
+        "in_battle": true,
+        "player_pokemon": "Pikachu",
+        "enemy_pokemon": "Squirtle",
+        "player_hp_ratio": 1.0,
+        "enemy_hp_ratio": 0.45,
+        "move_menu_visible": true,
+        "confidence": 0.95
+      },
+      "expected_outcome": "confirmed"
+    },
+    {
+      "turn_id": 2,
+      "observation_before": {
+        "timestamp": 1788160004.0,
+        "in_battle": true,
+        "player_pokemon": "Pikachu",
+        "enemy_pokemon": "Squirtle",
+        "player_hp_ratio": 1.0,
+        "enemy_hp_ratio": 0.45,
+        "move_menu_visible": true,
+        "confidence": 0.95
+      },
+      "decision": {
+        "action": {
+          "type": "move",
+          "move_slot": 0,
+          "reason": "Thunderbolt to finish Squirtle"
+        },
+        "score": 0.95,
+        "confidence": 0.95,
+        "reason": "Finish opponent"
+      },
+      "observation_after": {
+        "timestamp": 1788160007.0,
+        "in_battle": false,
+        "player_pokemon": "Pikachu",
+        "enemy_pokemon": "Squirtle",
+        "player_hp_ratio": 1.0,
+        "enemy_hp_ratio": 0.0,
+        "move_menu_visible": false,
+        "confidence": 0.95
+      },
+      "expected_outcome": "confirmed"
+    }
+  ]
+}

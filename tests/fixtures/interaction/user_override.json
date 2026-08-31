@@ -1,0 +1,14 @@
+{
+  "session_id": "test_interaction_001",
+  "user_command": "volta pra cidade",
+  "context": {
+    "current_map": "Route 1",
+    "in_battle": false,
+    "active_goal_type": "TRAIN_POKEMON"
+  },
+  "expected": {
+    "intent_type": "command",
+    "action": "RETURN_TO_CITY",
+    "command_resolution": true
+  }
+}

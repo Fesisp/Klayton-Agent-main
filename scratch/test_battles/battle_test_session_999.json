@@ -1,0 +1,22 @@
+{
+  "session_id": "test_session_999",
+  "started_at": 1788167542.4157634,
+  "ended_at": 1788167542.416102,
+  "enemy_name": "Charizard",
+  "result": "won",
+  "decisions": [
+    {
+      "turn": 1,
+      "action": "MOVE",
+      "slot": 0
+    }
+  ],
+  "actions": [
+    {
+      "turn": 1,
+      "status": "confirmed"
+    }
+  ],
+  "observations": [],
+  "events": []
+}

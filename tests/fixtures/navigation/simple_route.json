@@ -1,0 +1,62 @@
+{
+  "session_id": "test_nav_simple_route_001",
+  "origin": {
+    "map_id": "Pallet Town",
+    "x": 0.0,
+    "y": 0.0,
+    "confidence": "high"
+  },
+  "destination": {
+    "map_id": "Viridian City",
+    "x": 0.0,
+    "y": 20.0,
+    "confidence": "high"
+  },
+  "result": "arrived",
+  "steps": [
+    {
+      "step_id": 1,
+      "location_before": {
+        "map_id": "Pallet Town",
+        "x": 0.0,
+        "y": 0.0,
+        "confidence": "high"
+      },
+      "action": {
+        "type": "move",
+        "direction": "w",
+        "target_map": "Route 1",
+        "reason": "Mover em direção a Route 1"
+      },
+      "location_after": {
+        "map_id": "Route 1",
+        "x": 0.0,
+        "y": 10.0,
+        "confidence": "high"
+      },
+      "expected_progress": "map_changed"
+    },
+    {
+      "step_id": 2,
+      "location_before": {
+        "map_id": "Route 1",
+        "x": 0.0,
+        "y": 10.0,
+        "confidence": "high"
+      },
+      "action": {
+        "type": "move",
+        "direction": "w",
+        "target_map": "Viridian City",
+        "reason": "Mover em direção a Viridian City"
+      },
+      "location_after": {
+        "map_id": "Viridian City",
+        "x": 0.0,
+        "y": 20.0,
+        "confidence": "high"
+      },
+      "expected_progress": "arrived"
+    }
+  ]
+}
