@@ -20,90 +20,135 @@ class PokemonDatabase:
         name = name.capitalize()
 
         try:
-            with sqlite3.connect(self.db_path) as conn:
-                conn.row_factory = sqlite3.Row
-                cursor = conn.cursor()
+            if self.db_path.exists():
+                with sqlite3.connect(self.db_path) as conn:
+                    conn.row_factory = sqlite3.Row
+                    cursor = conn.cursor()
 
-                cursor.execute("SELECT * FROM pokemon WHERE name = ?", (name,))
-                row = cursor.fetchone()
-                if not row:
-                    return None
-                pokemon = dict(row)
+                    cursor.execute("SELECT * FROM pokemon WHERE name = ?", (name,))
+                    row = cursor.fetchone()
+                    if row:
+                        pokemon = dict(row)
 
-                cursor.execute("SELECT type FROM types WHERE pokemon_name = ?", (name,))
-                pokemon['tipos'] = [r[0] for r in cursor.fetchall()]
+                        cursor.execute("SELECT type FROM types WHERE pokemon_name = ?", (name,))
+                        pokemon['tipos'] = [r[0] for r in cursor.fetchall()]
 
-                cursor.execute("SELECT ability FROM abilities WHERE pokemon_name = ?", (name,))
-                pokemon['abilities'] = [r[0] for r in cursor.fetchall()]
+                        cursor.execute("SELECT ability FROM abilities WHERE pokemon_name = ?", (name,))
+                        pokemon['abilities'] = [r[0] for r in cursor.fetchall()]
 
-                cursor.execute("SELECT * FROM moves WHERE pokemon_name = ?", (name,))
-                moves_rows = cursor.fetchall()
+                        cursor.execute("SELECT * FROM moves WHERE pokemon_name = ?", (name,))
+                        moves_rows = cursor.fetchall()
 
-                moves_by_level = {}
-                for m in moves_rows:
-                    lvl = str(m['level'])
-                    if lvl not in moves_by_level:
-                        moves_by_level[lvl] = []
-                    moves_by_level[lvl].append([
-                        m['move_name'], m['power'], m['accuracy'],
-                        m['type'], m['category'], m['priority'], m['pp']
-                    ])
+                        moves_by_level = {}
+                        for m in moves_rows:
+                            lvl = str(m['level'])
+                            if lvl not in moves_by_level:
+                                moves_by_level[lvl] = []
+                            moves_by_level[lvl].append([
+                                m['move_name'], m['power'], m['accuracy'],
+                                m['type'], m['category'], m['priority'], m['pp']
+                            ])
 
-                pokemon['movimientos_por_nivel'] = moves_by_level
-                return pokemon
-        except sqlite3.Error as e:
-            print(f"Critico Database: {e}")
-            return None
+                        pokemon['movimientos_por_nivel'] = moves_by_level
+                        return pokemon
+        except Exception:
+            pass
+
+        # Fallback soberano via KnowledgeBase (Tier 1 PokeOneCommunity -> Tier 3 PokeAPI)
+        try:
+            from .knowledge_base import KnowledgeBase
+            kb = KnowledgeBase()
+            kb_data = kb.get_pokemon(name)
+            if kb_data:
+                types_list = [t for t in [kb_data.get('type1'), kb_data.get('type2')] if t]
+                return {
+                    'name': kb_data.get('name', name),
+                    'id': kb_data.get('id', 1),
+                    'hp': kb_data.get('hp', 45),
+                    'attack': kb_data.get('attack', 49),
+                    'defense': kb_data.get('defense', 49),
+                    'sp_attack': kb_data.get('sp_atk', 65),
+                    'sp_defense': kb_data.get('sp_def', 65),
+                    'speed': kb_data.get('speed', 45),
+                    'height': kb_data.get('height', 0.7),
+                    'weight': kb_data.get('weight', 6.9),
+                    'tipos': types_list,
+                    'abilities': [],
+                    'movimientos_por_nivel': {}
+                }
+        except Exception:
+            pass
+
+        return None
 
     def get_all_pokemon_names(self):
         """Retorna todos os nomes oficiais para validação de OCR."""
         try:
-            with sqlite3.connect(self.db_path) as conn:
-                cursor = conn.cursor()
-                cursor.execute("SELECT name FROM pokemon")
-                return [r[0] for r in cursor.fetchall()]
-        except sqlite3.Error:
+            if self.db_path.exists():
+                with sqlite3.connect(self.db_path) as conn:
+                    cursor = conn.cursor()
+                    cursor.execute("SELECT name FROM pokemon")
+                    names = [r[0] for r in cursor.fetchall()]
+                    if names:
+                        return names
+        except Exception:
+            pass
+
+        try:
+            from .knowledge_base import KnowledgeBase
+            kb = KnowledgeBase()
+            with kb._get_conn("pokemon") as conn:
+                c = conn.cursor()
+                c.execute("SELECT name FROM pokemon")
+                return [r[0] for r in c.fetchall()]
+        except Exception:
             return []
-    
+
     @lru_cache(maxsize=256)
     def get_move_data(self, move_name):
         """
         Busca informações de um movimento específico no banco de dados.
-        
-        PROPÓSITO: Obter PP máximo, power, accuracy, tipo, categoria para tracking.
-        
-        Args:
-            move_name: Nome do movimento (case-insensitive)
-            
-        Returns:
-            dict: {'move_name', 'power', 'accuracy', 'type', 'category', 'priority', 'pp'}
-            None: Se movimento não encontrado
         """
         if not move_name:
             return None
         
-        # Normaliza nome (lowercase e strip)
         move_key = move_name.lower().strip()
         
         try:
-            with sqlite3.connect(self.db_path) as conn:
-                conn.row_factory = sqlite3.Row
-                cursor = conn.cursor()
-                
-                # Busca movimento (case-insensitive usando LOWER)
-                cursor.execute("""
-                    SELECT DISTINCT move_name, power, accuracy, type, category, priority, pp
-                    FROM moves
-                    WHERE LOWER(move_name) = ?
-                    LIMIT 1
-                """, (move_key,))
-                
-                row = cursor.fetchone()
-                if not row:
-                    return None
-                
-                return dict(row)
-        except sqlite3.Error as e:
-            print(f"Erro ao buscar movimento '{move_name}': {e}")
-            return None
+            if self.db_path.exists():
+                with sqlite3.connect(self.db_path) as conn:
+                    conn.row_factory = sqlite3.Row
+                    cursor = conn.cursor()
+                    
+                    cursor.execute("""
+                        SELECT DISTINCT move_name, power, accuracy, type, category, priority, pp
+                        FROM moves
+                        WHERE LOWER(move_name) = ?
+                        LIMIT 1
+                    """, (move_key,))
+                    
+                    row = cursor.fetchone()
+                    if row:
+                        return dict(row)
+        except Exception:
+            pass
+
+        try:
+            from .knowledge_base import KnowledgeBase
+            kb = KnowledgeBase()
+            move_data = kb.get_move(move_name)
+            if move_data:
+                return {
+                    'move_name': move_data.get('name', move_name),
+                    'power': move_data.get('power'),
+                    'accuracy': move_data.get('accuracy'),
+                    'type': move_data.get('type'),
+                    'category': move_data.get('category'),
+                    'priority': move_data.get('priority', 0),
+                    'pp': move_data.get('pp', 15)
+                }
+        except Exception:
+            pass
+
+        return None
 
