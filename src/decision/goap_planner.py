@@ -28,7 +28,7 @@ Data: 2026-08-30
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Set, Union
+from typing import Dict, List, Any, Optional, Set, Union, Tuple
 from .goal_engine import Goal, GoalInstance
 from ..world.world_state import WorldState
 from ..skills.base_skill import BaseSkill

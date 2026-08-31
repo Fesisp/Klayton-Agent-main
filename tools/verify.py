@@ -127,6 +127,8 @@ def run_quality_gate(is_release_mode: bool = False) -> bool:
         "tests/runtime/test_input_guard.py",
         "tools/runtime_status.py",
         "tools/stress_runtime.py",
+        "tools/audit_knowledge.py",
+        "tools/replay_runtime_events.py",
         "tests/test_autonomous_learning_system.py",
         "tests/test_self_supervised_learning.py",
         "tests/test_semantic_vision.py",

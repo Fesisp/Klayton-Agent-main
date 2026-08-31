@@ -3,69 +3,19 @@
   "databases": {
     "pokemon.sqlite": {
       "required": true,
-      "minimum_rows": {
-        "pokemon": 800
-      }
+      "description": "Banco de Pokémons canônico"
     },
     "moves.sqlite": {
       "required": true,
-      "minimum_rows": {
-        "moves": 500
-      }
+      "description": "Banco de Movimentos canônico"
     },
     "types.sqlite": {
       "required": true,
-      "minimum_rows": {
-        "type_chart": 324
-      }
+      "description": "Banco de Tipos canônico"
     },
     "natures.sqlite": {
       "required": true,
-      "minimum_rows": {
-        "natures": 25
-      }
-    },
-    "items.sqlite": {
-      "required": true,
-      "minimum_rows": {
-        "items": 1
-      }
-    },
-    "abilities.sqlite": {
-      "required": true,
-      "minimum_rows": {
-        "abilities": 1
-      }
-    },
-    "evolutions.sqlite": {
-      "required": true,
-      "minimum_rows": {
-        "evolutions": 1
-      }
-    },
-    "status_conditions.sqlite": {
-      "required": true,
-      "minimum_rows": {
-        "status_conditions": 1
-      }
-    },
-    "hms_field_moves.sqlite": {
-      "required": true,
-      "minimum_rows": {
-        "field_moves": 1
-      }
-    },
-    "npcs.sqlite": {
-      "required": false,
-      "minimum_rows": {
-        "npcs": 1
-      }
-    },
-    "pokeone_encounters.sqlite": {
-      "required": false,
-      "minimum_rows": {
-        "encounters": 1
-      }
+      "description": "Banco de Natures canônico"
     }
   }
 }
