@@ -20,11 +20,15 @@ except ImportError:
     logger = logging.getLogger("InputGuard")
 
 
+from src.compliance.action_rate_limiter import ActionRateLimiter
+
+
 class InputGuard:
     """Guarda de segurança para envio de teclas e acionamentos físicos."""
 
-    def __init__(self, max_actions_per_second: int = 15):
+    def __init__(self, max_actions_per_second: float = 8.0):
         self.max_actions_per_second = max_actions_per_second
+        self.rate_limiter = ActionRateLimiter(max_actions_per_second=max_actions_per_second)
         self.action_timestamps: List[float] = []
         self.emergency_stop_active = False
 
@@ -32,6 +36,10 @@ class InputGuard:
         """Verifica limite de taxa e estado da trava de emergência."""
         if self.emergency_stop_active:
             logger.warning("🛑 InputGuard: Ação bloqueada — Parada de Emergência Ativa!")
+            return False
+
+        if not self.rate_limiter.allow():
+            logger.warning("⚠️ InputGuard: Limite de taxa de acionamento por segundo atingido via Compliance!")
             return False
 
         now = time.time()
