@@ -1,15 +1,11 @@
 """
-NavRecoverySkillEngine - Orquestrador da Tríade Mestra (Navigation + Recovery + Skills)
-======================================================================================
+NavRecoverySkillEngine - Orquestrador da Tríade Mestra Unificada
+================================================================
 
-Unifica o Roteamento de Navegação (Local/Global), o Verificador de Movimento e o Gerenciador de Recuperação
-com a Fila de Skills em uma máquina de execução resiliente e impossível de travar.
+Unifica a arquitetura em 5 camadas:
+GoalInstance ➔ Utility AI ➔ GOAPPlanner (A* Strategic Plan) ➔ HierarchicalPlanner ➔ Skill Queue
 
-Fluxo:
-1. Avalia rota de navegação se necessário.
-2. Executa o ciclo da Skill ativa.
-3. Monitora se a posição mudou ou colidiu em obstáculo.
-4. Se houver falha/estagnação ➔ Ativa o RecoveryManager (escape 4-way) e dispara REPLAN.
+Contém resiliência com NavigationSystem (monitoramento de posição) e RecoveryManager (escape 4-way).
 
 Autor: Klayton Companion Agent Framework
 Data: 2026-08-30
@@ -20,6 +16,7 @@ from ..world.world_state import WorldState
 from ..skills.base_skill import BaseSkill, SkillResult, SkillStatus
 from ..navigation.navigation_system import NavigationSystem
 from ..core.recovery_manager import RecoveryManager
+from ..decision.goap_planner import GOAPPlanner
 from ..decision.hierarchical_planner import HierarchicalPlanner
 try:
     from loguru import logger
@@ -30,20 +27,29 @@ except ImportError:
 
 class NavRecoverySkillEngine:
     """
-    Orquestrador Unificado da Tríade Mestra.
+    Orquestrador Unificado da Tríade Mestra (GOAP + Hierarchical + Nav + Recovery).
     """
 
     def __init__(self):
         self.navigation: NavigationSystem = NavigationSystem()
         self.recovery: RecoveryManager = RecoveryManager()
-        self.planner: HierarchicalPlanner = HierarchicalPlanner()
+        self.goap_planner: GOAPPlanner = GOAPPlanner()
+        self.hierarchical_planner: HierarchicalPlanner = HierarchicalPlanner()
 
     def execute_step(self, current_goal: str, world: WorldState, components: Dict[str, Any]) -> SkillResult:
         """
-        Executa um ciclo completo de execução da Skill ativa com proteção de navegação e recovery.
+        Executa o ciclo unificado:
+        1. GOAPPlanner resolve a próxima Skill estratégica com busca A* e suporte a interrupção/retomada.
+        2. Se necessário, o HierarchicalPlanner decompõe tarefas complexas.
+        3. A Skill é executada e protegida por monitoramento de estagnação do NavigationSystem e RecoveryManager.
         """
-        # 1. Obter a próxima Skill a ser executada a partir do HierarchicalPlanner
-        skill: Optional[BaseSkill] = self.planner.resolve_next_skill(current_goal, world)
+        # 1. Obter a próxima Skill estratégica do GOAP
+        skill: Optional[BaseSkill] = self.goap_planner.get_next_skill(current_goal, world)
+
+        # Fallback de decomposição hierárquica se o GOAP não retornar skill imediata
+        if not skill:
+            skill = self.hierarchical_planner.resolve_next_skill(current_goal, world)
+
         if not skill:
             return SkillResult(status=SkillStatus.SUCCESS, message="Nenhuma Skill ativa necessária")
 
@@ -59,14 +65,14 @@ class NavRecoverySkillEngine:
                 logger.warning(f"🚧 Estagnação de posição detectada em {world.player.position}! Disparando RecoveryManager...")
                 self.recovery.recover(world, components, reason="Position stuck in collision")
                 self.navigation.reset_local()
-                self.planner.create_plan_for_goal(current_goal, world)
+                self.goap_planner.trigger_replan()
                 return SkillResult(status=SkillStatus.INTERRUPTED, message="Interrompido para recuperação de obstáculo")
 
         # 4. Tratamento de Falha da própria Skill
         if result.failed:
             logger.warning(f"🚨 Skill '{skill.name}' reportou falha! Disparando procedimento de recuperação...")
             self.recovery.recover(world, components, reason=f"Skill {skill.name} failed: {result.message}")
-            self.planner.create_plan_for_goal(current_goal, world)
+            self.goap_planner.trigger_replan()
             return SkillResult(status=SkillStatus.FAILED, message=f"Recuperado após falha da Skill {skill.name}")
 
         return result

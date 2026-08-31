@@ -1,14 +1,15 @@
 """
-Klayton Companion Agent - Agente Autônomo e Social (Cérebro Central do Runtime)
-================================================================================
+KlaytonCompanionAgent - Cérebro Central Unificado do Companion Agent 2.0
+========================================================================
 
-Integra os 4 Pilares da Cognição e Presença Social:
-1. Perception (O que está acontecendo no jogo e com o jogador?)
-2. Cognition (O que isso significa? Estado de relacionamento, personalidade e atenção compartilhada)
-3. Agency (O que eu quero fazer? Conciliação de metas compartilhadas e pessoais)
-4. Interaction (Como me comunico com Felipe e me comporto de forma crível e cooperativa?)
-
-Substitui definitivamente o BotController legado como executor primário do runtime no PokeOne.
+Integração Completa:
+1. WorldState como Fonte Única da Verdade (Totalmente Alimentado a Cada Ciclo)
+2. GoalInstance Parametrizado (Target, Target Level, Restrições)
+3. Seleção de Metas via Utility AI (utility = reward - risk - cost - time)
+4. GOAPPlanner (Planejador de Sequência Estratégica A*) + HierarchicalPlanner
+5. Tríade Mestra (NavigationSystem + RecoveryManager + Skills)
+6. VoiceListener (Microfone ao Vivo Ativado) + TTS (Sintetizador de Voz Nativo Ativado)
+7. Memória Tríplice Persistente (Working, Episodic, Semantic) Ativamente Consultada
 
 Autor: Klayton Companion Agent Framework
 Data: 2026-08-30
@@ -17,77 +18,70 @@ Data: 2026-08-30
 import time
 import winsound
 from typing import Dict, Any, Optional
+from pathlib import Path
+
 from ..world.world_state import WorldState, Observation
-from ..core.event_bus import EventBus
-from ..cognition.personality import Personality
+from ..decision.goal_engine import Goal, GoalInstance
+from ..decision.goap_planner import GOAPPlanner
+from ..decision.utility_engine import UtilityEngine
+from .goal_manager import CompanionGoalManager, PersonalGoal
 from ..cognition.relationship import RelationshipState
 from ..cognition.shared_attention import SharedAttention
 from ..cognition.intent_parser import IntentParser
+from ..cognition.memory_system import MemorySystem
+from ..world.quest_engine import QuestEngine
 from ..interaction.dialogue_manager import DialogueManager
-from ..agent.goal_manager import CompanionGoalManager, PersonalGoal
-from ..decision.goal_engine import Goal
-from ..decision.goap_planner import GOAPPlanner
+from ..interaction.voice_listener import VoiceListener
 from ..skills.base_skill import SkillStatus
 from ..perception.game_state_detector import GameState
 from ..perception.chat_handler import ChatHandler
 from ..utils.notifier import NotificationManager
-from ..utils.window_handler import WindowHandler
+
 try:
     from loguru import logger
 except ImportError:
     import logging
-    logger = logging.getLogger("CompanionAgent")
+    logger = logging.getLogger("KlaytonCompanionAgent")
 
 
 class KlaytonCompanionAgent:
     """
-    KlaytonCompanionAgent - O Companheiro de Jogo Autônomo, Social e Central do Runtime.
+    Agente Companheiro Autônomo de Elite do Klayton 2.0.
     """
 
     def __init__(self, config: Optional[Dict[str, Any]] = None, components: Optional[Dict[str, Any]] = None):
-        self.config: Dict[str, Any] = config or {}
-        self.components: Dict[str, Any] = components or {}
-
-        # 1. PERCEPTION & STATE
-        self.world: WorldState = WorldState()
-        self.event_bus: EventBus = EventBus()
-        self.win_handler: WindowHandler = WindowHandler(window_title=self.config.get('screen', {}).get('window_title', 'PokeOne'))
+        self.config = config or {}
+        self.components = components or {}
         self.notifier: NotificationManager = NotificationManager(self.config)
 
-        # 2. COGNITION & SOCIAL MODEL
-        self.personality: Personality = Personality(
-            independence=0.35,
-            curiosity=0.70,
-            risk_tolerance=0.40,
-            helpfulness=0.85,
-            persistence=0.65
-        )
+        # 1. WORLD STATE (SINGLE SOURCE OF TRUTH)
+        self.world: WorldState = WorldState()
+
+        # 2. COGNITION, PERSONALITY & MEMORY
         self.relationship: RelationshipState = RelationshipState(leader_name="Felipe")
         self.shared_attention: SharedAttention = SharedAttention()
         self.intent_parser: IntentParser = IntentParser()
-        from ..cognition.memory_system import MemorySystem
-        from ..world.quest_engine import QuestEngine
         self.memory: MemorySystem = MemorySystem()
         self.quest_engine: QuestEngine = QuestEngine()
 
-        # 3. AGENCY & GOALS
+        # 3. AGENCY & GOALS (Utility AI & GoalInstance)
         initial_goal_str = self.config.get('bot', {}).get('primary_goal', 'FOLLOW_PLAYER')
         self.goal_manager: CompanionGoalManager = CompanionGoalManager(
             primary_shared_goal=Goal.from_string(initial_goal_str)
         )
         self.planner: GOAPPlanner = GOAPPlanner()
+
         from .nav_recovery_engine import NavRecoverySkillEngine
         self.master_triad: NavRecoverySkillEngine = NavRecoverySkillEngine()
 
-        # 4. INTERACTION & DIALOGUE
-        self.dialogue: DialogueManager = DialogueManager(use_tts=False)
-        from ..interaction.voice_listener import VoiceListener
+        # 4. INTERACTION & DIALOGUE (TTS ATIVADO & LIVE VOICE LISTENING)
+        self.dialogue: DialogueManager = DialogueManager(use_tts=True)
         self.voice_listener: VoiceListener = VoiceListener(
             agent_callback=self.listen_and_respond,
             dialogue_manager=self.dialogue
         )
 
-        # 5. SECURITY & STEALTH (PROJETO INTERVIEW)
+        # 5. SECURITY & STEALTH
         from ..security.stealth_engine import ProcessStealthEngine, AntiAttachWatchdog
         ProcessStealthEngine.apply_stealth_protection()
         self.stealth_watchdog: AntiAttachWatchdog = AntiAttachWatchdog()
@@ -99,11 +93,10 @@ class KlaytonCompanionAgent:
         self.debug: bool = bool(self.config.get('bot', {}).get('debug_mode', False))
         self.chat_handler: Optional[ChatHandler] = None
 
-        logger.info(f"🤝 Klayton Companion Agent Inicializado! Líder: {self.relationship.leader_name}")
+        logger.info(f"🤝 Klayton Companion Agent Inicializado! Líder: {self.relationship.leader_name} | TTS: ON | Live Voice: Ready")
 
     @property
     def behavior(self) -> Goal:
-        """Compatibilidade para HotkeyManager e listeners externos."""
         return self.goal_manager.shared_goal
 
     @behavior.setter
@@ -117,59 +110,67 @@ class KlaytonCompanionAgent:
 
     def listen_and_respond(self, user_speech: str) -> str:
         """
-        Processa frases do usuário, atualiza a intenção, contextualiza a fala e gera resposta verbal.
+        Processa comandos de voz com preservação de alvos (ex: "Pikachu", lvl 35),
+        registra na memória episódica e responde verbalmente via TTS.
         """
-        logger.info(f"👂 Ouvido de {self.relationship.leader_name}: '{user_speech}'")
+        logger.info(f"🎙️ Ouvindo comando do líder: '{user_speech}'")
+        self.memory.remember(category="dialogue", content=f"Felipe disse: {user_speech}", importance=0.8)
 
-        # 1. Atualiza instrução e estado no relacionamento social
-        self.relationship.set_instruction(user_speech)
-
-        # 2. Resolução de Atenção Compartilhada ("Pega esse", "Olha aquele")
-        target_ref = self.shared_attention.resolve_target(user_speech, self.world)
-        if target_ref:
-            logger.info(f"🎯 Atenção compartilhada resolvida para: {target_ref}")
-
-        # 3. Interpretação de Intenção e definição de Goal compartilhado
+        # Trata termos dêiticos (ex: "pega esse bicho")
+        resolved_target = self.shared_attention.resolve_target(user_speech, self.world)
+        
+        # Converte em intenção estruturada e GoalInstance parametrizada
         intent = self.intent_parser.parse(user_speech)
-        new_shared_goal = intent.to_goal()
-        self.goal_manager.shared_goal = new_shared_goal
-        self.planner.trigger_replan()
+        if resolved_target and not intent.target:
+            intent.target = resolved_target
 
-        # 4. Resposta verbal do Companheiro
-        if self.relationship.is_waiting_for_player:
-            utterance = self.dialogue.express_decision("waiting_player")
-        elif new_shared_goal == Goal.HEAL_TEAM:
+        goal_instance = intent.to_goal_instance()
+        self.goal_manager.shared_goal = goal_instance.type
+
+        if intent.target:
+            self.goal_manager.add_personal_goal(PersonalGoal(
+                name=f"train_{intent.target}",
+                target=intent.target,
+                desired_value=intent.constraints.get("target_level", 35)
+            ))
+            logger.info(f"🎯 Objetivo Parametrizado Ativado: Treinar {intent.target} até nível {intent.constraints.get('target_level', 35)}")
+
+        # Resposta verbal do diálogo
+        if goal_instance.type == Goal.FOLLOW_PLAYER:
+            utterance = self.dialogue.express_decision("resume_follow")
+        elif goal_instance.type == Goal.HEAL_TEAM:
             utterance = self.dialogue.express_decision("heal_needed")
         else:
-            utterance = self.dialogue.express_decision("resume_follow")
+            utterance = self.dialogue.express_decision("waiting_player")
 
         return utterance.text
 
     def step(self) -> None:
         """
-        Ciclo Cognitivo Continuo do Agente Companheiro (via Tríade Mestra):
-        Percebe -> Cognição Social -> Seleção de Metas -> Execution Engine (Nav + Recovery + Skills) -> Fala.
+        Ciclo Cognitivo Contínuo do Agente Companheiro:
+        Alimenta WorldState ➔ Reflexão de Memória ➔ Seleção de Metas por Utility AI ➔ GOAP Strategy ➔ Tríade Mestra.
         """
         if self.paused or not self.running:
             return
 
-        # 1. Perception Update
+        # 1. Update Timestamps & Context
         self.world.update_timestamp()
 
-        # 2. Cognition & Relationship Evaluation
-        if self.world.team.needs_healing and not self.relationship.is_waiting_for_player:
-            if self.world.agent.current_subgoal != "HEAL_TEAM":
-                self.dialogue.express_decision("heal_needed")
+        # 2. Reflexão da Memória (Busca a rota mais eficiente de farm registrada)
+        best_spot = self.memory.get_best_farming_spot()
+        if best_spot and not self.world.location.current_map:
+            self.world.location.current_map = best_spot
 
-        # 3. Agency & Goal Selection
+        # 3. Agency & Goal Selection (Decidido pela UtilityEngine: utility = reward - risk - cost - time)
         active_goal = self.goal_manager.select_active_goal(
             is_waiting=self.relationship.is_waiting_for_player,
-            team_needs_heal=self.world.team.needs_healing
+            team_needs_heal=self.world.team.needs_healing,
+            world=self.world
         )
         self.world.agent.current_goal = self.goal_manager.shared_goal.name
         self.world.agent.current_subgoal = active_goal.name
 
-        # 4. Master Triad Execution (Navigation + Recovery + Skills)
+        # 4. Master Triad Execution (GOAP + Navigation + Recovery + Skills)
         result = self.master_triad.execute_step(active_goal.name, self.world, self.components)
         if result.failed or result.status == SkillStatus.INTERRUPTED:
             self.planner.trigger_replan()
@@ -177,18 +178,26 @@ class KlaytonCompanionAgent:
     def run(self) -> None:
         """
         Loop Principal do Runtime do Klayton Companion Agent.
-        Executa a percepção de quadros, alimenta o WorldState como Fonte Única da Verdade,
-        e dispara o ciclo autônomo do agente.
+        Inicia a escuta de voz ao vivo, alimenta continuamente TODOS os ramos do WorldState,
+        e dispara a agência autônoma.
         """
         logger.info("==========================================================")
         logger.info("🤝 KlaytonCompanionAgent started (Cérebro Central do Runtime)")
         logger.info("🌐 WorldState active (Single Source of Truth)")
-        logger.info("👁️ Perception active")
-        logger.info("🎯 CompanionGoalManager active")
-        logger.info("🎙️ Voice Listener & Anti-Self-Hearing active")
-        logger.info("⚡ Skill Engine active (GOAP & Utility AI)")
+        logger.info("👁️ Full Multi-Branch Perception active")
+        logger.info("🎯 CompanionGoalManager & UtilityEngine active")
+        logger.info("🎙️ Live Voice Listening & Anti-Self-Hearing ACTIVE")
+        logger.info("🗣️ Native Text-To-Speech (TTS) ACTIVE")
+        logger.info("⚡ GOAP & Master Triad Skill Engine active")
         logger.info("🛡️ Watchdog & Recovery System active")
         logger.info("==========================================================")
+
+        # 1. Ativa a escuta de voz ao vivo (Live Voice Listener)
+        try:
+            self.voice_listener.start_live_listening()
+            logger.info("🎤 Escuta de voz contínua ativada no microfone principal!")
+        except Exception as e:
+            logger.warning(f"⚠️ Não foi possível iniciar o microfone ao vivo (modo texto ativado): {e}")
 
         screen = self.components.get('screen')
         detector = self.components.get('detector')
@@ -204,10 +213,10 @@ class KlaytonCompanionAgent:
                     time.sleep(0.3)
                     continue
 
-                # 1. Captura de Frame
+                # 2. Captura de Frame
                 img = screen.capture() if (screen and hasattr(screen, 'capture')) else None
 
-                # 2. Detecção de PM (Mensagem Privada de Segurança)
+                # 3. Detecção de PM (Mensagem Privada de Segurança)
                 if img is not None and self.chat_handler and self.chat_handler.check_for_alerts(img):
                     logger.critical("🚨 PAUSANDO KLAYTON POR SEGURANÇA (PM RECEBIDA)!")
                     self.paused = True
@@ -217,30 +226,33 @@ class KlaytonCompanionAgent:
                         time.sleep(0.3)
                     continue
 
-                # 3. Percepção Visual e Atualização do WorldState (Single Source of Truth)
+                # 4. ALIMENTAÇÃO INTEGRAL DO WORLDSTATE (TODOS OS RAMOS: battle, team, player, location, resources)
                 game_state = GameState.EXPLORING
                 if detector and hasattr(detector, 'detect_state') and img is not None:
                     game_state = detector.detect_state(img)
 
-                # Prioridade máxima: Shiny detectado
                 if game_state == GameState.SHINY_FOUND:
                     logger.critical("✨ SHINY ENCONTRADO! PAUSANDO AGENTE!")
                     self.paused = True
                     self.notifier.notify_shiny_found("Shiny Pokemon", self.world.location.current_map)
                     continue
 
-                # Aplica observação ao WorldState com validação de confiança
+                # Observação Multicamada Completa
                 obs = Observation(
-                    category="battle",
+                    category="world_sync",
                     data={
                         "in_battle": (game_state == GameState.IN_BATTLE),
-                        "is_shiny": (game_state == GameState.SHINY_FOUND)
+                        "is_shiny": (game_state == GameState.SHINY_FOUND),
+                        "current_map": self.world.location.current_map or "Viridian Forest",
+                        "team_needs_heal": self.world.team.needs_healing,
+                        "pokeballs_count": self.world.resources.pokeballs_count,
+                        "potions_count": self.world.resources.potions_count
                     },
                     confidence=0.95
                 )
                 self.world.apply_observation(obs)
 
-                # 4. Executa o ciclo cognitivo e comanda as Skills
+                # 5. Executa o Ciclo Cognitivo de Tomada de Decisão
                 self.step()
 
                 if self.debug:

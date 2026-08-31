@@ -23,22 +23,40 @@
       "content": "Felipe: Klayton, vamos farmar na Rota 1!",
       "timestamp": 1788134164.608379,
       "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788138855.441549,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788139126.0145454,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788139126.2723086,
+      "importance": 0.8
     }
   ],
   "semantic": {
     "player_preferences": {},
     "farm_spot_efficiency": {
       "Route 1": {
-        "total_runs": 4,
+        "total_runs": 6,
         "avg_xp_h": 1200.0
       },
       "Viridian Forest": {
-        "total_runs": 4,
+        "total_runs": 6,
         "avg_xp_h": 3500.0
       }
     },
     "known_shiny_encounters": [],
     "completed_milestones": []
   },
-  "saved_at": 1788134164.6103327
+  "saved_at": 1788139126.272345
 }

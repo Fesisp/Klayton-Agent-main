@@ -1,17 +1,22 @@
 """
-Goal Manager - Conciliação de Objetivos Compartilhados e Pessoais
-================================================================
+Goal Manager - Conciliação de Objetivos via Utility AI
+======================================================
 
-Gerencia a coexistência entre o Objetivo Compartilhado (acordado com o humano, ex: TRAIN_TEAM)
-e os Objetivos Pessoais do Klayton (motivação própria autônoma, ex: level_up(Pikachu)).
+Gera metas candidatas (compartilhadas e pessoais) e utiliza a UtilityEngine
+como TOMADORA DE DECISÃO SOBERANA no loop principal do Klayton.
+
+Equação de decisão:
+utility = reward - risk - cost - time
 
 Autor: Klayton Companion Agent
 Data: 2026-08-30
 """
 
 from dataclasses import dataclass, field
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from ..decision.goal_engine import Goal
+from ..decision.utility_engine import UtilityEngine
+from ..world.world_state import WorldState
 
 
 @dataclass
@@ -25,30 +30,49 @@ class PersonalGoal:
 
 class CompanionGoalManager:
     """
-    Gerenciador de Metas Compartilhadas vs Pessoais do Companheiro.
+    Gerenciador de Metas que delega a decisão de seleção para a UtilityEngine.
     """
 
     def __init__(self, primary_shared_goal: Goal = Goal.FOLLOW_PLAYER):
         self.shared_goal: Goal = primary_shared_goal
         self.personal_goals: List[PersonalGoal] = []
         self.active_personal_goal: Optional[PersonalGoal] = None
+        self.utility_engine: UtilityEngine = UtilityEngine()
 
     def add_personal_goal(self, goal: PersonalGoal) -> None:
         self.personal_goals.append(goal)
 
-    def select_active_goal(self, is_waiting: bool, team_needs_heal: bool) -> Goal:
+    def select_active_goal(self, is_waiting: bool, team_needs_heal: bool, world: Optional[WorldState] = None) -> Goal:
         """
-        Seleciona o objetivo ativo priorizando metas de segurança e compartilhadas,
-        mas permitindo avanço em metas pessoais quando apropriado.
+        Gera a lista de metas candidatas viáveis e utiliza a UtilityEngine
+        para calcular a utilidade de cada uma em tempo real, selecionando o objetivo vencedor.
         """
-        if team_needs_heal:
-            return Goal.HEAL_TEAM
+        # Se não houver WorldState explícito, constrói um temporário para reflexão
+        if world is None:
+            world = WorldState()
+            world.team.needs_healing = team_needs_heal
+            world.companion.is_following_leader = not is_waiting
+
+        # 1. Monta o catálogo de metas candidatas no estado atual
+        candidate_goals: List[str] = [
+            "HEAL_TEAM",
+            "FOLLOW_PLAYER",
+            self.shared_goal.name
+        ]
 
         if is_waiting:
-            return Goal.IDLE
+            candidate_goals.append("IDLE")
 
-        # Se há um objetivo pessoal ativo e o compartilhado permite (ex: FOLLOW_PLAYER ou FARM_XP)
-        if self.active_personal_goal and self.shared_goal in [Goal.FOLLOW_PLAYER, Goal.FARM_XP, Goal.HUNT]:
-            return Goal.TRAIN_POKEMON
+        if self.active_personal_goal:
+            candidate_goals.append("TRAIN_POKEMON")
 
-        return self.shared_goal
+        candidate_goals.append("EXPLORE")
+
+        # Elimina duplicatas preservando a ordem
+        candidate_goals = list(dict.fromkeys(candidate_goals))
+
+        # 2. A UtilityEngine escolhe racionalmente com base em (reward - risk - cost - time)
+        best_goal_str, scores = self.utility_engine.select_best_goal(candidate_goals, world)
+
+        # 3. Retorna o Enum Goal correspondente à maior utilidade
+        return Goal.from_string(best_goal_str)
