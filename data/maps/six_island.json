@@ -2,9 +2,47 @@
   "map_name": "Six Island",
   "region": "Sevii",
   "pokeone_slug": "six-island",
-  "exits": [],
-  "landmarks": {},
-  "pokemon_center": null,
-  "pokemart": null,
-  "encounter_areas": []
+  "exits": [
+    {
+      "target_map": "Water Path",
+      "direction": "South"
+    },
+    {
+      "target_map": "Green Path",
+      "direction": "North"
+    }
+  ],
+  "landmarks": {
+    "key_building": "Dotted Hole / Ruin Valley"
+  },
+  "pokemon_center": {
+    "coordinates": [
+      18,
+      12
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      28,
+      12
+    ]
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

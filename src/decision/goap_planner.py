@@ -180,7 +180,7 @@ class GOAPPlanner:
             "in_battle": bool(world.battle.in_battle),
             "team_healed": not bool(world.team.needs_healing),
             "needs_heal": bool(world.team.needs_healing),
-            "has_supplies": (world.resources.pokeballs_count > 0 and world.resources.potions_count > 0),
+            "has_supplies": ((world.resources.pokeballs_count or 0) > 0 and (world.resources.potions_count or 0) > 0),
             "at_target_map": at_target_map,
             "target_level_reached": target_level_reached,
             "following_leader": bool(world.companion.is_following_leader)

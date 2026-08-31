@@ -2,9 +2,47 @@
   "map_name": "Seven Island",
   "region": "Sevii",
   "pokeone_slug": "seven-island",
-  "exits": [],
-  "landmarks": {},
-  "pokemon_center": null,
-  "pokemart": null,
-  "encounter_areas": []
+  "exits": [
+    {
+      "target_map": "Trainer Tower",
+      "direction": "North"
+    },
+    {
+      "target_map": "Sevault Canyon",
+      "direction": "South"
+    }
+  ],
+  "landmarks": {
+    "key_building": "Trainer Tower / Sevault Canyon"
+  },
+  "pokemon_center": {
+    "coordinates": [
+      16,
+      10
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      26,
+      10
+    ]
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

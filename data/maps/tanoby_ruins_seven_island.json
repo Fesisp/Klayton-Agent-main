@@ -2,9 +2,33 @@
   "map_name": "Tanoby Ruins Seven Island",
   "region": "Sevii",
   "pokeone_slug": "tanoby-ruins-seven-island",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Island Port",
+      "direction": "Ferry"
+    }
+  ],
+  "landmarks": {
+    "poi": "Tanoby Ruins Seven Island Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

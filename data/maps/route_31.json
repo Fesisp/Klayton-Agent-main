@@ -7,14 +7,35 @@
       "direction": "South"
     },
     {
-      "target_map": "Violet City",
-      "direction": "West"
+      "target_map": "Dark Cave",
+      "direction": "East"
     },
     {
-      "target_map": "Dark Cave",
-      "direction": "North"
+      "target_map": "Violet City",
+      "direction": "West"
     }
   ],
   "pokemon_center": null,
-  "pokemart": null
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ],
+  "landmarks": {
+    "poi": "Route 31 Area Landmark"
+  }
 }

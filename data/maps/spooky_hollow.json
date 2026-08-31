@@ -36,5 +36,8 @@
       "min_lvl": 15,
       "max_lvl": 25
     }
-  ]
+  ],
+  "landmarks": {
+    "poi": "Spooky Hollow Area Landmark"
+  }
 }

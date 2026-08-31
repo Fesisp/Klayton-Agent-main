@@ -2,9 +2,37 @@
   "map_name": "Relic Passage",
   "region": "Unova",
   "pokeone_slug": "relic-passage",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Adjacent Area",
+      "direction": "Exit"
+    },
+    {
+      "target_map": "Central Plaza",
+      "direction": "Center"
+    }
+  ],
+  "landmarks": {
+    "poi": "Relic Passage Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

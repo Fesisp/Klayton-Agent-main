@@ -2,9 +2,37 @@
   "map_name": "Underground Path West East",
   "region": "Kanto",
   "pokeone_slug": "underground-path-west-east",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Adjacent Area",
+      "direction": "Exit"
+    },
+    {
+      "target_map": "Central Plaza",
+      "direction": "Center"
+    }
+  ],
+  "landmarks": {
+    "poi": "Underground Path West East Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

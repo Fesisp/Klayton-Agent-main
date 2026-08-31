@@ -1,6 +1,6 @@
 {
   "map_name": "Summer Beach Resort",
-  "region": "Event_Summer",
+  "region": "Special_Custom",
   "exits": [
     {
       "target_map": "Coral Island",
@@ -14,13 +14,13 @@
   "pokemon_center": {
     "coordinates": [
       18,
-      15
+      12
     ]
   },
   "pokemart": {
     "coordinates": [
       28,
-      15
+      12
     ]
   },
   "encounter_areas": [
@@ -36,5 +36,8 @@
       "min_lvl": 15,
       "max_lvl": 25
     }
-  ]
+  ],
+  "landmarks": {
+    "key_building": "Surf Competition / Coconut Shop"
+  }
 }

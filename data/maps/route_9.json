@@ -3,14 +3,35 @@
   "region": "Kanto",
   "exits": [
     {
-      "target_map": "Cerulean City",
+      "target_map": "Tubeline Bridge",
       "direction": "West"
     },
     {
-      "target_map": "Rock Tunnel Entrance",
+      "target_map": "Opelucid City",
       "direction": "East"
     }
   ],
   "pokemon_center": null,
-  "pokemart": null
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ],
+  "landmarks": {
+    "poi": "Route 9 Area Landmark"
+  }
 }

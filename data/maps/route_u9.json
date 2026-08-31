@@ -2,9 +2,37 @@
   "map_name": "Route U9",
   "region": "Unova",
   "pokeone_slug": "route-u9",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Route 8",
+      "direction": "South"
+    },
+    {
+      "target_map": "Route 10",
+      "direction": "North"
+    }
+  ],
+  "landmarks": {
+    "poi": "Route U9 Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

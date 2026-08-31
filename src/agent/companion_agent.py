@@ -250,12 +250,6 @@ class KlaytonCompanionAgent:
                 # 4. Alimentação Integral do WorldState via PerceptionSnapshot
                 self.world.apply_snapshot(snapshot)
 
-                # Garante que o time do WorldState possui o Pokémon ativo para verificação de nível/HP
-                if not self.world.team.members:
-                    from ..world.world_state import PokemonInfo
-                    active_name = self.goal_manager.shared_goal_instance.target or "Pikachu"
-                    self.world.team.members.append(PokemonInfo(name=active_name, level=1, hp_percentage=1.0))
-
                 # 5. Executa o Ciclo Cognitivo de Tomada de Decisão
                 self.step()
 

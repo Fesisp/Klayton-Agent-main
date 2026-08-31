@@ -2,19 +2,43 @@
   "map_name": "Aspertia City",
   "region": "Unova",
   "pokeone_slug": "aspertia-city",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Route 19",
+      "direction": "East"
+    }
+  ],
+  "landmarks": {
+    "key_building": "Aspertia Gym - Cheren / Lookout"
+  },
   "pokemon_center": {
     "coordinates": [
-      15,
+      14,
       12
     ]
   },
   "pokemart": {
     "coordinates": [
-      25,
+      24,
       12
     ]
   },
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

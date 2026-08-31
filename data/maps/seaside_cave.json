@@ -2,9 +2,37 @@
   "map_name": "Seaside Cave",
   "region": "Kanto",
   "pokeone_slug": "seaside-cave",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Route Entrance",
+      "direction": "South"
+    },
+    {
+      "target_map": "Inner Cave",
+      "direction": "Deep"
+    }
+  ],
+  "landmarks": {
+    "dungeon": "Seaside Cave Dungeon Spawns"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

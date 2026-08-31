@@ -9,18 +9,43 @@
     {
       "target_map": "Route 21",
       "direction": "North"
+    },
+    {
+      "target_map": "Pokemon Mansion",
+      "direction": "NorthWest"
     }
   ],
   "pokemon_center": {
     "coordinates": [
       12,
-      15
+      14
     ]
   },
   "pokemart": {
     "coordinates": [
       22,
-      15
+      14
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Cinnabar Gym - Blaine / Mansion"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

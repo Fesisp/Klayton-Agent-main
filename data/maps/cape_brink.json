@@ -34,5 +34,8 @@
       "max_lvl": 35,
       "rate": 0.2
     }
-  ]
+  ],
+  "landmarks": {
+    "poi": "Cape Brink Area Landmark"
+  }
 }

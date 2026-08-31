@@ -2,9 +2,37 @@
   "map_name": "Twist Mountain Lowest Level",
   "region": "Kanto",
   "pokeone_slug": "twist-mountain-lowest-level",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Exterior Route",
+      "direction": "Entrance"
+    },
+    {
+      "target_map": "Lower Floor",
+      "direction": "Stairs"
+    }
+  ],
+  "landmarks": {
+    "poi": "Twist Mountain Lowest Level Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

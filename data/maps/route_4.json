@@ -3,12 +3,16 @@
   "region": "Kanto",
   "exits": [
     {
-      "target_map": "Mt. Moon B2F",
+      "target_map": "Castelia City",
+      "direction": "South"
+    },
+    {
+      "target_map": "Desert Resort",
       "direction": "West"
     },
     {
-      "target_map": "Cerulean City",
-      "direction": "East"
+      "target_map": "Nimbasa City",
+      "direction": "North"
     }
   ],
   "pokemon_center": {
@@ -17,5 +21,26 @@
       10
     ]
   },
-  "pokemart": null
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ],
+  "landmarks": {
+    "poi": "Route 4 Area Landmark"
+  }
 }

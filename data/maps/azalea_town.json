@@ -7,24 +7,45 @@
       "direction": "East"
     },
     {
-      "target_map": "Ilex Forest",
-      "direction": "West"
+      "target_map": "Slowpoke Well",
+      "direction": "East"
     },
     {
-      "target_map": "Slowpoke Well",
-      "direction": "EastPond"
+      "target_map": "Ilex Forest",
+      "direction": "West"
     }
   ],
   "pokemon_center": {
     "coordinates": [
       15,
-      10
+      12
     ]
   },
   "pokemart": {
     "coordinates": [
       25,
-      10
+      12
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Azalea Gym - Bugsy / Kurt Well"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

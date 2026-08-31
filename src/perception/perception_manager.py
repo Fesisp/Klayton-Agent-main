@@ -27,6 +27,7 @@ from .perception_snapshot import PerceptionSnapshot
 from ..world.world_state import PokemonInfo, BattleState, ResourcesState, QuestState
 from .game_state_detector import GameState, GameStateDetector
 from .chat_handler import ChatHandler
+from .team_detector import TeamDetector
 from ..utils.placeholders import CalibrationRequired
 
 
@@ -43,6 +44,7 @@ class PerceptionManager:
         self.screen = components.get('screen')
         self.ocr = components.get('ocr')
         self.detector: Optional[GameStateDetector] = components.get('detector')
+        self.team_detector: TeamDetector = TeamDetector(self.config, components)
 
         # Chat handler para segurança e detecção de PMs
         self.chat_handler: Optional[ChatHandler] = None
@@ -95,26 +97,24 @@ class PerceptionManager:
             except Exception:
                 battle_info = {}
 
+        opp_lvl = battle_info.get("opponent_level")
+        opp_hp = battle_info.get("opponent_hp_percentage")
+
         return BattleState(
             in_battle=is_in_battle,
             is_shiny=is_shiny,
             opponent_name=battle_info.get("opponent_name"),
-            opponent_level=int(battle_info.get("opponent_level", 1)) if battle_info.get("opponent_level") else 1,
-            opponent_hp_percentage=float(battle_info.get("opponent_hp_percentage", 1.0)),
-            opponent_status=battle_info.get("opponent_status", "OK"),
-            battle_type=battle_info.get("battle_type", "wild")
+            opponent_level=int(opp_lvl) if opp_lvl is not None else None,
+            opponent_hp_percentage=float(opp_hp) if opp_hp is not None else None,
+            opponent_status=battle_info.get("opponent_status", "UNKNOWN"),
+            battle_type=battle_info.get("battle_type", None)
         )
 
-    def detect_team(self, frame: Optional[Any]) -> List[PokemonInfo]:
+    def detect_team(self, frame: Optional[Any], game_state: str = "EXPLORING", battle_info: Optional[Dict[str, Any]] = None) -> List[PokemonInfo]:
         """
-        Extrai o estado dos Pokémon da equipe visíveis no HUD/menu.
-        Se não houver leitura de OCR ativa, retorna lista vazia (sem inventar dados).
+        Extrai o estado detalhado dos 6 Pokémon da equipe visíveis no HUD/menu/batalha via TeamDetector.
         """
-        if frame is None or not self.ocr:
-            return []
-
-        # Placeholder formal enquanto a calibração de OCR de slots de time do PokeOne é finalizada
-        return []
+        return self.team_detector.detect_team_slots(frame, game_state=game_state, battle_info=battle_info)
 
     def detect_location(self, frame: Optional[Any]) -> str:
         """Detecta o mapa atual via OCR ou template matching."""
@@ -142,13 +142,23 @@ class PerceptionManager:
         """
         frame = self.capture_frame()
         game_state = self.detect_game_state(frame)
+        battle_state = self.detect_battle(frame, game_state)
+
+        battle_info_dict = None
+        if battle_state and battle_state.in_battle:
+            battle_info_dict = {
+                "opponent_name": battle_state.opponent_name,
+                "opponent_hp_percentage": battle_state.opponent_hp_percentage
+            }
+
+        team_slots = self.detect_team(frame, game_state=game_state, battle_info=battle_info_dict)
 
         return PerceptionSnapshot(
             game_state=game_state,
             current_map=self.detect_location(frame),
             player_position=self.detect_player(frame),
-            team=self.detect_team(frame),
-            battle=self.detect_battle(frame, game_state),
+            team=team_slots,
+            battle=battle_state,
             resources=self.detect_resources(frame),
             nearby_players=self.detect_nearby_players(frame),
             quest=self.detect_quest(frame),

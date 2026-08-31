@@ -2,9 +2,37 @@
   "map_name": "The Old Route",
   "region": "Kanto",
   "pokeone_slug": "the-old-route",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Nearest City",
+      "direction": "South"
+    },
+    {
+      "target_map": "Route 2",
+      "direction": "North"
+    }
+  ],
+  "landmarks": {
+    "poi": "The Old Route Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

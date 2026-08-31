@@ -3,14 +3,35 @@
   "region": "Kanto",
   "exits": [
     {
-      "target_map": "Saffron City",
-      "direction": "North"
+      "target_map": "Driftveil City",
+      "direction": "East"
     },
     {
-      "target_map": "Vermilion City",
-      "direction": "South"
+      "target_map": "Chargestone Cave",
+      "direction": "North"
     }
   ],
   "pokemon_center": null,
-  "pokemart": null
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ],
+  "landmarks": {
+    "poi": "Route 6 Area Landmark"
+  }
 }

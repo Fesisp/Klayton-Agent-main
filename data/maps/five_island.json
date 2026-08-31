@@ -2,9 +2,47 @@
   "map_name": "Five Island",
   "region": "Sevii",
   "pokeone_slug": "five-island",
-  "exits": [],
-  "landmarks": {},
-  "pokemon_center": null,
-  "pokemart": null,
-  "encounter_areas": []
+  "exits": [
+    {
+      "target_map": "Five Isle Meadow",
+      "direction": "East"
+    },
+    {
+      "target_map": "Resort Gorgeous",
+      "direction": "North"
+    }
+  ],
+  "landmarks": {
+    "key_building": "Rocket Warehouse Path"
+  },
+  "pokemon_center": {
+    "coordinates": [
+      15,
+      10
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      25,
+      10
+    ]
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

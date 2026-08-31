@@ -3,24 +3,49 @@
   "region": "Johto",
   "exits": [
     {
-      "target_map": "Route 45",
-      "direction": "South"
+      "target_map": "Ice Path",
+      "direction": "West"
     },
     {
-      "target_map": "Ice Path",
+      "target_map": "Dragons Den",
       "direction": "North"
+    },
+    {
+      "target_map": "Route 45",
+      "direction": "South"
     }
   ],
   "pokemon_center": {
     "coordinates": [
       18,
-      16
+      14
     ]
   },
   "pokemart": {
     "coordinates": [
       28,
-      16
+      14
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Blackthorn Gym - Clair / Dragon's Den"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

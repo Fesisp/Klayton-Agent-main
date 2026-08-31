@@ -2,19 +2,51 @@
   "map_name": "Virbank City",
   "region": "Unova",
   "pokeone_slug": "virbank-city",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Route 20",
+      "direction": "West"
+    },
+    {
+      "target_map": "Virbank Complex",
+      "direction": "South"
+    },
+    {
+      "target_map": "Castelia City Boat",
+      "direction": "SouthEast"
+    }
+  ],
+  "landmarks": {
+    "key_building": "Virbank Gym - Roxie / Virbank Complex"
+  },
   "pokemon_center": {
     "coordinates": [
-      15,
-      12
+      18,
+      14
     ]
   },
   "pokemart": {
     "coordinates": [
-      25,
-      12
+      28,
+      14
     ]
   },
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

@@ -42,10 +42,11 @@ class ResourceManager:
             logger.warning("🩹 Equipe precisa de cura! Redirecionando para HEAL_TEAM antes de prosseguir.")
             return Goal.HEAL_TEAM
 
-        # 2. Checagem de Pokébolas para Caça ou Captura
-        if target_goal in [Goal.HUNT, Goal.FISH] and world.resources.pokeballs_count < self.min_pokeballs:
-            if world.resources.money >= 500:
-                logger.warning(f"🎒 Pokéballs insuficientes ({world.resources.pokeballs_count} < {self.min_pokeballs}). Redirecionando para BUY_ITEMS.")
+        balls = world.resources.pokeballs_count or 0
+        money = world.resources.money or 0
+        if target_goal in [Goal.HUNT, Goal.FISH] and balls < self.min_pokeballs:
+            if money >= 500:
+                logger.warning(f"🎒 Pokéballs insuficientes ({balls} < {self.min_pokeballs}). Redirecionando para BUY_ITEMS.")
                 return Goal.BUY_ITEMS
             else:
                 logger.info("⚠️ Pokéballs insuficientes e sem saldo suficiente para comprar.")

@@ -2,9 +2,37 @@
   "map_name": "Route 46",
   "region": "Johto",
   "pokeone_slug": "route-46",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Route 45",
+      "direction": "North"
+    },
+    {
+      "target_map": "Route 29",
+      "direction": "South"
+    }
+  ],
+  "landmarks": {
+    "poi": "Route 46 Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

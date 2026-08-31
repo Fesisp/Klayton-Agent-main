@@ -3,12 +3,20 @@
   "region": "Unova",
   "exits": [
     {
-      "target_map": "Pinwheel Forest",
+      "target_map": "Virbank Boat",
       "direction": "South"
     },
     {
-      "target_map": "Unova Route 4",
+      "target_map": "Castelia Sewers",
+      "direction": "Center"
+    },
+    {
+      "target_map": "Route 4",
       "direction": "North"
+    },
+    {
+      "target_map": "Skyarrow Bridge",
+      "direction": "East"
     }
   ],
   "pokemon_center": {
@@ -22,5 +30,26 @@
       35,
       20
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Castelia Gym - Burgh / Sewers / Art Gallery"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

@@ -12,5 +12,50 @@
     }
   ],
   "pokemon_center": null,
-  "pokemart": null
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Pikachu",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 3,
+      "max_lvl": 6,
+      "rate": 0.05
+    },
+    {
+      "species": "Caterpie",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 3,
+      "max_lvl": 5,
+      "rate": 0.4
+    },
+    {
+      "species": "Weedle",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 3,
+      "max_lvl": 5,
+      "rate": 0.4
+    },
+    {
+      "species": "Metapod",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 4,
+      "max_lvl": 6,
+      "rate": 0.1
+    },
+    {
+      "species": "Kakuna",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 4,
+      "max_lvl": 6,
+      "rate": 0.1
+    }
+  ],
+  "landmarks": {
+    "poi": "Viridian Forest Area Landmark"
+  }
 }

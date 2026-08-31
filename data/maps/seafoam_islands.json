@@ -3,14 +3,35 @@
   "region": "Kanto",
   "exits": [
     {
-      "target_map": "Route 20 East",
+      "target_map": "Route 20",
       "direction": "East"
     },
     {
-      "target_map": "Route 20 West",
+      "target_map": "Route 20",
       "direction": "West"
     }
   ],
   "pokemon_center": null,
-  "pokemart": null
+  "pokemart": null,
+  "landmarks": {
+    "poi": "Seafoam Islands Area Landmark"
+  },
+  "encounter_areas": [
+    {
+      "species": "Tentacool",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 15,
+      "max_lvl": 25,
+      "rate": 0.6
+    },
+    {
+      "species": "Magikarp",
+      "method": "old_rod",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.4
+    }
+  ]
 }

@@ -2,9 +2,33 @@
   "map_name": "Dragons Den",
   "region": "Kanto",
   "pokeone_slug": "dragons-den",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Blackthorn City",
+      "direction": "South"
+    }
+  ],
+  "landmarks": {
+    "poi": "Dragons Den Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

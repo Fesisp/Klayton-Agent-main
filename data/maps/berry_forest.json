@@ -14,20 +14,20 @@
   "pokemart": null,
   "encounter_areas": [
     {
+      "species": "Hypno",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 35,
+      "max_lvl": 40,
+      "rate": 0.2
+    },
+    {
       "species": "Drowzee",
       "method": "grass",
       "time": "all",
       "min_lvl": 30,
       "max_lvl": 35,
-      "rate": 0.3
-    },
-    {
-      "species": "Hypno",
-      "method": "grass",
-      "time": "all",
-      "min_lvl": 36,
-      "max_lvl": 40,
-      "rate": 0.15
+      "rate": 0.4
     },
     {
       "species": "Venonat",
@@ -35,23 +35,7 @@
       "time": "night",
       "min_lvl": 30,
       "max_lvl": 34,
-      "rate": 0.35
-    },
-    {
-      "species": "Pinsir",
-      "method": "grass",
-      "time": "morning",
-      "min_lvl": 32,
-      "max_lvl": 38,
-      "rate": 0.1
-    },
-    {
-      "species": "Heracross",
-      "method": "headbutt",
-      "time": "all",
-      "min_lvl": 30,
-      "max_lvl": 35,
-      "rate": 0.1
+      "rate": 0.3
     }
   ]
 }

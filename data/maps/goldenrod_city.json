@@ -7,6 +7,10 @@
       "direction": "South"
     },
     {
+      "target_map": "Goldenrod Radio Tower",
+      "direction": "West"
+    },
+    {
       "target_map": "Route 35",
       "direction": "North"
     }
@@ -22,5 +26,26 @@
       32,
       18
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Goldenrod Gym - Whitney / Dept Store / Radio Tower"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

@@ -3,12 +3,16 @@
   "region": "Johto",
   "exits": [
     {
-      "target_map": "Route 36",
+      "target_map": "Route 37",
       "direction": "South"
     },
     {
-      "target_map": "Route 37",
-      "direction": "SouthEast"
+      "target_map": "Burned Tower",
+      "direction": "NorthWest"
+    },
+    {
+      "target_map": "Bell Tower",
+      "direction": "NorthEast"
     },
     {
       "target_map": "Route 38",
@@ -30,5 +34,26 @@
       30,
       15
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Ecruteak Gym - Morty / Burned Tower / Bell Tower"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

@@ -50,21 +50,29 @@ class GameStateDetector:
         status_templates = {}
         for status in ['brn', 'par', 'psn', 'tox', 'slp', 'frz']:
             status_path = os.path.join(assets_dir, f'status_{status}.png')
-            if os.path.exists(status_path):
+            if cv2 and os.path.exists(status_path):
                 status_templates[status] = cv2.imread(status_path)
             else:
                 logger.debug(f"Template de status '{status}' não encontrado em {status_path}")
         
+        def safe_read(p):
+            if cv2 and os.path.exists(p):
+                try:
+                    return cv2.imread(p)
+                except Exception:
+                    return None
+            return None
+
         return {
-            'shiny': cv2.imread(shiny_path),
-            'talk': cv2.imread(talk_path),
-            'goto': cv2.imread(goto_path),
-            'fight': cv2.imread(fight_path),
-            'bag': cv2.imread(bag_path),
-            'pokemon': cv2.imread(pokemon_path),
-            'run': cv2.imread(run_path),
-            'chat': cv2.imread(chat_path),
-            'status': status_templates  # Dicionário de templates de status
+            'shiny': safe_read(shiny_path),
+            'talk': safe_read(talk_path),
+            'goto': safe_read(goto_path),
+            'fight': safe_read(fight_path),
+            'bag': safe_read(bag_path),
+            'pokemon': safe_read(pokemon_path),
+            'run': safe_read(run_path),
+            'chat': safe_read(chat_path),
+            'status': status_templates
         }
 
     def _resolve_roi(self, image, roi):
@@ -450,28 +458,70 @@ class GameStateDetector:
         
         return hp_ratio
     
-    def detect_enemy_action_category(self):
-        """Detecta se o inimigo usou golpe de BUFF/SETUP no último turno.
-        
+    def detect_enemy_action_category(self, frame=None, battle_text: Optional[str] = None) -> str:
+        """Detecta se o inimigo usou golpe de BUFF/SETUP, HEAL, HAZARD, DEBUFF ou ATAQUE no turno.
+
         APLICAÇÃO:
         Previne que o bot vire "escada" durante Sleep/Freeze.
-        Se detectar Dragon Dance, Swords Dance, Calm Mind, etc., força troca.
-        
+        Se detectar Dragon Dance, Swords Dance, Calm Mind, etc., força troca para interromper Setup.
+
         MÉTODO:
-        - Analisa log de batalha (se disponível)
-        - Detecta animações de buff (brilho, partículas)
-        - Fallback: assume ataque se incerto
-        
-        Returns:
-            str: "STATUS_BUFF", "ATTACK", "UNKNOWN"
+        - Analisa texto da caixa de mensagem do battlelog (se disponível ou via OCR)
+        - Classifica em "STATUS_BUFF", "STATUS_DEBUFF", "HEAL", "HAZARD", "ATTACK", ou "UNKNOWN"
         """
-        # TODO: Implementar detecção via análise de animação ou log
-        # Por enquanto, retorna UNKNOWN (não bloqueia funcionalidade)
-        
-        # Placeholder: Poderia analisar ROI de mensagem de batalha
-        # Ex: "Dragonite usou Dragon Dance!" -> STATUS_BUFF
-        
-        logger.debug("detect_enemy_action_category não implementado - retornando UNKNOWN")
+        # 1. Se não recebeu texto diretamente, tenta extrair via OCR do frame
+        if not battle_text and frame is not None and self.ocr and hasattr(self.ocr, 'extract_text'):
+            try:
+                battle_text = self.ocr.extract_text(frame)
+            except Exception:
+                battle_text = None
+
+        if not battle_text:
+            return "UNKNOWN"
+
+        text_lower = battle_text.lower()
+
+        # Palavras-chave de Setup / Buff
+        buff_keywords = [
+            "swords dance", "dragon dance", "calm mind", "nasty plot", "agility",
+            "quiver dance", "bulk up", "shell smash", "growth", "work up", "charge",
+            "acid armor", "iron defense", "amnesia", "rock polish", "curse", "tail glow",
+            "sharply rose", "rose!", "stat rose", "increased its", "boosted"
+        ]
+        if any(kw in text_lower for kw in buff_keywords):
+            logger.info(f"⚔️ Ação do inimigo identificada como STATUS_BUFF: '{battle_text}'")
+            return "STATUS_BUFF"
+
+        # Palavras-chave de Cura
+        heal_keywords = [
+            "recover", "roost", "soft-boiled", "synthesis", "moonlight", "morning sun",
+            "wish", "rest", "milk drink", "slack off", "restored hp", "healed"
+        ]
+        if any(kw in text_lower for kw in heal_keywords):
+            logger.info(f"💖 Ação do inimigo identificada como HEAL: '{battle_text}'")
+            return "HEAL"
+
+        # Palavras-chave de Hazards
+        hazard_keywords = ["stealth rock", "spikes", "toxic spikes", "sticky web"]
+        if any(kw in text_lower for kw in hazard_keywords):
+            logger.info(f"⚠️ Ação do inimigo identificada como HAZARD: '{battle_text}'")
+            return "HAZARD"
+
+        # Palavras-chave de Debuff / Status negativo
+        debuff_keywords = [
+            "growl", "tail whip", "leer", "string shot", "screech", "scary face",
+            "fake tears", "metal sound", "will-o-wisp", "toxic", "hypnosis", "thunder wave",
+            "sing", "spores", "glare", "confuse ray", "fell asleep", "was paralyzed",
+            "was burned", "was poisoned", "became confused", "stat fell", "harshly lowered"
+        ]
+        if any(kw in text_lower for kw in debuff_keywords):
+            logger.info(f"🌀 Ação do inimigo identificada como STATUS_DEBUFF: '{battle_text}'")
+            return "STATUS_DEBUFF"
+
+        # Se houver menção de golpe de ataque comum ou dano
+        if any(kw in text_lower for kw in ["used", "dealt", "hit", "damage", "attack"]):
+            return "ATTACK"
+
         return "UNKNOWN"
     
     def get_hp_ratio_by_pixel(self, frame, side='player'):

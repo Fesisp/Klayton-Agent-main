@@ -2,19 +2,51 @@
   "map_name": "Lacunosa Town",
   "region": "Unova",
   "pokeone_slug": "lacunosa-town",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Route 12",
+      "direction": "West"
+    },
+    {
+      "target_map": "Route 13",
+      "direction": "SouthEast"
+    },
+    {
+      "target_map": "Giant Chasm",
+      "direction": "North"
+    }
+  ],
+  "landmarks": {
+    "key_building": "Giant Chasm Entry"
+  },
   "pokemon_center": {
     "coordinates": [
-      15,
-      12
+      12,
+      10
     ]
   },
   "pokemart": {
     "coordinates": [
-      25,
-      12
+      22,
+      10
     ]
   },
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

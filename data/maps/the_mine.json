@@ -2,9 +2,37 @@
   "map_name": "The Mine",
   "region": "Kanto",
   "pokeone_slug": "the-mine",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Exterior Route",
+      "direction": "Entrance"
+    },
+    {
+      "target_map": "Lower Floor",
+      "direction": "Stairs"
+    }
+  ],
+  "landmarks": {
+    "poi": "The Mine Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Zubat",
+      "method": "cave",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 20,
+      "rate": 0.5
+    },
+    {
+      "species": "Geodude",
+      "method": "cave",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 20,
+      "rate": 0.5
+    }
+  ]
 }

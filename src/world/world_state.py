@@ -29,10 +29,10 @@ class Observation:
 class PokemonInfo:
     """Informações detalhadas de um Pokémon da equipe ou inimigo."""
     name: str = "Unknown"
-    level: int = 1
-    hp_percentage: float = 1.0  # 0.0 a 1.0
-    max_hp: int = 100
-    current_hp: int = 100
+    level: Optional[int] = None
+    hp_percentage: Optional[float] = None
+    max_hp: Optional[int] = None
+    current_hp: Optional[int] = None
     status: str = "OK"  # OK, Poison, Burn, Sleep, Freeze, Paralyze
     fainted: bool = False
     active: bool = False
@@ -47,7 +47,7 @@ class PlayerState:
     position: Optional[Tuple[int, int]] = None
     map_name: str = "Unknown"
     in_water: bool = False
-    money: int = 0
+    money: Optional[int] = None
 
 
 @dataclass
@@ -66,25 +66,33 @@ class TeamState:
     def average_hp_percentage(self) -> float:
         if not self.members:
             return 1.0
-        return sum(p.hp_percentage for p in self.members) / len(self.members)
+        known_hps = [p.hp_percentage for p in self.members if p.hp_percentage is not None]
+        if not known_hps:
+            return 1.0
+        return sum(known_hps) / len(known_hps)
 
     @property
     def needs_healing(self) -> bool:
         if not self.members:
             return False
-        return any(p.hp_percentage < 0.20 or p.status != "OK" or p.fainted for p in self.members)
+        return any(
+            (p.hp_percentage is not None and p.hp_percentage < 0.20) or
+            p.status != "OK" or
+            p.fainted
+            for p in self.members
+        )
 
 
 @dataclass
 class BattleState:
-    """Estado do combate atual."""
+    """Estado do combate atual sem suposições não observadas."""
     in_battle: bool = False
     turn_count: int = 0
     opponent_name: Optional[str] = None
-    opponent_level: int = 1
-    opponent_hp_percentage: float = 1.0
-    opponent_status: str = "OK"
-    battle_type: str = "wild"  # wild ou trainer
+    opponent_level: Optional[int] = None
+    opponent_hp_percentage: Optional[float] = None
+    opponent_status: str = "UNKNOWN"
+    battle_type: Optional[str] = None  # wild, trainer ou None
     is_shiny: bool = False
     available_actions: List[str] = field(default_factory=lambda: ["fight", "bag", "pokemon", "run"])
 
@@ -124,9 +132,9 @@ class LocationState:
 @dataclass
 class ResourcesState:
     """Estado de recursos e inventário."""
-    pokeballs_count: int = 10
-    potions_count: int = 5
-    money: int = 1000
+    pokeballs_count: Optional[int] = None
+    potions_count: Optional[int] = None
+    money: Optional[int] = None
     items: Dict[str, int] = field(default_factory=dict)
 
 

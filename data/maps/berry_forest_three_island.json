@@ -2,9 +2,37 @@
   "map_name": "Berry Forest Three Island",
   "region": "Sevii",
   "pokeone_slug": "berry-forest-three-island",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Route Entrance",
+      "direction": "South"
+    },
+    {
+      "target_map": "Inner Cave",
+      "direction": "Deep"
+    }
+  ],
+  "landmarks": {
+    "poi": "Berry Forest Three Island Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

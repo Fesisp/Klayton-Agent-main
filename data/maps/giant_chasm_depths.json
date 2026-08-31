@@ -2,9 +2,37 @@
   "map_name": "Giant Chasm Depths",
   "region": "Kanto",
   "pokeone_slug": "giant-chasm-depths",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Adjacent Area",
+      "direction": "Exit"
+    },
+    {
+      "target_map": "Central Plaza",
+      "direction": "Center"
+    }
+  ],
+  "landmarks": {
+    "poi": "Giant Chasm Depths Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Zubat",
+      "method": "cave",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 20,
+      "rate": 0.5
+    },
+    {
+      "species": "Geodude",
+      "method": "cave",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 20,
+      "rate": 0.5
+    }
+  ]
 }

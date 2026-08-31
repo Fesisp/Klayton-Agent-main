@@ -28,5 +28,8 @@
       "min_lvl": 25,
       "max_lvl": 35
     }
-  ]
+  ],
+  "landmarks": {
+    "poi": "Haunted Manor Area Landmark"
+  }
 }

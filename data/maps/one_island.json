@@ -11,7 +11,7 @@
       "direction": "North"
     },
     {
-      "target_map": "Vermilion City Port",
+      "target_map": "Vermilion Ferry",
       "direction": "Ferry"
     }
   ],
@@ -19,8 +19,7 @@
     "coordinates": [
       15,
       12
-    ],
-    "network_center": "Celio Network Machine"
+    ]
   },
   "pokemart": {
     "coordinates": [
@@ -45,5 +44,8 @@
       "max_lvl": 35,
       "rate": 0.35
     }
-  ]
+  ],
+  "landmarks": {
+    "key_building": "Celio Network Machine"
+  }
 }

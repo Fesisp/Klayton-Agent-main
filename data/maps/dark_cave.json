@@ -2,9 +2,41 @@
   "map_name": "Dark Cave",
   "region": "Johto",
   "pokeone_slug": "dark-cave",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Route 31",
+      "direction": "West"
+    },
+    {
+      "target_map": "Route 45",
+      "direction": "South"
+    },
+    {
+      "target_map": "Route 46",
+      "direction": "South"
+    }
+  ],
+  "landmarks": {
+    "dungeon": "Dark Cave Dungeon Spawns"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

@@ -2,9 +2,37 @@
   "map_name": "Dream Of Water Murmuring Falls",
   "region": "Special_Custom",
   "pokeone_slug": "dream-of-water-murmuring-falls",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Adjacent Area",
+      "direction": "Exit"
+    },
+    {
+      "target_map": "Central Plaza",
+      "direction": "Center"
+    }
+  ],
+  "landmarks": {
+    "poi": "Dream Of Water Murmuring Falls Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Tentacool",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 15,
+      "max_lvl": 25,
+      "rate": 0.6
+    },
+    {
+      "species": "Magikarp",
+      "method": "old_rod",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.4
+    }
+  ]
 }

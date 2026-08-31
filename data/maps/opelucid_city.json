@@ -3,24 +3,49 @@
   "region": "Unova",
   "exits": [
     {
-      "target_map": "Unova Route 9",
+      "target_map": "Route 9",
       "direction": "West"
     },
     {
-      "target_map": "Unova Route 10",
+      "target_map": "Route 11",
+      "direction": "East"
+    },
+    {
+      "target_map": "Route 10",
       "direction": "North"
     }
   ],
   "pokemon_center": {
     "coordinates": [
       22,
-      14
+      16
     ]
   },
   "pokemart": {
     "coordinates": [
       32,
-      14
+      16
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Opelucid Gym - Iris / Drayden"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

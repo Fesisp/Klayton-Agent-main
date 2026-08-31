@@ -2,9 +2,37 @@
   "map_name": "Route 40",
   "region": "Johto",
   "pokeone_slug": "route-40",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Olivine City",
+      "direction": "East"
+    },
+    {
+      "target_map": "Route 41",
+      "direction": "South"
+    }
+  ],
+  "landmarks": {
+    "poi": "Route 40 Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

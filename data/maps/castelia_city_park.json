@@ -2,8 +2,19 @@
   "map_name": "Castelia City Park",
   "region": "Unova",
   "pokeone_slug": "castelia-city-park",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Adjacent Area",
+      "direction": "Exit"
+    },
+    {
+      "target_map": "Central Plaza",
+      "direction": "Center"
+    }
+  ],
+  "landmarks": {
+    "gym": "Castelia City Park Official Gym"
+  },
   "pokemon_center": {
     "coordinates": [
       15,
@@ -16,5 +27,22 @@
       12
     ]
   },
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

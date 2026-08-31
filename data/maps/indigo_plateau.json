@@ -3,20 +3,41 @@
   "region": "Kanto",
   "exits": [
     {
-      "target_map": "Victory Road",
+      "target_map": "Victory Road 3F",
       "direction": "South"
     }
   ],
   "pokemon_center": {
     "coordinates": [
       10,
-      10
+      8
     ]
   },
   "pokemart": {
     "coordinates": [
       20,
-      10
+      8
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Kanto Pokemon League / Elite Four"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

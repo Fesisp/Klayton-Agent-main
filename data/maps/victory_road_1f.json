@@ -3,14 +3,35 @@
   "region": "Kanto",
   "exits": [
     {
-      "target_map": "Route 22 Gate",
+      "target_map": "Pokemon League Reception",
       "direction": "South"
     },
     {
       "target_map": "Victory Road 2F",
-      "direction": "Ladders"
+      "direction": "Stairs"
     }
   ],
   "pokemon_center": null,
-  "pokemart": null
+  "pokemart": null,
+  "landmarks": {
+    "poi": "Victory Road 1F Area Landmark"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

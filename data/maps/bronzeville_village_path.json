@@ -2,9 +2,47 @@
   "map_name": "Bronzeville Village Path",
   "region": "Kanto",
   "pokeone_slug": "bronzeville-village-path",
-  "exits": [],
-  "landmarks": {},
-  "pokemon_center": null,
-  "pokemart": null,
-  "encounter_areas": []
+  "exits": [
+    {
+      "target_map": "Adjacent Area",
+      "direction": "Exit"
+    },
+    {
+      "target_map": "Central Plaza",
+      "direction": "Center"
+    }
+  ],
+  "landmarks": {
+    "poi": "Bronzeville Village Path Area Landmark"
+  },
+  "pokemon_center": {
+    "coordinates": [
+      15,
+      12
+    ]
+  },
+  "pokemart": {
+    "coordinates": [
+      25,
+      12
+    ]
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

@@ -13,6 +13,10 @@
     {
       "target_map": "Route 12",
       "direction": "South"
+    },
+    {
+      "target_map": "Pokemon Tower 1F",
+      "direction": "East"
     }
   ],
   "pokemon_center": {
@@ -26,5 +30,26 @@
       25,
       12
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Pokemon Tower / Cemetery"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

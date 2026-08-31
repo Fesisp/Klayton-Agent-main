@@ -36,5 +36,8 @@
       "min_lvl": 10,
       "max_lvl": 20
     }
-  ]
+  ],
+  "landmarks": {
+    "poi": "Easter Egg Island Area Landmark"
+  }
 }

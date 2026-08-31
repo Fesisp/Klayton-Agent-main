@@ -3,24 +3,53 @@
   "region": "Unova",
   "exits": [
     {
-      "target_map": "Unova Route 5",
+      "target_map": "Driftveil Drawbridge",
       "direction": "East"
     },
     {
-      "target_map": "Unova Route 6",
+      "target_map": "Cold Storage",
+      "direction": "South"
+    },
+    {
+      "target_map": "PWT",
+      "direction": "SouthWest"
+    },
+    {
+      "target_map": "Route 6",
       "direction": "West"
     }
   ],
   "pokemon_center": {
     "coordinates": [
-      18,
-      12
+      20,
+      15
     ]
   },
   "pokemart": {
     "coordinates": [
-      28,
-      12
+      30,
+      15
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Driftveil Gym - Clay / PWT"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

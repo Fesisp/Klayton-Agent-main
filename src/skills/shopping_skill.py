@@ -25,7 +25,8 @@ class ShoppingSkill(BaseSkill):
         self.target_potions = target_potions
 
     def can_execute(self, world: WorldState) -> bool:
-        return not world.battle.in_battle and world.resources.money >= 200
+        money = world.resources.money or 0
+        return not world.battle.in_battle and money >= 200
 
     def execute(self, world: WorldState, components: Dict[str, Any]) -> SkillResult:
         input_sim = components.get('input')
@@ -33,12 +34,14 @@ class ShoppingSkill(BaseSkill):
         if hasattr(input_sim, 'press'):
             input_sim.press('space')
 
-        needed_balls = max(0, self.target_pokeballs - world.resources.pokeballs_count)
+        cur_balls = world.resources.pokeballs_count or 0
+        cur_money = world.resources.money or 0
+        needed_balls = max(0, self.target_pokeballs - cur_balls)
         cost_balls = needed_balls * 200
 
-        if needed_balls > 0 and world.resources.money >= cost_balls:
-            world.resources.pokeballs_count += needed_balls
-            world.resources.money -= cost_balls
+        if needed_balls > 0 and cur_money >= cost_balls:
+            world.resources.pokeballs_count = cur_balls + needed_balls
+            world.resources.money = cur_money - cost_balls
 
         return SkillResult(
             status=SkillStatus.SUCCESS,
@@ -46,4 +49,5 @@ class ShoppingSkill(BaseSkill):
         )
 
     def is_complete(self, world: WorldState) -> bool:
-        return world.resources.pokeballs_count >= self.target_pokeballs
+        cur_balls = world.resources.pokeballs_count or 0
+        return cur_balls >= self.target_pokeballs

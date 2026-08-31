@@ -1,6 +1,6 @@
 {
   "map_name": "Winter Event Village",
-  "region": "Event_Winter",
+  "region": "Special_Custom",
   "exits": [
     {
       "target_map": "Frosty Mountain",
@@ -13,14 +13,14 @@
   ],
   "pokemon_center": {
     "coordinates": [
-      12,
-      10
+      20,
+      15
     ]
   },
   "pokemart": {
     "coordinates": [
-      22,
-      10
+      30,
+      15
     ]
   },
   "encounter_areas": [
@@ -42,5 +42,8 @@
       "min_lvl": 20,
       "max_lvl": 30
     }
-  ]
+  ],
+  "landmarks": {
+    "key_building": "Santa Workshop / Ice Rink"
+  }
 }

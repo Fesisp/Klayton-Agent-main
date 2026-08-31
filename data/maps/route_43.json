@@ -2,9 +2,37 @@
   "map_name": "Route 43",
   "region": "Johto",
   "pokeone_slug": "route-43",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Mahogany Town",
+      "direction": "South"
+    },
+    {
+      "target_map": "Lake of Rage",
+      "direction": "North"
+    }
+  ],
+  "landmarks": {
+    "poi": "Route 43 Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

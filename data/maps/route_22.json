@@ -7,10 +7,47 @@
       "direction": "East"
     },
     {
-      "target_map": "Victory Road Gate",
+      "target_map": "Pokemon League Reception",
       "direction": "West"
     }
   ],
   "pokemon_center": null,
-  "pokemart": null
+  "pokemart": null,
+  "encounter_areas": [
+    {
+      "species": "Nidoran-M",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 3,
+      "max_lvl": 5,
+      "rate": 0.3
+    },
+    {
+      "species": "Nidoran-F",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 3,
+      "max_lvl": 5,
+      "rate": 0.3
+    },
+    {
+      "species": "Mankey",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 3,
+      "max_lvl": 5,
+      "rate": 0.2
+    },
+    {
+      "species": "Spearow",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 3,
+      "max_lvl": 5,
+      "rate": 0.2
+    }
+  ],
+  "landmarks": {
+    "poi": "Route 22 Area Landmark"
+  }
 }

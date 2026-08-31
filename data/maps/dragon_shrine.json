@@ -22,5 +22,8 @@
       "min_lvl": 20,
       "max_lvl": 30
     }
-  ]
+  ],
+  "landmarks": {
+    "poi": "Dragon Shrine Area Landmark"
+  }
 }

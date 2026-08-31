@@ -7,20 +7,41 @@
       "direction": "South"
     },
     {
-      "target_map": "Unova Route 7",
+      "target_map": "Route 7",
       "direction": "North"
     }
   ],
   "pokemon_center": {
     "coordinates": [
-      15,
-      10
+      16,
+      12
     ]
   },
   "pokemart": {
     "coordinates": [
-      25,
-      10
+      26,
+      12
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Mistralton Gym - Skyla / Cargo Service"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

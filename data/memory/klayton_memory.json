@@ -113,22 +113,82 @@
       "content": "Felipe disse: vamos treinar agora",
       "timestamp": 1788144804.724167,
       "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788145931.7537985,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788145932.0625396,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788146033.421809,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788146033.7414782,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788146152.223605,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788146152.5232472,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788146215.1899295,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788146215.5207121,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe: Klayton, vamos farmar na Rota 1!",
+      "timestamp": 1788146298.378847,
+      "importance": 0.8
+    },
+    {
+      "category": "dialogue",
+      "content": "Felipe disse: vamos treinar agora",
+      "timestamp": 1788146298.6904085,
+      "importance": 0.8
     }
   ],
   "semantic": {
     "player_preferences": {},
     "farm_spot_efficiency": {
       "Route 1": {
-        "total_runs": 12,
+        "total_runs": 17,
         "avg_xp_h": 1200.0
       },
       "Viridian Forest": {
-        "total_runs": 12,
+        "total_runs": 17,
         "avg_xp_h": 3500.0
       }
     },
     "known_shiny_encounters": [],
     "completed_milestones": []
   },
-  "saved_at": 1788144804.7242186
+  "saved_at": 1788146298.6904826
 }

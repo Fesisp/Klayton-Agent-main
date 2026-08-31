@@ -7,6 +7,10 @@
       "direction": "East"
     },
     {
+      "target_map": "Sprout Tower",
+      "direction": "North"
+    },
+    {
       "target_map": "Route 32",
       "direction": "South"
     },
@@ -18,13 +22,34 @@
   "pokemon_center": {
     "coordinates": [
       18,
-      14
+      16
     ]
   },
   "pokemart": {
     "coordinates": [
       28,
-      14
+      16
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Violet Gym - Falkner / Sprout Tower"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

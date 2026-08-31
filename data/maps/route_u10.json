@@ -2,9 +2,37 @@
   "map_name": "Route U10",
   "region": "Unova",
   "pokeone_slug": "route-u10",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Route 9",
+      "direction": "South"
+    },
+    {
+      "target_map": "Route 11",
+      "direction": "North"
+    }
+  ],
+  "landmarks": {
+    "poi": "Route U10 Area Landmark"
+  },
   "pokemon_center": null,
   "pokemart": null,
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 10,
+      "rate": 0.5
+    },
+    {
+      "species": "Water Pokemon",
+      "method": "surf",
+      "time": "all",
+      "min_lvl": 10,
+      "max_lvl": 15,
+      "rate": 0.3
+    }
+  ]
 }

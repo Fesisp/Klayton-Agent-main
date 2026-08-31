@@ -13,14 +13,35 @@
   ],
   "pokemon_center": {
     "coordinates": [
-      15,
+      14,
       10
     ]
   },
   "pokemart": {
     "coordinates": [
-      25,
+      24,
       10
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Team Plasma Rally Plaza"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

@@ -26,7 +26,8 @@ class CaptureSkill(BaseSkill):
         super().__init__(name="CaptureSkill", config=config)
 
     def can_execute(self, world: WorldState) -> bool:
-        return world.battle.in_battle and world.resources.pokeballs_count > 0
+        balls = world.resources.pokeballs_count or 0
+        return world.battle.in_battle and balls > 0
 
     def execute(self, world: WorldState, components: Dict[str, Any]) -> SkillResult:
         input_sim = components.get('input')
@@ -57,16 +58,19 @@ class CaptureSkill(BaseSkill):
             )
 
         # 2. Seleção de Pokébola disponível (Pokéball / Great Ball / Ultra Ball / Master Ball)
-        world.resources.pokeballs_count = max(0, world.resources.pokeballs_count - 1)
+        if world.resources.pokeballs_count is not None:
+            world.resources.pokeballs_count = max(0, world.resources.pokeballs_count - 1)
 
         # Clica no menu de Bag e usa Pokébola
         if hasattr(input_sim, 'press'):
             input_sim.press('b')  # Abre a mochila (Bag)
 
+        balls_rem = world.resources.pokeballs_count if world.resources.pokeballs_count is not None else "Uncalibrated"
         return SkillResult(
             status=SkillStatus.RUNNING,
-            message=f"Captura: Lançando Pokébola (Restantes: {world.resources.pokeballs_count})"
+            message=f"Captura: Lançando Pokébola (Restantes: {balls_rem})"
         )
 
     def is_complete(self, world: WorldState) -> bool:
-        return not world.battle.in_battle or world.resources.pokeballs_count == 0
+        balls = world.resources.pokeballs_count or 0
+        return not world.battle.in_battle or balls == 0

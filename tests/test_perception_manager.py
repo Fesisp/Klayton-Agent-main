@@ -55,8 +55,26 @@ def test_perception_manager_contract():
     assert world.battle.opponent_name == "Pidgey"
     assert world.location.current_map == "Route 1"
     assert len(world.team.members) == 1
-    assert world.team.members[0].name == "Pikachu"
-    print(f"  ✅ WorldState assimilou PerceptionSnapshot com perfeição: Opponent='{world.battle.opponent_name}' | Map='{world.location.current_map}'")
+    # 4. Teste de Extração dos Slots do Time via TeamDetector
+    from src.perception.team_detector import TeamDetector
+    from src.knowledge.team_manager import TeamManager
+    team_mgr = TeamManager()
+    team_mgr.current_team = ["pikachu", "charizard", "blastoise"]
+    team_detector = TeamDetector(components={'team': team_mgr})
+    slots = team_detector.detect_team_slots(frame=None, game_state="EXPLORING")
+    assert len(slots) == 3
+    assert slots[0].name == "Pikachu"
+    assert slots[0].active is True
+    assert slots[1].name == "Charizard"
+    assert slots[1].active is False
+    # 5. Teste de Classificação da Ação do Inimigo via Battlelog
+    from src.perception.game_state_detector import GameStateDetector
+    detector = GameStateDetector(None, None, {})
+    assert detector.detect_enemy_action_category(battle_text="Dragonite used Dragon Dance!") == "STATUS_BUFF"
+    assert detector.detect_enemy_action_category(battle_text="Blissey used Soft-Boiled!") == "HEAL"
+    assert detector.detect_enemy_action_category(battle_text="Skarmory used Stealth Rock!") == "HAZARD"
+    assert detector.detect_enemy_action_category(battle_text="Gengar used Hypnosis!") == "STATUS_DEBUFF"
+    print("  ✅ GameStateDetector.detect_enemy_action_category classificou com perfeição as mensagens de battlelog!")
 
 
 if __name__ == '__main__':

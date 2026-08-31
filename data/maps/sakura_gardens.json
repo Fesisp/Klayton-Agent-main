@@ -22,5 +22,8 @@
       "min_lvl": 15,
       "max_lvl": 25
     }
-  ]
+  ],
+  "landmarks": {
+    "poi": "Sakura Gardens Area Landmark"
+  }
 }

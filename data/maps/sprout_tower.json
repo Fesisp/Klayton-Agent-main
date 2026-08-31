@@ -8,5 +8,26 @@
     }
   ],
   "pokemon_center": null,
-  "pokemart": null
+  "pokemart": null,
+  "landmarks": {
+    "dungeon": "Sprout Tower Dungeon Spawns"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

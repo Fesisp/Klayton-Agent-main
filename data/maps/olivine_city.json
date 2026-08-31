@@ -7,20 +7,45 @@
       "direction": "North"
     },
     {
+      "target_map": "Glitter Lighthouse",
+      "direction": "SouthEast"
+    },
+    {
       "target_map": "Route 40",
-      "direction": "South"
+      "direction": "West"
     }
   ],
   "pokemon_center": {
     "coordinates": [
-      18,
+      16,
       12
     ]
   },
   "pokemart": {
     "coordinates": [
-      28,
+      26,
       12
     ]
-  }
+  },
+  "landmarks": {
+    "key_building": "Olivine Gym - Jasmine / Glitter Lighthouse"
+  },
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }

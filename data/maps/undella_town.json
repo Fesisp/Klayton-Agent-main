@@ -2,8 +2,23 @@
   "map_name": "Undella Town",
   "region": "Unova",
   "pokeone_slug": "undella-town",
-  "exits": [],
-  "landmarks": {},
+  "exits": [
+    {
+      "target_map": "Route 13",
+      "direction": "North"
+    },
+    {
+      "target_map": "Undella Bay",
+      "direction": "East"
+    },
+    {
+      "target_map": "Route 14",
+      "direction": "South"
+    }
+  ],
+  "landmarks": {
+    "key_building": "Cynthia's Villa / Marine Tube"
+  },
   "pokemon_center": {
     "coordinates": [
       15,
@@ -16,5 +31,22 @@
       12
     ]
   },
-  "encounter_areas": []
+  "encounter_areas": [
+    {
+      "species": "Wild Pokemon",
+      "method": "grass",
+      "time": "all",
+      "min_lvl": 5,
+      "max_lvl": 15,
+      "rate": 0.7
+    },
+    {
+      "species": "Rare Spawn",
+      "method": "grass",
+      "time": "day",
+      "min_lvl": 10,
+      "max_lvl": 18,
+      "rate": 0.3
+    }
+  ]
 }
