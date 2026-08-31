@@ -19,10 +19,18 @@ from ..knowledge.pokemon_database import PokemonDatabase
 
 
 class OCREngine:
-    def __init__(self, tesseract_path, db=None):
-        if not os.path.exists(tesseract_path):
-            logger.error(f"Tesseract não encontrado em: {tesseract_path}")
-        pytesseract.pytesseract.tesseract_cmd = tesseract_path
+    def __init__(self, tesseract_path=None, db=None):
+        if isinstance(tesseract_path, dict):
+            config = tesseract_path
+            tesseract_path = config.get('ocr', {}).get('tesseract_path', r"C:\Program Files\Tesseract-OCR\tesseract.exe")
+        elif tesseract_path is None:
+            tesseract_path = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
+        if os.path.exists(tesseract_path) and pytesseract is not None:
+            pytesseract.pytesseract.tesseract_cmd = tesseract_path
+        else:
+            logger.debug(f"Tesseract OCR não encontrado em: {tesseract_path} (OCR funcionará com fallback)")
+
         self.db = db or PokemonDatabase()
         
         # Carrega moves conhecidos de data/known_moves.json

@@ -28,7 +28,8 @@ Data: 2026-08-30
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Set
+from typing import Dict, List, Any, Optional, Set, Union
+from .goal_engine import Goal, GoalInstance
 from ..world.world_state import WorldState
 from ..skills.base_skill import BaseSkill
 from ..skills import (
@@ -218,6 +219,18 @@ class GOAPPlanner:
         action = self.current_plan.pop(0)
         return self.skills.get(action.target_skill_name)
 
+    def _map_goal_to_goap_state(self, goal_name: str) -> Dict[str, Any]:
+        """Mapeia um objetivo alto nível para o estado desejado no espaço GOAP."""
+        if goal_name in ["FARM_XP", "TRAIN_POKEMON", "HUNT"]:
+            return {"target_level_reached": True}
+        elif goal_name == "HEAL_TEAM":
+            return {"team_healed": True}
+        elif goal_name in ["BUY_ITEMS", "SHOP"]:
+            return {"has_supplies": True}
+        elif goal_name == "WAIT":
+            return {"waiting": True}
+        return {"following_leader": True}
+
     def plan(self, start_state: Dict[str, Any], goal_state: Dict[str, Any]) -> List[GOAPAction]:
         """
         Busca A* no espaço de estados para encontrar a sequência de menor custo que satisfaça goal_state.
@@ -299,38 +312,3 @@ class GOAPPlanner:
             return resumed
         return None
 
-    def get_next_skill(self, goal_name: str, world: WorldState) -> Optional[BaseSkill]:
-        """
-        Resolve a próxima Skill a ser executada a partir da fila de ações do GOAP.
-        """
-        # Checagem de interrupção para cura
-        if world.team.needs_healing and goal_name not in ["HEAL_TEAM", "IDLE"]:
-            if not self.current_plan or self.current_plan[0].name != "HealTeam":
-                self.interrupt_and_push_plan({"team_healed": True}, world)
-
-        # Se não houver plano ou replanejamento solicitado
-        if self.needs_replan or not self.current_plan:
-            start_state = self.extract_world_state_symbols(world)
-            goal_state = {"following_leader": True}
-            if goal_name in ["FARM_XP", "TRAIN_POKEMON", "HUNT"]:
-                goal_state = {"target_level_reached": True}
-            elif goal_name == "HEAL_TEAM":
-                goal_state = {"team_healed": True}
-
-            self.current_plan = self.plan(start_state, goal_state)
-            self.needs_replan = False
-
-        # Se o plano atual terminou e existe um plano na pilha de interrupção, retoma!
-        if not self.current_plan and self.interrupted_plan_stack:
-            self.resume_interrupted_plan(world)
-
-        if self.current_plan:
-            action = self.current_plan[0]
-            skill = self.skills.get(action.target_skill_name)
-            if skill:
-                if skill.is_complete(world):
-                    self.current_plan.pop(0)
-                    return self.get_next_skill(goal_name, world)
-                return skill
-
-        return self.skills.get("FollowSkill")

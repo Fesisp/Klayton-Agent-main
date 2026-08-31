@@ -14,8 +14,8 @@ class ScreenCapture:
         self.cfg = config or {}
         window_title = self.cfg.get('screen', {}).get('window_title', 'PokeOne')
         self.win_handler = WindowHandler(window_title=window_title)
-        self.sct = mss.mss()
-        self.monitor = self.sct.monitors[1] if len(self.sct.monitors) > 1 else self.sct.monitors[0]
+        self.sct = mss.mss() if mss is not None else None
+        self.monitor = self.sct.monitors[1] if (self.sct and len(self.sct.monitors) > 1) else (self.sct.monitors[0] if self.sct else {})
 
     def capture(self):
         rect = self.win_handler.get_window_rect()

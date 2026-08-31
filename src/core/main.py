@@ -79,14 +79,14 @@ def main():
     
     config = load_config()
 
-    # Inicializa Componentes Periféricos
+    # Inicializa Componentes Periféricos com assinaturas corretas
     screen = ScreenCapture(config)
     ocr = OCREngine(config)
-    detector = GameStateDetector(config)
+    detector = GameStateDetector(screen, ocr, config)
     inputs = InputSimulator(config)
-    db = PokemonDatabase(config)
+    db = PokemonDatabase()
     team = TeamManager(config, db)
-    strategy = BattleStrategy(config, db)
+    strategy = BattleStrategy(db, team, config=config)
 
     components = {
         'screen': screen,
@@ -102,8 +102,11 @@ def main():
     agent = KlaytonCompanionAgent(config=config, components=components)
 
     # Inicializa Ouvintes Periféricos (Hotkeys e UDP)
-    hotkey_mgr = HotkeyManager(agent, config)
-    hotkey_mgr.start()
+    if hasattr(HotkeyManager, 'create_and_start'):
+        hotkey_mgr = HotkeyManager.create_and_start(agent, config)
+    else:
+        hotkey_mgr = HotkeyManager(agent, config)
+        hotkey_mgr.start()
 
     udp_receiver = UDPCommandReceiver(agent, config)
     udp_receiver.start()

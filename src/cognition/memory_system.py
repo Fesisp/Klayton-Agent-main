@@ -19,7 +19,8 @@ from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Any, Optional
 from pathlib import Path
 
-MEMORY_FILE = Path(r"c:\Users\mrfel\OneDrive\Laboratorio\Developer\Klayton-Agent-main\data\memory\klayton_memory.json")
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+MEMORY_FILE = PROJECT_ROOT / "data" / "memory" / "klayton_memory.json"
 MEMORY_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 

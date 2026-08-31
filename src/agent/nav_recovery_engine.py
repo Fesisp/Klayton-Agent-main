@@ -47,20 +47,24 @@ class NavRecoverySkillEngine:
             goal_instance = GoalInstance(type=Goal.from_string(goal_name))
 
         # 1. Obter a próxima Skill do GOAP / HierarchicalPlanner
-        skill: Optional[BaseSkill] = self.goap_planner.get_next_skill(goal_name, world)
+        skill: Optional[BaseSkill] = self.goap_planner.get_next_skill(goal_instance, world)
         if not skill:
             skill = self.hierarchical_planner.resolve_next_skill(goal_name, world)
 
         if not skill:
             return SkillResult(status=SkillStatus.SUCCESS, message="Nenhuma Skill ativa necessária")
 
-        # 2. BUG 4 CORRIGIDO: Injeção dos parâmetros dinâmicos (target_level, target_pokemon) na Skill!
+        # 2. Injeção dos parâmetros dinâmicos (target_level, target_pokemon, target_map) na Skill!
         if goal_instance.target_level and hasattr(skill, 'target_level'):
             setattr(skill, 'target_level', goal_instance.target_level)
             logger.info(f"🎯 Parâmetro Injetado na Skill {skill.name}: target_level={goal_instance.target_level}")
 
         if goal_instance.target and hasattr(skill, 'target_pokemon'):
             setattr(skill, 'target_pokemon', goal_instance.target)
+
+        if goal_instance.location_hint and hasattr(skill, 'target_map'):
+            setattr(skill, 'target_map', goal_instance.location_hint)
+            logger.info(f"🗺️ Parâmetro Injetado na Skill {skill.name}: target_map='{goal_instance.location_hint}'")
 
         world.agent.active_skill = skill.name
 

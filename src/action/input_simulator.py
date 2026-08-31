@@ -43,9 +43,8 @@ def execute_human_action(x, y, label="Botão"):
 
 class InputSimulator:
     def __init__(self, config=None):
-        # Desabilita o fail-safe para evitar paradas bruscas se o mouse for para o canto
-        # CUIDADO: Isso impede que você pare o bot movendo o mouse para o canto!
-        pyautogui.FAILSAFE = False
+        if pyautogui is not None:
+            pyautogui.FAILSAFE = False
         self.cfg = config or {}
         self.rois = self.cfg.get('rois', {})
         self.move_duration = float(self.cfg.get('input', {}).get('mouse_move_duration', 0.0))

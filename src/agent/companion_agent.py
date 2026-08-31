@@ -119,12 +119,17 @@ class KlaytonCompanionAgent:
         # Trata termos dêiticos (ex: "pega esse bicho")
         resolved_target = self.shared_attention.resolve_target(user_speech, self.world)
         
+        # Atualiza o contexto social do RelationshipState
+        self.relationship.set_instruction(user_speech)
+        
         # Converte em intenção estruturada e GoalInstance parametrizada
         intent = self.intent_parser.parse(user_speech)
         if resolved_target and not intent.target:
             intent.target = resolved_target
 
         goal_instance = intent.to_goal_instance()
+        # Ordens diretas do usuário possuem prioridade máxima (2.0) sobre utilidades passivas!
+        goal_instance.priority = 2.0
         self.goal_manager.set_shared_goal_instance(goal_instance)
 
         if intent.target:
@@ -230,10 +235,16 @@ class KlaytonCompanionAgent:
                         time.sleep(0.3)
                     continue
 
-                # 4. ALIMENTAÇÃO INTEGRAL DO WORLDSTATE (TODOS OS RAMOS: battle, team, player, location, resources)
+                # 4. ALIMENTAÇÃO INTEGRAL DO WORLDSTATE (Percepção Real Visual/OCR)
                 game_state = GameState.EXPLORING
+                battle_info = {}
                 if detector and hasattr(detector, 'detect_state') and img is not None:
                     game_state = detector.detect_state(img)
+                    if hasattr(detector, 'get_battle_info') and game_state == GameState.IN_BATTLE:
+                        try:
+                            battle_info = detector.get_battle_info(img) or {}
+                        except Exception:
+                            battle_info = {}
 
                 if game_state == GameState.SHINY_FOUND:
                     logger.critical("✨ SHINY ENCONTRADO! PAUSANDO AGENTE!")
@@ -241,17 +252,29 @@ class KlaytonCompanionAgent:
                     self.notifier.notify_shiny_found("Shiny Pokemon", self.world.location.current_map)
                     continue
 
-                # Observação Multicamada Completa
+                # Garante que o time do WorldState possui pelo menos 1 membro cadastrado para verificação de nível/HP
+                if not self.world.team.members:
+                    from ..world.world_state import PokemonInfo
+                    active_name = self.goal_manager.shared_goal_instance.target or "Pikachu"
+                    self.world.team.members.append(PokemonInfo(name=active_name, level=1, hp_percentage=1.0))
+
+                # Observação Multicamada Completa com dados de percepção real
+                obs_data = {
+                    "in_battle": (game_state == GameState.IN_BATTLE),
+                    "is_shiny": (game_state == GameState.SHINY_FOUND),
+                    "current_map": self.world.location.current_map or "Viridian Forest",
+                    "pokeballs_count": self.world.resources.pokeballs_count,
+                    "potions_count": self.world.resources.potions_count
+                }
+                if battle_info:
+                    obs_data.update({
+                        "opponent_name": battle_info.get("opponent_name", "Wild Pokemon"),
+                        "opponent_hp_percentage": battle_info.get("opponent_hp_percentage", 1.0)
+                    })
+
                 obs = Observation(
                     category="world_sync",
-                    data={
-                        "in_battle": (game_state == GameState.IN_BATTLE),
-                        "is_shiny": (game_state == GameState.SHINY_FOUND),
-                        "current_map": self.world.location.current_map or "Viridian Forest",
-                        "team_needs_heal": self.world.team.needs_healing,
-                        "pokeballs_count": self.world.resources.pokeballs_count,
-                        "potions_count": self.world.resources.potions_count
-                    },
+                    data=obs_data,
                     confidence=0.95
                 )
                 self.world.apply_observation(obs)

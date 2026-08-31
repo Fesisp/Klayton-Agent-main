@@ -23,8 +23,10 @@ class NavigationSystem:
 
     def __init__(self):
         self.global_graph: MapGraph = MapGraph()
+        self.global_graph.load_all_maps_from_disk()
+        if len(self.global_graph.nodes) == 0:
+            self._setup_default_kanto_graph()
         self.local_verifier: MovementVerifier = MovementVerifier(max_stuck_attempts=3)
-        self._setup_default_kanto_graph()
 
     def _setup_default_kanto_graph(self) -> None:
         """Inicializa o mapa padrão de Kanto."""

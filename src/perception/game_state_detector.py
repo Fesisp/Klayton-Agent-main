@@ -21,9 +21,15 @@ class GameState(Enum):
 from ..utils.geometry import crop_roi_safe
 
 class GameStateDetector:
-    def __init__(self, screen_capture, ocr_engine, config):
+    def __init__(self, screen_capture=None, ocr_engine=None, config=None):
+        if isinstance(screen_capture, dict) and config is None:
+            config = screen_capture
+            screen_capture = None
+            ocr_engine = None
+
         self.cap = screen_capture
         self.ocr = ocr_engine
+        config = config or {}
         self.rois = config.get('rois', {})
         self.cfg_detection = config.get('detection', {})
         self.templates = self._load_templates(config)
