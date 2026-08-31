@@ -1,143 +1,111 @@
-# Klayton Companion Agent 2.0 - Autonomous Multimodal Companion Agent 🤖🤝
+# Klayton Companion Agent 2.0 - Documentação Principal
 
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
-[![OpenCV](https://img.shields.io/badge/OpenCV-Computer_Vision-5C3EE8.svg?logo=opencv&logoColor=white)](https://opencv.org/)
-[![Tesseract OCR](https://img.shields.io/badge/Tesseract-OCR-green.svg?logo=google&logoColor=white)](https://github.com/tesseract-ocr/tesseract)
-[![GOAP + Utility AI](https://img.shields.io/badge/AI-GOAP%20%2B%20Utility%20AI-purple.svg)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+## 🤝 Sobre o Klayton 2.0
 
-**Klayton Companion Agent 2.0** é um **Framework de Agente Autônomo e Social de Segunda Pessoa (Companion Agent)**. Em vez de uma automação baseada em macros imperativos, o Klayton opera como um segundo jogador virtual dotado de personalidade, consciência social, raciocínio orientado a objetivos (GOAP + Utility AI), comunicação por voz (TTS) e atenção compartilhada.
+O **Klayton 2.0** é um **Companion Agent (Agente Companheiro Autônomo e Social)** de elite projetado para operar no MMO PokeOne.
 
-> **Disclaimer:** Este projeto é desenvolvido estritamente para **pesquisa em Inteligência Artificial, visão computacional e agentes autônomos sociais**.
+Diferente de bots tradicionais baseados em máquinas de estado rígidas ou loops de if-else, o Klayton opera como um organismo operacional dinâmico acionado por **Utility AI**, **Goal-Oriented Action Planning (GOAP)** com busca $A^*$, **Memória Tríplice Persistente**, escuta de **voz ao vivo (VoiceListener)** e **sintetizador nativo (TTS)**.
 
 ---
 
-## 🎯 Visão Geral da Arquitetura
+## 🏛️ Arquitetura Cognitiva Unificada em 5 Camadas
 
-O Klayton evoluiu de uma Finite State Machine engessada para uma **Arquitetura Cognitiva em 4 Pilares**:
-
-1. **Perception Layer (Visão Computacional & Confiança)**: Captura de tela ultra-rápida via `mss`, `OpenCV` e `Tesseract OCR` produzindo observações com índice de confiança (`Observation.confidence >= 0.50`).
-2. **Cognition & Social Model**: Modelo unificado do mundo (`WorldState`), Barramento de Eventos Pub/Sub (`EventBus`), Contexto de Relacionamento (`RelationshipState`), Matriz de Personalidade (`Personality`) e Atenção Compartilhada (`SharedAttention`).
-3. **Agency & Goal Engine (GOAP + Utility AI)**: Motor de utilidade (`utility = reward - risk - cost - time`) e planejador GOAP com suporte a **REPLAN** automático e conciliação de metas compartilhadas vs. pessoais.
-4. **Interaction & Dialogue ("Thought ➔ Action ➔ Speech")**: Gerenciador de diálogo com voz (TTS) que expressa publicamente intenções (*"Minha equipe está meio machucada. Vou no Pokémon Center e já volto!"*) e motor de perguntas de esclarecimento.
-
----
-
-## ✨ Recursos Principais
-
-### 🧠 Agente Companheiro & Presença Social
-* **Matriz de Personalidade**: Ajusta dinamicamente a utilidade de exploração, curiosidade, tolerância ao risco e independência.
-* **Memória de Relacionamento**: Rastreia distância do líder, direção e instruções sociais como *"Klayton, me espera aqui"*.
-* **Comunicação por Voz & TTS**: Expressão verbal pública de decisões internas (*Thought ➔ Action ➔ Speech*).
-* **Atenção Compartilhada (`SharedAttention`)**: Resolução contextual de comandos como *"Pega esse"* cruzando visão do cursor e oponentes.
-
-### 🛡️ Fortalecimento Técnico & Prevenção de Loops
-* **Agent Watchdog**: Supervisão em tempo real anti-loop e anti-travamento.
-* **Navegação por Grafo de Mapas & A***: Roteamento global de longa distância e verificação de movimento (*"Nunca assuma que a ação funcionou; verifique no frame seguinte"*).
-* **Replay Logger**: Gravador de sessões em formato `.jsonl` para inspeção e depuração de decisões de IA.
-
----
-
-## 🏗️ Diagrama do Agente
-
-```mermaid
-flowchart TD
-    Human["👤 Jogador Humano (Felipe)"] --> Perception["👁️ 1. Perception (CV & Confidence)"]
-    Perception --> WorldState["🌐 WorldState (Single Source of Truth)"]
-    
-    Human -->|Linguagem Natural| IntentParser["🗣️ IntentParser & Clarification"]
-    IntentParser --> GoalEngine["🎯 Goal Engine (Shared vs Personal)"]
-    
-    WorldState --> Cognition["🧠 2. Cognition (Relationship & Personality)"]
-    Cognition --> Agency["🚀 3. Agency (GOAP Planner + Utility AI)"]
-    GoalEngine --> Agency
-    
-    Agency --> Interaction["💬 4. Interaction (TTS & Skill Selector)"]
-    Interaction --> Jogo["🎮 Game Sandbox"]
+```
+                             PERCEPTION (Visão / OCR)
+                                       │
+                                       ▼
+                                 ┌───────────┐
+                                 │WorldState │ (Fonte Única da Verdade)
+                                 └─────┬─────┘
+                                       │
+           ┌───────────────────────────┼───────────────────────────┐
+           │                           │                           │
+     MemorySystem                RelationshipState           IntentParser
+(Record & Statistical Spot)   (Liderança do Felipe)    (Comandos & Target: Pikachu 35)
+           │                           │                           │
+           └───────────────────────────┼───────────────────────────┘
+                                       ▼
+                                Goal Candidates
+                                       │
+                                       ▼
+                                 UtilityEngine
+                         (utility = reward - risk - cost - time)
+                                       │
+                                       ▼
+                                 GoalInstance
+                             (target + constraints)
+                                       │
+                                       ▼
+                                  GOAP Planner
+                            (A* State-Space Plan)
+                                       │
+                                       ▼
+                               Hierarchical Planner
+                            (Decomposição de Subtarefas)
+                                       │
+                                       ▼
+                                 Master Triad
+                     (Navigation + Recovery + 13 Skills)
+                                       │
+                                       ▼
+                                    PokeOne
+                                       │
+                                       └────────► percepção novamente (Loop Fechado)
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🗄️ Base de Conhecimento SQLite (3 Níveis de Prioridade)
 
-### Prerequisites
+O Klayton possui 7 bancos de dados SQLite locais em `data/knowledge/` indexados com microsegundos de tempo de resposta via `@lru_cache`:
 
-* **Operating System**: Windows 10/11 (Required for native input & alert subsystems).
-* **Python**: `3.10` or higher.
-* **Tesseract OCR Engine**:
-  * Download and install Tesseract OCR from [UB-Mannheim/tesseract/wiki](https://github.com/UB-Mannheim/tesseract/wiki).
-  * Ensure the executable path matches your configuration (Default: `C:\Program Files\Tesseract-OCR\tesseract.exe`).
+| Banco SQLite | Tabela Principal | Total Registros | Atributos Indexados |
+| :--- | :--- | :---: | :--- |
+| **`pokemon.sqlite`** | `pokemon` | **809 Pokémon** | Stats Totais, **BST (Base Stat Total)**, **Catch Rate (0–255)**, Base XP, Tipos, Altura, Peso |
+| **`pokemon.sqlite`** | `pokemon_learnset`| **15.145 Golpes** | Movimentos aprendidos por nível para cada espécie |
+| **`moves.sqlite`** | `moves` | **522 Golpes** | Power, Accuracy, PP, Priority, Category (Physical/Special/Status) |
+| **`types.sqlite`** | `type_chart` | **324 Combinações** | Matriz $18 \times 18$ de fraquezas, resistências e imunidades |
+| **`natures.sqlite`** | `natures` | **25 Naturezas** | Stat aumentado (+10%), Stat reduzido (-10%), Sabores de Berries |
+| **`status_conditions.sqlite`** | `status_conditions`| **9 Condições** | Multiplicadores de captura (2.5x Sleep/Freeze, 1.5x Par/Psn/Brn) e penalidades |
+| **`hms_field_moves.sqlite`** | `field_moves` | **8 HMs / Campo** | Cut, Surf, Fly, Strength, Flash, Rock Smash, Waterfall, Dive e **insígnias necessárias** |
+| **`items.sqlite`** | `items` | **26 Itens** | Pokébolas, Poções, Pedras Evolutivas, Berries e Held Items competitivos |
+| **`npcs.sqlite`** | `npcs` | **232 NPCs** | Gym Leaders, Vendedores, Healers, Move Tutors e Quest NPCs do PokeOne |
+| **`pokeone_encounters.sqlite`**| `encounters`| **318 Spawns** | Spawns do PokeOne Community Location Atlas com níveis min/max e métodos |
 
-### Installation
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/Fesisp/PokeBot.git
-   cd PokeBot
-   ```
-
-2. **Set up a Virtual Environment**:
-   ```bash
-   python -m venv venv
-   # Windows PowerShell
-   .\venv\Scripts\Activate.ps1
-   ```
-
-3. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Configuration Verification**:
-   Edit `config/settings.yaml` to ensure your Tesseract OCR path and screen coordinates match your target client.
+### 👑 Hierarquia de Resolução de Conflitos:
+$$\mathbf{1^\circ\ PokeOneCommunity} \succ \mathbf{2^\circ\ PokeOneUnofficial} \succ \mathbf{3^\circ\ Pok\acute{e}API}$$
 
 ---
 
-## 🎮 Usage
+## 🚶 Catálogo das 13 Skills Concretas
 
-### Launching the Agent
-
-1. Open the target game client and ensure it is unobstructed on screen.
-2. Run the main entry point:
-   ```bash
-   python run_bot.py
-   ```
-
-### Hotkey Mapping (Real-Time Control)
-
-| Key | Mode / Action | Description |
-| :---: | :--- | :--- |
-| `F1` | **IDLE Mode** | Passive screen scanning (alerts on target detection) |
-| `F2` | **MISSION Mode** | Autonomous navigation and quest interactions |
-| `F3` | **HUNTING Mode** | Targeted entity hunting & selective retreat |
-| `F4` | **FOLLOW Mode** | Shadows primary lead character |
-| `F5` | **Pause** | Temporarily halts execution |
-| `F6` | **Resume** | Resumes agent operations |
-| `F9` | **Stop** | Gracefully shuts down agent thread |
+- **`FollowSkill`**: Acompanhamento inteligente (aproximação, dead reckoning em perda de visão, troca de mapa e comandos de voz *"vem comigo"*, *"espera aqui"*, *"fica perto"*, *"vai na frente"*).
+- **`WaitSkill`**: Espera no local solicitado.
+- **`NavigateSkill`**: Condução intermapas via A* e grafo de 355 mapas do PokeOne (Kanto, Sevii Islands 1-7, Johto, Destiny Island, Unova e Eventos).
+- **`HealSkill`**: Procedimento autônomo de cura nos Centros Pokémon.
+- **`BattleSkill`**: Combate por fraquezas elementares, categorias físicas/especiais e trocas defensivas.
+- **`HuntingSkill`**: Patrulhamento da grama alta em vaivém.
+- **`CaptureSkill`**: Enfraquecimento seguro e cálculo da fórmula canônica de captura.
+- **`FishingSkill`**: Pesca completa (varas, fisgada, duelo).
+- **`InteractionSkill`**: Diálogo com NPCs, placas e baús.
+- **`ShoppingSkill`**: Compra automática de suprimentos nos Pokemarts.
+- **`QuestSkill`**: Progressão de objetivos do `QuestEngine` (ginásios, insígnias, líderes).
+- **`ExploreSkill`**: Exploração de áreas não mapeadas.
+- **`RecoverSkill`**: Descolamento físico 4-way anti-stuck.
 
 ---
 
-## 📂 Project Structure
+## 🚀 Como Executar
 
-```text
-PokeBot/
-├── assets/           # Template images for visual matching
-├── config/           # System settings & mode configurations (YAML)
-├── data/             # Game knowledge bases (Move sets, type matrices)
-├── docs/             # Technical guides and architecture details
-├── src/
-│   ├── action/       # Humanized mouse/keyboard execution engine
-│   ├── core/         # Main loop, thread manager, state orchestrator
-│   ├── decision/     # Tactical engine, damage predictor & AI inference
-│   ├── knowledge/    # Game knowledge managers
-│   ├── perception/   # OpenCV vision processing & OCR wrappers
-│   └── utils/        # Logger and auxiliary utilities
-├── tests/            # Test suite
-└── run_bot.py        # Primary application entry point
+```bash
+# Executar o Runtime Unificado do Klayton Companion Agent 2.0
+python run_bot.py
 ```
 
----
-
-## 📄 License
-
-Distributed under the **MIT License**. See `LICENSE` for details.
+### Execução da Suíte de Testes Automatizados:
+```bash
+python test_integrity.py
+python tests/test_companion_agent_100_percent.py
+python tests/test_goap_and_utility_ai.py
+python tests/test_pokeapi_knowledge_base.py
+```
