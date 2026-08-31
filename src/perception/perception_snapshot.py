@@ -28,5 +28,6 @@ class PerceptionSnapshot:
     nearby_players: List[Dict[str, Any]] = field(default_factory=list)
     dialog: Dict[str, Any] = field(default_factory=dict)
     quest: Optional[QuestState] = None
+    pm_alert: bool = False
     confidence: float = 1.0
     timestamp: float = field(default_factory=time.time)

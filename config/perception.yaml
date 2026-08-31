@@ -6,3 +6,16 @@ perception:
 ocr:
   tesseract_path: "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
   lang: "eng+por"
+
+# Inteligência Visual Semântica (VLM / Gemini 2.5 Flash / Qwen Local)
+semantic_ai:
+  enabled: true
+  provider: "gemini" # gemini, local, null
+  model: "gemini-2.5-flash"
+  confidence_trigger: 0.55
+  cooldown_seconds: 2.0
+  duplicate_scene_seconds: 30.0
+  max_requests_per_minute: 8
+  local:
+    endpoint: "http://localhost:11434/api/generate"
+    model: "qwen2.5-vl:7b"

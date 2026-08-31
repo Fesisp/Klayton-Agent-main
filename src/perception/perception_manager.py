@@ -54,6 +54,12 @@ class PerceptionManager:
             except Exception:
                 self.chat_handler = None
 
+        # Camada de Inteligência Visual Semântica (Semantic Vision / Visual Reasoner)
+        from .semantic.visual_reasoner import VisualReasoner
+        from .semantic.perception_fusion import PerceptionFusion
+        self.visual_reasoner = VisualReasoner(config=self.config)
+        self.perception_fusion = PerceptionFusion()
+
     def capture_frame(self) -> Optional[Any]:
         """Captura um frame bruto da janela do jogo se o driver estiver ativo."""
         if self.screen and hasattr(self.screen, 'capture'):
@@ -153,7 +159,9 @@ class PerceptionManager:
 
         team_slots = self.detect_team(frame, game_state=game_state, battle_info=battle_info_dict)
 
-        return PerceptionSnapshot(
+        fast_confidence = 0.95 if frame is not None else 0.0
+
+        base_snapshot = PerceptionSnapshot(
             game_state=game_state,
             current_map=self.detect_location(frame),
             player_position=self.detect_player(frame),
@@ -162,6 +170,23 @@ class PerceptionManager:
             resources=self.detect_resources(frame),
             nearby_players=self.detect_nearby_players(frame),
             quest=self.detect_quest(frame),
-            confidence=0.95 if frame is not None else 0.0,
-            timestamp=time.time()
+            confidence=fast_confidence,
+            pm_alert=self.check_pm_alert(frame)
         )
+
+        # Otimização de Economia de API (Se a percepção rápida já possuir alta confiança >= 0.80 e estado conhecido, retorna direto)
+        if fast_confidence >= 0.80 and game_state not in ["UNKNOWN", ""]:
+            return base_snapshot
+
+        # Analisa a cena semântica via VisualReasoner (VLM/Gemini se disparado pelo ConfidenceRouter ou por desconhecidos)
+        event_trigger = "UNKNOWN_SCENE" if game_state == "UNKNOWN" else None
+        semantic_obs = self.visual_reasoner.analyze_scene(
+            frame=frame,
+            fast_confidence=fast_confidence,
+            event_type=event_trigger,
+            context={"game_state": game_state}
+        )
+
+        # Fusão Ponderada de Percepção
+        fused_snapshot = self.perception_fusion.fuse(base_snapshot, semantic_obs)
+        return fused_snapshot

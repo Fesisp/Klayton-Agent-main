@@ -1,0 +1,9 @@
+{
+  "stairs_exit": {
+    "examples_count": 3,
+    "success_rate": 1.0,
+    "expected_outcome": "change_map",
+    "confirmed_by_environment": true,
+    "confidence": 0.88
+  }
+}
