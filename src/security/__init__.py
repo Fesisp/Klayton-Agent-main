@@ -1,7 +1,6 @@
-"""Módulo de Segurança e Proteção de Processo do Klayton Agent."""
-from .stealth_engine import ProcessStealthEngine, AntiAttachWatchdog
+"""
+Security & Process Isolation Package - Klayton Agent
+====================================================
 
-__all__ = [
-    'ProcessStealthEngine',
-    'AntiAttachWatchdog',
-]
+Garante a operação 100% Out-of-Process, proteção de credenciais e privacidade de dados locais.
+"""

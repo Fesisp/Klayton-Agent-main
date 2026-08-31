@@ -134,6 +134,7 @@ def run_quality_gate(is_release_mode: bool = False) -> bool:
         "tests/compliance/test_supervision_gate.py",
         "tests/compliance/test_repetitive_behavior_guard.py",
         "tests/compliance/test_compliance_integration.py",
+        "tests/test_security_isolation.py",
         "tests/test_autonomous_learning_system.py",
         "tests/test_self_supervised_learning.py",
         "tests/test_semantic_vision.py",
