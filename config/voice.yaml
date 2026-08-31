@@ -1,0 +1,9 @@
+# Configurações de Voz, Reconhecimento e TTS (Text-to-Speech)
+voice:
+  enabled: true
+  engine: "edge_tts"
+  voice_name: "pt-BR-AntonioNeural"
+  tts_rate: "+0%"
+  tts_volume: "+0%"
+  microphone_index: null
+  sample_rate: 16000

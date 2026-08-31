@@ -10,8 +10,11 @@ Diferente de bots tradicionais baseados em máquinas de estado rígidas ou loops
 
 ## 🏛️ Arquitetura Cognitiva Unificada em 5 Camadas
 
-```
+```text
                              PERCEPTION (Visão / OCR)
+                                       │
+                                       ▼
+                              PerceptionSnapshot DTO
                                        │
                                        ▼
                                  ┌───────────┐
@@ -21,7 +24,7 @@ Diferente de bots tradicionais baseados em máquinas de estado rígidas ou loops
            ┌───────────────────────────┼───────────────────────────┐
            │                           │                           │
      MemorySystem                RelationshipState           IntentParser
-(Record & Statistical Spot)   (Liderança do Felipe)    (Comandos & Target: Pikachu 35)
+(recall_for_decision)         (Liderança do Felipe)    (Comandos & Target: Pikachu 35)
            │                           │                           │
            └───────────────────────────┼───────────────────────────┘
                                        ▼
@@ -30,14 +33,15 @@ Diferente de bots tradicionais baseados em máquinas de estado rígidas ou loops
                                        ▼
                                  UtilityEngine
                          (utility = reward - risk - cost - time)
+                         (Direto para DIRECT_COMMAND priority >= 2.0)
                                        │
                                        ▼
                                  GoalInstance
-                             (target + constraints)
+                             (target + target_level + location_hint + constraints)
                                        │
                                        ▼
                                   GOAP Planner
-                            (A* State-Space Plan)
+                            (A* State-Space Plan com símbolos reais)
                                        │
                                        ▼
                                Hierarchical Planner
@@ -95,6 +99,17 @@ $$\mathbf{1^\circ\ PokeOneCommunity} \succ \mathbf{2^\circ\ PokeOneUnofficial} \
 
 ---
 
+## ⚙️ Configuração Modular
+
+O projeto conta com uma estrutura centralizada e dividida em `config/`:
+- `config/agent.yaml`: Parâmetros gerais do companheiro.
+- `config/voice.yaml`: Voz nativa TTS e microfone.
+- `config/perception.yaml`: Limiares de confiança e OCR.
+- `config/navigation.yaml`: Grafo e verificação local.
+- `config/battle.yaml`: Trocas defensivas e captura.
+
+---
+
 ## 🚀 Como Executar
 
 ```bash
@@ -105,7 +120,10 @@ python run_bot.py
 ### Execução da Suíte de Testes Automatizados:
 ```bash
 python test_integrity.py
-python tests/test_companion_agent_100_percent.py
+python tests/test_e2e_real_goap_pipeline.py
+python tests/test_e2e_goal_instance_pipeline.py
+python tests/test_world_state_sync.py
 python tests/test_goap_and_utility_ai.py
+python tests/test_companion_agent_100_percent.py
 python tests/test_pokeapi_knowledge_base.py
 ```

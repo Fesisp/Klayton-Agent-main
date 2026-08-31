@@ -1,0 +1,5 @@
+# Configurações de Navegação e Grafo de Mapas
+navigation:
+  max_stuck_attempts: 3
+  maps_directory: "data/maps"
+  default_region: "Kanto"

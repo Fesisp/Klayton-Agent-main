@@ -1,0 +1,8 @@
+# Configurações de Percepção Visual, OCR e Template Matching
+perception:
+  fps_limit: 30
+  confidence_threshold: 0.85
+  calibration_status: "CalibrationRequired('Aguardando tela ativa do PokeOne')"
+ocr:
+  tesseract_path: "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
+  lang: "eng+por"

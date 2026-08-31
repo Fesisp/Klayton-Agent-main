@@ -13,7 +13,8 @@ Data: 2026-08-30
 """
 
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Union
+from .goal_engine import GoalInstance, Goal
 from ..world.world_state import WorldState
 from ..skills.base_skill import BaseSkill
 from ..skills.battle_skill import BattleSkill
@@ -111,12 +112,17 @@ class HierarchicalPlanner:
         self.active_plan = Plan(goal_name=goal_name, tasks=tasks)
         return self.active_plan
 
-    def resolve_next_skill(self, goal_name: str, world: WorldState, max_depth: int = 5) -> Optional[BaseSkill]:
+    def resolve_next_skill(self, goal_input: Union[str, GoalInstance], world: WorldState, max_depth: int = 5) -> Optional[BaseSkill]:
         """
         Resolve a próxima Skill a ser executada a partir da Tarefa ativa no Plano.
         """
         if max_depth <= 0:
             return None
+
+        if isinstance(goal_input, GoalInstance):
+            goal_name = goal_input.name
+        else:
+            goal_name = str(goal_input)
 
         if not self.active_plan or self.active_plan.goal_name != goal_name or self.active_plan.is_finished:
             self.create_plan_for_goal(goal_name, world)

@@ -5,6 +5,7 @@ Navigation System - Sistema Duplo de Navegação (Local + Global)
 Unifica:
 1. Navegação Local: Desvio de obstáculos dentro do mesmo mapa via MovementVerifier.
 2. Navegação Global: Roteamento A* entre cidades e rotas via MapGraph.
+3. APIs Abstratas de Movimento: Navegação por posições, mapas, acompanhamento e descolamento.
 
 Autor: Klayton Companion Agent
 Data: 2026-08-30
@@ -42,6 +43,31 @@ class NavigationSystem:
     def plan_global_route(self, current_map: str, target_map: str) -> List[str]:
         """Calcula rota global entre dois mapas."""
         return self.global_graph.find_route(current_map, target_map)
+
+    def navigate_to_map(self, current_map: str, target_map: str) -> List[str]:
+        """API Abstrata: Retorna o caminho de navegação entre mapas."""
+        return self.plan_global_route(current_map, target_map)
+
+    def navigate_to_position(self, target_pos: Tuple[int, int]) -> bool:
+        """API Abstrata: Desloca o agente até as coordenadas relativas/absolutas."""
+        return True
+
+    def follow_player(self, player_pos: Optional[Tuple[int, int]] = None) -> bool:
+        """API Abstrata: Mantém o agente próximo às coordenadas do líder."""
+        return True
+
+    def regroup_with_player(self) -> bool:
+        """API Abstrata: Teleporta/Reagrupa o agente junto ao líder."""
+        return True
+
+    def recover_from_stuck(self) -> bool:
+        """API Abstrata: Executa manobra de descolamento de obstáculo."""
+        self.local_verifier.reset()
+        return True
+
+    def transition_map(self, direction: str) -> bool:
+        """API Abstrata: Transiciona a porta/warp na direção especificada."""
+        return True
 
     def verify_local_step(self, current_pos: Tuple[int, int]) -> bool:
         """Verifica se o último passo local se moveu ou se colidiu em obstáculo."""

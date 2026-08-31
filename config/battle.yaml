@@ -1,0 +1,6 @@
+# Configurações de Estratégia de Combate
+battle:
+  switch_hp_threshold: 0.20
+  auto_catch_shiny: true
+  catch_hp_threshold: 0.25
+  preferred_ball: "Ultra Ball"

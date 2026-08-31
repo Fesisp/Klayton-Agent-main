@@ -33,6 +33,7 @@ from ..world.quest_engine import QuestEngine
 from ..interaction.dialogue_manager import DialogueManager
 from ..interaction.voice_listener import VoiceListener
 from ..skills.base_skill import SkillStatus
+from ..perception.perception_snapshot import PerceptionSnapshot
 from ..perception.game_state_detector import GameState
 from ..perception.chat_handler import ChatHandler
 from ..utils.notifier import NotificationManager
@@ -161,8 +162,9 @@ class KlaytonCompanionAgent:
         # 1. Update Timestamps & Context
         self.world.update_timestamp()
 
-        # 2. Reflexão da Memória (Busca a rota mais eficiente de farm registrada na memória semântica)
-        best_spot = self.memory.get_best_farming_spot()
+        # 2. Reflexão da Memória Contextual (Recall estatístico para apoio de decisão)
+        decision_context = self.memory.recall_for_decision(self.world, self.goal_manager.shared_goal_instance)
+        best_spot = decision_context.get("best_known_spot")
         if best_spot and self.world.location.current_map in ["Unknown", ""]:
             self.world.location.current_map = best_spot
 
@@ -187,7 +189,7 @@ class KlaytonCompanionAgent:
     def run(self) -> None:
         """
         Loop Principal do Runtime do Klayton Companion Agent.
-        Inicia a escuta de voz ao vivo, alimenta continuamente TODOS os ramos do WorldState,
+        Inicia a escuta de voz ao vivo, alimenta continuamente TODOS os ramos do WorldState via PerceptionSnapshot,
         e dispara a agência autônoma.
         """
         logger.info("==========================================================")
@@ -235,7 +237,7 @@ class KlaytonCompanionAgent:
                         time.sleep(0.3)
                     continue
 
-                # 4. ALIMENTAÇÃO INTEGRAL DO WORLDSTATE (Percepção Real Visual/OCR)
+                # 4. ALIMENTAÇÃO INTEGRAL DO WORLDSTATE VIA PERCEPTIONSNAPSHOT
                 game_state = GameState.EXPLORING
                 battle_info = {}
                 if detector and hasattr(detector, 'detect_state') and img is not None:
@@ -257,6 +259,15 @@ class KlaytonCompanionAgent:
                     from ..world.world_state import PokemonInfo
                     active_name = self.goal_manager.shared_goal_instance.target or "Pikachu"
                     self.world.team.members.append(PokemonInfo(name=active_name, level=1, hp_percentage=1.0))
+
+                # Constrói Snapshot de Percepção Desacoplado
+                snapshot = PerceptionSnapshot(
+                    game_state=game_state.name if hasattr(game_state, 'name') else str(game_state),
+                    current_map=self.world.location.current_map or "Viridian Forest",
+                    player_position=self.world.player.position,
+                    confidence=0.95
+                )
+                self.world.apply_snapshot(snapshot)
 
                 # Observação Multicamada Completa com dados de percepção real
                 obs_data = {

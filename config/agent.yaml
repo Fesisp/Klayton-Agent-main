@@ -1,0 +1,7 @@
+# Configurações Gerais do Klayton Companion Agent
+bot:
+  name: "Klayton"
+  leader_name: "Felipe"
+  primary_goal: "FOLLOW_PLAYER"
+  debug_mode: false
+  loop_interval: 0.5

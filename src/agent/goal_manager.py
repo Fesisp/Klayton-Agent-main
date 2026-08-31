@@ -51,16 +51,20 @@ class CompanionGoalManager:
     def add_personal_goal(self, goal: PersonalGoal) -> None:
         """Adiciona e ativa imediatamente a meta pessoal para avaliação na Utility AI."""
         self.personal_goals.append(goal)
-        self.active_personal_goal = goal  # BUG 3 CORRIGIDO: Ativação explícita da meta pessoal
+        self.active_personal_goal = goal
 
     def select_active_goal(self, is_waiting: bool, team_needs_heal: bool, world: Optional[WorldState] = None) -> GoalInstance:
         """
         Gera a lista de metas candidatas e usa a UtilityEngine para selecionar a melhor GoalInstance.
-        Preserva target e target_level no retorno.
+        Preserva target, target_level, location_hint e constraints no retorno.
         """
         if world is None:
             world = WorldState()
             world.companion.is_following_leader = not is_waiting
+
+        # 1. Prioridade Absoluta: Ordens diretas do jogador (priority >= 2.0)
+        if self.shared_goal_instance and self.shared_goal_instance.priority >= 2.0:
+            return self.shared_goal_instance
 
         candidate_goals: List[str] = [
             "HEAL_TEAM",
@@ -77,17 +81,24 @@ class CompanionGoalManager:
         candidate_goals = list(dict.fromkeys(candidate_goals))
         best_goal_str, scores = self.utility_engine.select_best_goal(candidate_goals, world)
 
-        # Se o objetivo vencedor for o compartilhado ou o de treino pessoal, repassa os parâmetros!
         best_goal_type = Goal.from_string(best_goal_str)
         if best_goal_type == self.shared_goal_instance.type:
             return self.shared_goal_instance
 
-        if best_goal_type == Goal.TRAIN_POKEMON and self.active_personal_goal:
+        if best_goal_type in [Goal.TRAIN_POKEMON, Goal.FARM_XP, Goal.HUNT] and self.active_personal_goal:
             return GoalInstance(
-                type=Goal.TRAIN_POKEMON,
+                type=best_goal_type,
                 target=self.active_personal_goal.target,
                 target_level=int(self.active_personal_goal.desired_value) if isinstance(self.active_personal_goal.desired_value, int) else 35,
+                location_hint=self.shared_goal_instance.location_hint,
+                constraints=self.shared_goal_instance.constraints,
                 success_conditions={"level": self.active_personal_goal.desired_value}
             )
 
-        return GoalInstance(type=best_goal_type)
+        return GoalInstance(
+            type=best_goal_type,
+            target=self.shared_goal_instance.target,
+            target_level=self.shared_goal_instance.target_level,
+            location_hint=self.shared_goal_instance.location_hint,
+            constraints=self.shared_goal_instance.constraints
+        )
