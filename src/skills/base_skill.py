@@ -56,6 +56,8 @@ class BaseSkill(ABC):
     def __init__(self, name: str, config: Optional[Dict[str, Any]] = None):
         self.name = name
         self.config = config or {}
+        self.target_pokemon: Optional[str] = None
+        self.target_level: Optional[int] = None
         self._current_status: SkillStatus = SkillStatus.READY
 
     def can_start(self, world: WorldState) -> bool:
@@ -93,4 +95,8 @@ class BaseSkill(ABC):
         pass
 
     def is_complete(self, world: WorldState) -> bool:
+        if self.target_level and self.target_pokemon:
+            for member in getattr(world.team, 'members', []):
+                if getattr(member, 'name', '').lower() == self.target_pokemon.lower() and getattr(member, 'level', 0) >= self.target_level:
+                    return True
         return self._current_status == SkillStatus.SUCCESS

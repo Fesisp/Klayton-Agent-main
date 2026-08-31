@@ -1,23 +1,22 @@
 """
-NavRecoverySkillEngine - Orquestrador da Tríade Mestra Unificada
-================================================================
+NavRecoverySkillEngine - Orquestrador da Tríade Mestra (Injeção de Parâmetros de GoalInstance)
+=============================================================================================
 
-Unifica a arquitetura em 5 camadas:
-GoalInstance ➔ Utility AI ➔ GOAPPlanner (A* Strategic Plan) ➔ HierarchicalPlanner ➔ Skill Queue
-
-Contém resiliência com NavigationSystem (monitoramento de posição) e RecoveryManager (escape 4-way).
+Garante que os parâmetros target e target_level da GoalInstance sejam injetados
+diretamente na Skill ativa executada pelo Klayton.
 
 Autor: Klayton Companion Agent Framework
 Data: 2026-08-30
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Union
 from ..world.world_state import WorldState
 from ..skills.base_skill import BaseSkill, SkillResult, SkillStatus
 from ..navigation.navigation_system import NavigationSystem
 from ..core.recovery_manager import RecoveryManager
 from ..decision.goap_planner import GOAPPlanner
 from ..decision.hierarchical_planner import HierarchicalPlanner
+from ..decision.goal_engine import GoalInstance, Goal
 try:
     from loguru import logger
 except ImportError:
@@ -27,7 +26,7 @@ except ImportError:
 
 class NavRecoverySkillEngine:
     """
-    Orquestrador Unificado da Tríade Mestra (GOAP + Hierarchical + Nav + Recovery).
+    Orquestrador Unificado da Tríade Mestra com Injeção Dinâmica de Parâmetros.
     """
 
     def __init__(self):
@@ -36,39 +35,48 @@ class NavRecoverySkillEngine:
         self.goap_planner: GOAPPlanner = GOAPPlanner()
         self.hierarchical_planner: HierarchicalPlanner = HierarchicalPlanner()
 
-    def execute_step(self, current_goal: str, world: WorldState, components: Dict[str, Any]) -> SkillResult:
+    def execute_step(self, active_goal_input: Union[str, GoalInstance], world: WorldState, components: Dict[str, Any]) -> SkillResult:
         """
-        Executa o ciclo unificado:
-        1. GOAPPlanner resolve a próxima Skill estratégica com busca A* e suporte a interrupção/retomada.
-        2. Se necessário, o HierarchicalPlanner decompõe tarefas complexas.
-        3. A Skill é executada e protegida por monitoramento de estagnação do NavigationSystem e RecoveryManager.
+        Executa a Skill ativa e injeta target e target_level da GoalInstance na instância da Skill.
         """
-        # 1. Obter a próxima Skill estratégica do GOAP
-        skill: Optional[BaseSkill] = self.goap_planner.get_next_skill(current_goal, world)
+        if isinstance(active_goal_input, GoalInstance):
+            goal_instance = active_goal_input
+            goal_name = goal_instance.name
+        else:
+            goal_name = str(active_goal_input)
+            goal_instance = GoalInstance(type=Goal.from_string(goal_name))
 
-        # Fallback de decomposição hierárquica se o GOAP não retornar skill imediata
+        # 1. Obter a próxima Skill do GOAP / HierarchicalPlanner
+        skill: Optional[BaseSkill] = self.goap_planner.get_next_skill(goal_name, world)
         if not skill:
-            skill = self.hierarchical_planner.resolve_next_skill(current_goal, world)
+            skill = self.hierarchical_planner.resolve_next_skill(goal_name, world)
 
         if not skill:
             return SkillResult(status=SkillStatus.SUCCESS, message="Nenhuma Skill ativa necessária")
 
+        # 2. BUG 4 CORRIGIDO: Injeção dos parâmetros dinâmicos (target_level, target_pokemon) na Skill!
+        if goal_instance.target_level and hasattr(skill, 'target_level'):
+            setattr(skill, 'target_level', goal_instance.target_level)
+            logger.info(f"🎯 Parâmetro Injetado na Skill {skill.name}: target_level={goal_instance.target_level}")
+
+        if goal_instance.target and hasattr(skill, 'target_pokemon'):
+            setattr(skill, 'target_pokemon', goal_instance.target)
+
         world.agent.active_skill = skill.name
 
-        # 2. Executar o ciclo da Skill
+        # 3. Execução da Skill
         result: SkillResult = skill.execute(world, components)
 
-        # 3. Monitoramento de Navegação e Posição (Se houver posição registrada)
+        # 4. Monitoramento de Colisão & Recuperação
         if world.player.position:
             moved_successfully = self.navigation.verify_local_step(world.player.position)
             if not moved_successfully or self.navigation.is_stuck:
-                logger.warning(f"🚧 Estagnação de posição detectada em {world.player.position}! Disparando RecoveryManager...")
+                logger.warning(f"🚧 Estagnação detectada em {world.player.position}! Disparando RecoveryManager...")
                 self.recovery.recover(world, components, reason="Position stuck in collision")
                 self.navigation.reset_local()
                 self.goap_planner.trigger_replan()
                 return SkillResult(status=SkillStatus.INTERRUPTED, message="Interrompido para recuperação de obstáculo")
 
-        # 4. Tratamento de Falha da própria Skill
         if result.failed:
             logger.warning(f"🚨 Skill '{skill.name}' reportou falha! Disparando procedimento de recuperação...")
             self.recovery.recover(world, components, reason=f"Skill {skill.name} failed: {result.message}")

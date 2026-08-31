@@ -163,17 +163,60 @@ class GOAPPlanner:
             )
         ]
 
-    def extract_world_state_symbols(self, world: WorldState) -> Dict[str, Any]:
-        """Converte o WorldState em símbolos de estado booleano/categórico para o GOAP."""
+    def extract_world_state_symbols(self, world: WorldState, goal_instance: Optional[GoalInstance] = None) -> Dict[str, Any]:
+        """
+        Converte o WorldState em símbolos dinâmicos reais do mundo e do objetivo parametrizado.
+        """
+        at_target_map = True
+        target_level_reached = False
+
+        if goal_instance:
+            if goal_instance.location_hint and world.location.current_map not in ["Unknown", ""]:
+                at_target_map = (world.location.current_map.lower() == goal_instance.location_hint.lower())
+            target_level_reached = goal_instance.is_fulfilled(world)
+
         return {
             "in_battle": bool(world.battle.in_battle),
             "team_healed": not bool(world.team.needs_healing),
             "needs_heal": bool(world.team.needs_healing),
             "has_supplies": (world.resources.pokeballs_count > 0 and world.resources.potions_count > 0),
-            "at_target_map": True,
-            "target_level_reached": False,
+            "at_target_map": at_target_map,
+            "target_level_reached": target_level_reached,
             "following_leader": bool(world.companion.is_following_leader)
         }
+
+    def get_next_skill(self, goal_input: Union[str, GoalInstance], world: WorldState) -> Optional[BaseSkill]:
+        """
+        Calcula ou recupera o próximo passo do plano GOAP usando GoalInstance e símbolos reais do mundo.
+        """
+        if isinstance(goal_input, GoalInstance):
+            goal_instance = goal_input
+            goal_name = goal_instance.name
+        else:
+            goal_name = str(goal_input)
+            goal_instance = GoalInstance(type=Goal.from_string(goal_name))
+
+        # Se houver emergência de cura e time machucado
+        if world.team.needs_healing and goal_name != "HEAL_TEAM":
+            self.interrupt_and_push_plan({"team_healed": True}, world)
+
+        # Se concluiu plano de emergência e há plano interrompido, retoma!
+        if not world.team.needs_healing and self.interrupted_plan_stack and not self.current_plan:
+            self.resume_interrupted_plan(world)
+
+        # Se precisa de replanejamento
+        if self.needs_replan or not self.current_plan:
+            start_state = self.extract_world_state_symbols(world, goal_instance)
+            goal_state = self._map_goal_to_goap_state(goal_name)
+            self.current_plan = self.plan(start_state, goal_state)
+            self.needs_replan = False
+
+        if not self.current_plan:
+            return None
+
+        # Pega a ação do topo
+        action = self.current_plan.pop(0)
+        return self.skills.get(action.target_skill_name)
 
     def plan(self, start_state: Dict[str, Any], goal_state: Dict[str, Any]) -> List[GOAPAction]:
         """

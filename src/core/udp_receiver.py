@@ -24,7 +24,11 @@ Data: 2026-02-20
 import socket
 import threading
 from typing import Optional, Callable
-from loguru import logger
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger("UDPReceiver")
 
 # ============================
 # CONFIGURAÇÕES

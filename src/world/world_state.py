@@ -176,11 +176,28 @@ class WorldState:
         elif obs.category == "location":
             if "map_name" in obs.data:
                 self.location.current_map = str(obs.data["map_name"])
+            if "current_map" in obs.data:
+                self.location.current_map = str(obs.data["current_map"])
             if "position" in obs.data:
                 self.player.position = obs.data["position"]
 
         elif obs.category == "team":
             if "hp_percentage" in obs.data and self.team.active_pokemon:
                 self.team.active_pokemon.hp_percentage = float(obs.data["hp_percentage"])
+
+        elif obs.category in ["world_sync", "resources", "player", "quest"]:
+            # Atualização multicamada integral
+            if "in_battle" in obs.data:
+                self.battle.in_battle = bool(obs.data["in_battle"])
+            if "is_shiny" in obs.data:
+                self.battle.is_shiny = bool(obs.data["is_shiny"])
+            if "current_map" in obs.data:
+                self.location.current_map = str(obs.data["current_map"])
+            if "pokeballs_count" in obs.data:
+                self.resources.pokeballs_count = int(obs.data["pokeballs_count"])
+            if "potions_count" in obs.data:
+                self.resources.potions_count = int(obs.data["potions_count"])
+            if "position" in obs.data:
+                self.player.position = obs.data["position"]
 
         return True

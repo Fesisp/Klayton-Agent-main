@@ -125,7 +125,7 @@ class KlaytonCompanionAgent:
             intent.target = resolved_target
 
         goal_instance = intent.to_goal_instance()
-        self.goal_manager.shared_goal = goal_instance.type
+        self.goal_manager.set_shared_goal_instance(goal_instance)
 
         if intent.target:
             self.goal_manager.add_personal_goal(PersonalGoal(
@@ -148,7 +148,7 @@ class KlaytonCompanionAgent:
     def step(self) -> None:
         """
         Ciclo Cognitivo Contínuo do Agente Companheiro:
-        Alimenta WorldState ➔ Reflexão de Memória ➔ Seleção de Metas por Utility AI ➔ GOAP Strategy ➔ Tríade Mestra.
+        Alimenta WorldState ➔ Reflexão de Memória ➔ Seleção de GoalInstance por Utility AI ➔ Injeção de Parâmetros na Skill.
         """
         if self.paused or not self.running:
             return
@@ -156,22 +156,26 @@ class KlaytonCompanionAgent:
         # 1. Update Timestamps & Context
         self.world.update_timestamp()
 
-        # 2. Reflexão da Memória (Busca a rota mais eficiente de farm registrada)
+        # 2. Reflexão da Memória (Busca a rota mais eficiente de farm registrada na memória semântica)
         best_spot = self.memory.get_best_farming_spot()
-        if best_spot and not self.world.location.current_map:
+        if best_spot and self.world.location.current_map in ["Unknown", ""]:
             self.world.location.current_map = best_spot
 
-        # 3. Agency & Goal Selection (Decidido pela UtilityEngine: utility = reward - risk - cost - time)
-        active_goal = self.goal_manager.select_active_goal(
+        # 3. Agency & Goal Selection (Decidido pela UtilityEngine: retorna GoalInstance com target/target_level/location)
+        active_goal_instance = self.goal_manager.select_active_goal(
             is_waiting=self.relationship.is_waiting_for_player,
             team_needs_heal=self.world.team.needs_healing,
             world=self.world
         )
-        self.world.agent.current_goal = self.goal_manager.shared_goal.name
-        self.world.agent.current_subgoal = active_goal.name
 
-        # 4. Master Triad Execution (GOAP + Navigation + Recovery + Skills)
-        result = self.master_triad.execute_step(active_goal.name, self.world, self.components)
+        # Se houver rota aprendida na memória e o objetivo envolve treino/farm, injeta o local na GoalInstance!
+        if best_spot and active_goal_instance.type in [Goal.FARM_XP, Goal.TRAIN_POKEMON, Goal.HUNT]:
+            active_goal_instance.location_hint = best_spot
+        self.world.agent.current_goal = self.goal_manager.shared_goal.name
+        self.world.agent.current_subgoal = active_goal_instance.name
+
+        # 4. Master Triad Execution (GOAP + Skill Parameter Injection + Recovery)
+        result = self.master_triad.execute_step(active_goal_instance, self.world, self.components)
         if result.failed or result.status == SkillStatus.INTERRUPTED:
             self.planner.trigger_replan()
 

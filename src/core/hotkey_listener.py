@@ -5,8 +5,18 @@ Permite mudar o comportamento do bot em tempo real sem precisar reiniciar.
 Funciona mesmo quando a janela do jogo está em foco.
 """
 
-from pynput import keyboard
-from loguru import logger
+try:
+    from pynput import keyboard
+    HAS_PYNPUT = True
+except ImportError:
+    keyboard = None
+    HAS_PYNPUT = False
+
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger("HotkeyListener")
 from enum import Enum
 import threading
 import time

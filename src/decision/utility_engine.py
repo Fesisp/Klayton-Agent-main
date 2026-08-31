@@ -81,13 +81,13 @@ class UtilityEngine:
                     reward += 5.0
 
             elif goal in ["FARM_XP", "TRAIN_POKEMON", "HUNT"]:
-                reward = 70.0
-                cost = 6.0
-                time_penalty = 10.0
+                reward = 100.0
+                cost = 5.0
+                time_penalty = 5.0
                 if world.team.needs_healing:
-                    risk = 40.0          # Risco elevado se o time estiver fraco
+                    risk = 70.0          # Total se HP ruim: 100 - 70 - 5 - 5 = 20.0
                 else:
-                    risk = 0.0           # Total: 70 - 0 - 6 - 10 = 54.0
+                    risk = 5.0           # Total se HP ok: 100 - 5 - 5 - 5 = 85.0 (Supera Follow Player 77.0)
 
             elif goal == "EXPLORE":
                 reward = 35.0

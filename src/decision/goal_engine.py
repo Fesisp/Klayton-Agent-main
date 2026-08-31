@@ -40,6 +40,7 @@ class Goal(Enum):
     RETURN_TO_CENTER = "RETURN_TO_CENTER"
     BUY_ITEMS = "BUY_ITEMS"
     HEAL_TEAM = "HEAL_TEAM"
+    EXPLORE = "EXPLORE"
 
     @classmethod
     def from_string(cls, val: str) -> "Goal":

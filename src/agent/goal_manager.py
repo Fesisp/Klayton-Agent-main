@@ -1,12 +1,9 @@
 """
-Goal Manager - Conciliação de Objetivos via Utility AI
-======================================================
+Goal Manager - Conciliação de Objetivos Parametrizados via Utility AI
+======================================================================
 
-Gera metas candidatas (compartilhadas e pessoais) e utiliza a UtilityEngine
-como TOMADORA DE DECISÃO SOBERANA no loop principal do Klayton.
-
-Equação de decisão:
-utility = reward - risk - cost - time
+Gerencia a seleção e conciliação de GoalInstances (parametrizados com target e constraints)
+e utiliza a UtilityEngine como tomadora de decisão soberana.
 
 Autor: Klayton Companion Agent
 Data: 2026-08-30
@@ -14,7 +11,7 @@ Data: 2026-08-30
 
 from dataclasses import dataclass, field
 from typing import Optional, List, Dict, Any
-from ..decision.goal_engine import Goal
+from ..decision.goal_engine import Goal, GoalInstance
 from ..decision.utility_engine import UtilityEngine
 from ..world.world_state import WorldState
 
@@ -30,34 +27,45 @@ class PersonalGoal:
 
 class CompanionGoalManager:
     """
-    Gerenciador de Metas que delega a decisão de seleção para a UtilityEngine.
+    Gerenciador de Metas que opera inteiramente sobre instâncias de objetivos (GoalInstance).
     """
 
     def __init__(self, primary_shared_goal: Goal = Goal.FOLLOW_PLAYER):
-        self.shared_goal: Goal = primary_shared_goal
+        self.shared_goal_instance: GoalInstance = GoalInstance(type=primary_shared_goal)
         self.personal_goals: List[PersonalGoal] = []
         self.active_personal_goal: Optional[PersonalGoal] = None
         self.utility_engine: UtilityEngine = UtilityEngine()
 
-    def add_personal_goal(self, goal: PersonalGoal) -> None:
-        self.personal_goals.append(goal)
+    @property
+    def shared_goal(self) -> Goal:
+        return self.shared_goal_instance.type
 
-    def select_active_goal(self, is_waiting: bool, team_needs_heal: bool, world: Optional[WorldState] = None) -> Goal:
+    @shared_goal.setter
+    def shared_goal(self, val: Goal) -> None:
+        self.shared_goal_instance = GoalInstance(type=val)
+
+    def set_shared_goal_instance(self, instance: GoalInstance) -> None:
+        """Define a instância completa do objetivo compartilhado preservando alvos e restrições."""
+        self.shared_goal_instance = instance
+
+    def add_personal_goal(self, goal: PersonalGoal) -> None:
+        """Adiciona e ativa imediatamente a meta pessoal para avaliação na Utility AI."""
+        self.personal_goals.append(goal)
+        self.active_personal_goal = goal  # BUG 3 CORRIGIDO: Ativação explícita da meta pessoal
+
+    def select_active_goal(self, is_waiting: bool, team_needs_heal: bool, world: Optional[WorldState] = None) -> GoalInstance:
         """
-        Gera a lista de metas candidatas viáveis e utiliza a UtilityEngine
-        para calcular a utilidade de cada uma em tempo real, selecionando o objetivo vencedor.
+        Gera a lista de metas candidatas e usa a UtilityEngine para selecionar a melhor GoalInstance.
+        Preserva target e target_level no retorno.
         """
-        # Se não houver WorldState explícito, constrói um temporário para reflexão
         if world is None:
             world = WorldState()
-            world.team.needs_healing = team_needs_heal
             world.companion.is_following_leader = not is_waiting
 
-        # 1. Monta o catálogo de metas candidatas no estado atual
         candidate_goals: List[str] = [
             "HEAL_TEAM",
             "FOLLOW_PLAYER",
-            self.shared_goal.name
+            self.shared_goal_instance.name
         ]
 
         if is_waiting:
@@ -66,13 +74,20 @@ class CompanionGoalManager:
         if self.active_personal_goal:
             candidate_goals.append("TRAIN_POKEMON")
 
-        candidate_goals.append("EXPLORE")
-
-        # Elimina duplicatas preservando a ordem
         candidate_goals = list(dict.fromkeys(candidate_goals))
-
-        # 2. A UtilityEngine escolhe racionalmente com base em (reward - risk - cost - time)
         best_goal_str, scores = self.utility_engine.select_best_goal(candidate_goals, world)
 
-        # 3. Retorna o Enum Goal correspondente à maior utilidade
-        return Goal.from_string(best_goal_str)
+        # Se o objetivo vencedor for o compartilhado ou o de treino pessoal, repassa os parâmetros!
+        best_goal_type = Goal.from_string(best_goal_str)
+        if best_goal_type == self.shared_goal_instance.type:
+            return self.shared_goal_instance
+
+        if best_goal_type == Goal.TRAIN_POKEMON and self.active_personal_goal:
+            return GoalInstance(
+                type=Goal.TRAIN_POKEMON,
+                target=self.active_personal_goal.target,
+                target_level=int(self.active_personal_goal.desired_value) if isinstance(self.active_personal_goal.desired_value, int) else 35,
+                success_conditions={"level": self.active_personal_goal.desired_value}
+            )
+
+        return GoalInstance(type=best_goal_type)
