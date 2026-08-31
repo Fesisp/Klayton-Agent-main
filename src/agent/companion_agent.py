@@ -55,6 +55,10 @@ class KlaytonCompanionAgent:
         self.components = components or {}
         self.notifier: NotificationManager = NotificationManager(self.config)
 
+        # 0. PERCEPTION MANAGER (Desacoplado)
+        from ..perception.perception_manager import PerceptionManager
+        self.perception: PerceptionManager = self.components.get('perception') or PerceptionManager(self.config, self.components)
+
         # 1. WORLD STATE (SINGLE SOURCE OF TRUTH)
         self.world: WorldState = WorldState()
 
@@ -224,11 +228,11 @@ class KlaytonCompanionAgent:
                     time.sleep(0.3)
                     continue
 
-                # 2. Captura de Frame
-                img = screen.capture() if (screen and hasattr(screen, 'capture')) else None
+                # 2. Captura de Snapshot de Percepção Desacoplada
+                snapshot = self.perception.capture_snapshot()
 
                 # 3. Detecção de PM (Mensagem Privada de Segurança)
-                if img is not None and self.chat_handler and self.chat_handler.check_for_alerts(img):
+                if self.perception.check_pm_alert(self.perception.capture_frame()):
                     logger.critical("🚨 PAUSANDO KLAYTON POR SEGURANÇA (PM RECEBIDA)!")
                     self.paused = True
                     self.notifier.notify_all("⚠️ MENSAGEM PRIVADA RECEBIDA! O agente foi pausado imediatamente para evitar ban.", is_critical=True)
@@ -237,64 +241,26 @@ class KlaytonCompanionAgent:
                         time.sleep(0.3)
                     continue
 
-                # 4. ALIMENTAÇÃO INTEGRAL DO WORLDSTATE VIA PERCEPTIONSNAPSHOT
-                game_state = GameState.EXPLORING
-                battle_info = {}
-                if detector and hasattr(detector, 'detect_state') and img is not None:
-                    game_state = detector.detect_state(img)
-                    if hasattr(detector, 'get_battle_info') and game_state == GameState.IN_BATTLE:
-                        try:
-                            battle_info = detector.get_battle_info(img) or {}
-                        except Exception:
-                            battle_info = {}
-
-                if game_state == GameState.SHINY_FOUND:
+                if snapshot.game_state == "SHINY_FOUND":
                     logger.critical("✨ SHINY ENCONTRADO! PAUSANDO AGENTE!")
                     self.paused = True
                     self.notifier.notify_shiny_found("Shiny Pokemon", self.world.location.current_map)
                     continue
 
-                # Garante que o time do WorldState possui pelo menos 1 membro cadastrado para verificação de nível/HP
+                # 4. Alimentação Integral do WorldState via PerceptionSnapshot
+                self.world.apply_snapshot(snapshot)
+
+                # Garante que o time do WorldState possui o Pokémon ativo para verificação de nível/HP
                 if not self.world.team.members:
                     from ..world.world_state import PokemonInfo
                     active_name = self.goal_manager.shared_goal_instance.target or "Pikachu"
                     self.world.team.members.append(PokemonInfo(name=active_name, level=1, hp_percentage=1.0))
 
-                # Constrói Snapshot de Percepção Desacoplado
-                snapshot = PerceptionSnapshot(
-                    game_state=game_state.name if hasattr(game_state, 'name') else str(game_state),
-                    current_map=self.world.location.current_map or "Viridian Forest",
-                    player_position=self.world.player.position,
-                    confidence=0.95
-                )
-                self.world.apply_snapshot(snapshot)
-
-                # Observação Multicamada Completa com dados de percepção real
-                obs_data = {
-                    "in_battle": (game_state == GameState.IN_BATTLE),
-                    "is_shiny": (game_state == GameState.SHINY_FOUND),
-                    "current_map": self.world.location.current_map or "Viridian Forest",
-                    "pokeballs_count": self.world.resources.pokeballs_count,
-                    "potions_count": self.world.resources.potions_count
-                }
-                if battle_info:
-                    obs_data.update({
-                        "opponent_name": battle_info.get("opponent_name", "Wild Pokemon"),
-                        "opponent_hp_percentage": battle_info.get("opponent_hp_percentage", 1.0)
-                    })
-
-                obs = Observation(
-                    category="world_sync",
-                    data=obs_data,
-                    confidence=0.95
-                )
-                self.world.apply_observation(obs)
-
                 # 5. Executa o Ciclo Cognitivo de Tomada de Decisão
                 self.step()
 
                 if self.debug:
-                    logger.debug(f"GameState: {game_state.name} | Active Goal: {self.world.agent.current_goal} | Subgoal: {self.world.agent.current_subgoal}")
+                    logger.debug(f"GameState: {snapshot.game_state} | Active Goal: {self.world.agent.current_goal} | Subgoal: {self.world.agent.current_subgoal}")
 
                 time.sleep(loop_interval)
 

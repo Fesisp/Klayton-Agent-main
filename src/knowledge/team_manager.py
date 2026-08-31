@@ -6,7 +6,9 @@ from typing import List, Dict, Optional
 class TeamManager:
     """Gerencia equipe atual (volátil) e golpes conhecidos (persistente)."""
 
-    def __init__(self):
+    def __init__(self, config=None, db=None):
+        self.config = config or {}
+        self.db = db
         # Banco de golpes conhecidos (persistente)
         self.moves_db_path = Path("data/known_moves.json")
         self.current_team: List[str] = []  # Lista volátil, atualizada em tempo real

@@ -55,24 +55,40 @@ class UDPCommandReceiver:
         callbacks (dict): Mapeamento comando → função
     """
     
-    def __init__(self, port: int = DEFAULT_PORT, host: str = DEFAULT_HOST):
+    def __init__(self, port: Any = DEFAULT_PORT, host: str = DEFAULT_HOST, agent: Any = None, config: Optional[dict] = None):
         """
-        Inicializa o receptor UDP
+        Inicializa o receptor UDP com suporte flexível a parâmetros.
+        """
+        if not isinstance(port, int) and not (isinstance(port, str) and str(port).isdigit()):
+            agent = port
+            if isinstance(host, dict):
+                config = host
+            port = (config or {}).get("udp", {}).get("port", DEFAULT_PORT)
+            host = (config or {}).get("udp", {}).get("host", DEFAULT_HOST)
         
-        Args:
-            port: Porta UDP para escutar (padrão: 5005)
-            host: IP para bind (padrão: 0.0.0.0 - todas interfaces)
-        """
-        self.port = port
+        self.port = int(port)
         self.host = host
+        self.agent = agent
+        self.config = config or {}
         self.running = False
         self.thread: Optional[threading.Thread] = None
         self.sock: Optional[socket.socket] = None
-        
-        # Callbacks para cada comando
         self.callbacks: dict[str, Callable] = {}
         
-        logger.debug(f"UDPReceiver inicializado (porta: {port})")
+        if self.agent:
+            self._register_default_agent_callbacks()
+
+        logger.debug(f"UDPReceiver inicializado (porta: {self.port})")
+
+    def _register_default_agent_callbacks(self):
+        """Registra os comandos padrão de controle do agente."""
+        if hasattr(self.agent, 'behavior'):
+            self.register_callback("IDLE", lambda: setattr(self.agent, 'behavior', "IDLE"))
+            self.register_callback("HUNT", lambda: setattr(self.agent, 'behavior', "HUNT"))
+            self.register_callback("FOLLOW", lambda: setattr(self.agent, 'behavior', "FOLLOW_PLAYER"))
+        if hasattr(self.agent, 'paused'):
+            self.register_callback("PAUSE", lambda: setattr(self.agent, 'paused', True))
+            self.register_callback("RESUME", lambda: setattr(self.agent, 'paused', False))
     
     def register_callback(self, command: str, callback: Callable):
         """

@@ -4,7 +4,7 @@ Main Entrypoint - Klayton Companion Agent 2.0
 ==============================================
 
 Inicializa e conecta todos os subsistemas cognitivos, periféricos e de escuta:
-- Percepção Visual (ScreenCapture, OCREngine, GameStateDetector)
+- Percepção Visual (ScreenCapture, OCREngine, GameStateDetector, PerceptionManager)
 - Ações & Mecânicas (InputSimulator, BattleStrategy, PokemonDatabase, TeamManager)
 - Cérebro Central & Agência (KlaytonCompanionAgent, GOAP, Utility AI)
 - Comunicação & Escuta (HotkeyManager, UDPCommandReceiver, Live Voice)
@@ -32,6 +32,7 @@ except ImportError:
 from src.perception.screen_capture import ScreenCapture
 from src.perception.ocr_engine import OCREngine
 from src.perception.game_state_detector import GameStateDetector, GameState
+from src.perception.perception_manager import PerceptionManager
 from src.action.input_simulator import InputSimulator
 from src.knowledge.pokemon_database import PokemonDatabase
 from src.knowledge.team_manager import TeamManager
@@ -58,8 +59,20 @@ def setup_logging():
         pass
 
 
+def deep_merge(base: dict, override: dict) -> dict:
+    """
+    Mescla recursivamente dois dicionários preservando subchaves aninhadas intactas.
+    """
+    for key, value in override.items():
+        if key in base and isinstance(base[key], dict) and isinstance(value, dict):
+            deep_merge(base[key], value)
+        else:
+            base[key] = value
+    return base
+
+
 def load_config():
-    """Carrega e funde as configurações do arquivo principal e dos arquivos modulares."""
+    """Carrega e funde recursivamente as configurações do settings.yaml e arquivos modulares."""
     config_path = ROOT_DIR / "config" / "settings.yaml"
     config = {}
 
@@ -71,7 +84,7 @@ def load_config():
                 if hasattr(logger, 'error'):
                     logger.error(f"Erro ao ler settings.yaml: {e}")
 
-    # Fusão com arquivos modulares em config/
+    # Fusão profunda com arquivos modulares em config/
     config_dir = ROOT_DIR / "config"
     modular_files = ["agent.yaml", "voice.yaml", "perception.yaml", "navigation.yaml", "battle.yaml"]
     for mfile in modular_files:
@@ -81,7 +94,7 @@ def load_config():
                 with open(mpath, "r", encoding="utf-8") as f:
                     mdata = yaml.safe_load(f)
                     if isinstance(mdata, dict):
-                        config.update(mdata)
+                        config = deep_merge(config, mdata)
             except Exception:
                 pass
 
@@ -115,6 +128,10 @@ def main():
         'strategy': strategy
     }
 
+    # Inicializa Gerenciador de Percepção Desacoplado
+    perception = PerceptionManager(config=config, components=components)
+    components['perception'] = perception
+
     # Inicializa o Cérebro Central
     agent = KlaytonCompanionAgent(config=config, components=components)
 
@@ -125,7 +142,9 @@ def main():
         hotkey_mgr = HotkeyManager(agent, config)
         hotkey_mgr.start()
 
-    udp_receiver = UDPCommandReceiver(agent, config)
+    udp_port = config.get("udp", {}).get("port", 5005)
+    udp_host = config.get("udp", {}).get("host", "0.0.0.0")
+    udp_receiver = UDPCommandReceiver(port=udp_port, host=udp_host, agent=agent, config=config)
     udp_receiver.start()
 
     # Inicia o Loop Principal do Runtime
